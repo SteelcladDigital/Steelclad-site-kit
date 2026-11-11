@@ -73,14 +73,30 @@ Set these in `integrations`, then rebuild:
 - `gtm_id`: Google Tag Manager. Load GA4, pixels and call tracking inside GTM.
 - `google_reviews_url`: adds a "Read more reviews on Google" button
 
-## Deploying (Netlify, one Netlify site per client, all from this repo)
+## Deploying (Cloudflare Pages, free)
 
-1. In Netlify, choose **Add new site → Import from Git** and pick this repo.
-2. Set the build command to `python3 build.py palmetto-pool` and the publish directory to `dist/palmetto-pool`.
-3. Add the client's custom domain and update DNS.
-4. Submit `https://domain/sitemap.xml` in Google Search Console.
+Each client is its own Cloudflare Pages project, and every project builds from this one repo. The free plan covers unlimited bandwidth, up to 100 projects and free SSL.
 
-Every push to `main` rebuilds the live sites. Cloudflare Pages works the same way.
+**First time only:** create a free account at dash.cloudflare.com, then go to **Workers & Pages → Create → Pages → Connect to Git** and authorize GitHub for the `SteelcladDigital` account.
+
+**For each client:**
+1. Go to **Workers & Pages → Create → Pages → Connect to Git** and pick `Steelclad-site-kit`.
+2. Name the project after the client, for example `palmetto-pool`. That gives a free preview address like `palmetto-pool.pages.dev`.
+3. Build settings:
+   - Framework preset: **None**
+   - Build command: `python3 build.py palmetto-pool`
+   - Build output directory: `dist/palmetto-pool`
+   - Production branch: `main`
+4. Click **Save and Deploy**, then review the `*.pages.dev` link with the client.
+5. When the client approves, go to **Custom domains → Set up a custom domain** and follow the DNS steps. SSL is automatic.
+6. Submit `https://domain/sitemap.xml` in Google Search Console.
+
+How it behaves:
+- Every push to `main` rebuilds all client sites, which is harmless because each one only changes if its files did.
+- Pushes to any other branch create a private preview URL, which is handy for showing a client changes before they go live.
+- `_redirects` (old URLs → new) and `404.html` work on Cloudflare Pages as-is.
+
+**Social share image:** the build creates `og-image.jpg` automatically when Pillow is installed. Cloudflare's build environment doesn't have Pillow, so run one local build per client and commit the result to `clients/<client>/assets/og-image.jpg`. Better still, add a real 1200×630 photo there.
 
 ## Pre-launch checklist (per client)
 
