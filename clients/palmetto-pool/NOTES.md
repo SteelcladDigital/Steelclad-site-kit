@@ -1,5 +1,11 @@
 # Palmetto Pool Solutions: client notes
 
+## Before launch: blog migration (blocker)
+
+The 8 existing posts keep their exact URLs (`/post/<slug>`). Each has a stub in `posts/` with its title, date, description, category, author and service/area tags already filled in, and `draft: true`. For each one, copy the article text from the live URL (listed as `migrate_from` in the file), paste it as Markdown, and remove `draft: true`. Drafts aren't built, so an unmigrated post would 404 after launch.
+
+New post (needs Mike's approval): `2026-11-11-saltwater-pool-maintenance-lexington-sc.md` targets the salt-cell and saltwater-maintenance keywords that no existing post or page covers. It links to Salt Cell & Filter Cleaning, Equipment Upgrades, the plans page and 4 city pages.
+
 ## Before launch: confirm with Mike
 
 1. **Plan names and inclusions** (Balance / Full Service / Full Service Plus) are a *proposal*, built only from services already on his site. Confirm what each plan includes, and whether chemicals are included in the monthly rate.

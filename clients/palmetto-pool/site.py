@@ -512,6 +512,15 @@ CONFIG = {
              ("Why does my pool turn green after a storm?", "Heavy summer rain dilutes chlorine and washes in debris and phosphates. Test and rebalance after big storms.")],
     "cta_title": "Rather not keep track of all this?", "cta_text": "Every item on this calendar is built into our maintenance plans. We'll handle the season, and you just swim.",
   },
+  "blog": {
+    "enabled": True, "index_slug": "blog", "post_prefix": "post",   # keeps the old GHL URLs: /blog and /post/<slug>
+    "nav_label": "Blog", "title": "Pool Care Tips for Lexington, SC Homeowners",
+    "meta": "Pool care tips and advice for Lexington & Richland County, SC homeowners from CPO-certified Palmetto Pool Solutions.",
+    "h1": "Pool care tips &amp; advice for Lexington, SC homeowners",
+    "lead": "From weekly maintenance to green-to-clean recovery, practical advice from a CPO-certified local pool team.",
+    "default_author": "Palmetto Pool Solutions", "home_title": "Pool care tips from our team",
+    "area_related_title": "Pool care tips for {city} homeowners",
+  },
   "about": {"title": "About Us: Family-Owned Pool Service in Lexington, SC",
     "meta": "Family-owned, CPO-certified pool service founded by lifelong Lexington County locals. We answer our phone, show up and document every visit.",
     "h1": "About Palmetto Pool Solutions", "lead": "A family-owned Lexington County pool company built on a simple idea: answer the phone, show up, and do what we said we'd do. Every time.",
@@ -529,5 +538,6 @@ CONFIG = {
   "reviews": REVIEWS,
   "faqs": GENERAL_FAQS,
   "legal_pages": [("privacypolicy", "Privacy Policy"), ("termsandconditions", "Terms of Service"), ("accessibility", "Accessibility Statement")],
-  "redirects": [("/contact-page", "/contact/"), ("/pool-service-columbia-sc2", "/pool-service-columbia-sc/"), ("/home", "/")],
+  "redirects": [("/contact-page", "/contact/"), ("/pool-service-columbia-sc2", "/pool-service-columbia-sc/"), ("/home", "/"),
+                ("/posts", "/blog/"), ("/terms", "/termsandconditions/"), ("/sitemap", "/sitemap.xml")],
 }

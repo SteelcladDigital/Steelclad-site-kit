@@ -309,3 +309,25 @@ a.card:hover{border-color:var(--c-secondary);transform:translateY(-3px);box-shad
 .map-link{display:inline-block;margin-top:8px}
 .hanger-title{font-family:var(--display);font-size:1.25rem;color:var(--c-primary);margin:.2em 0 .1em;line-height:1.15}
 .h3{font-size:1.35rem;font-weight:500}
+/* blog */
+.post-card{padding:0;overflow:hidden}
+.post-card > *:not(img){margin-left:24px;margin-right:24px}
+.post-card .kicker{margin-top:22px;font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--c-secondary-deep)}
+.post-card h3{margin-top:8px;font-size:1.25rem}
+.post-card .more{margin-bottom:22px;color:var(--c-muted);font-weight:500}
+.post-thumb{width:100%;aspect-ratio:1200/630;object-fit:cover}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{background:var(--c-secondary-wash);color:var(--c-secondary-deep);font-size:.82rem;font-weight:600;padding:5px 12px;border-radius:99px}
+.post-meta{color:rgba(255,255,255,.72);font-size:.92rem;margin-top:14px}
+.post-body{font-size:1.06rem;max-width:72ch}
+.post-body h2{font-size:1.75rem;margin-top:1.6em}
+.post-body h3{font-size:1.3rem;margin-top:1.3em}
+.post-body ul,.post-body ol{padding-left:1.3em;margin:0 0 1.1em}
+.post-body li{margin-bottom:.45em}
+.post-body blockquote{margin:1.4em 0;padding:16px 22px;border-left:4px solid var(--c-secondary);background:var(--c-secondary-wash);border-radius:0 12px 12px 0}
+.post-body blockquote p{margin:0}
+.post-body img{border-radius:var(--radius);margin:1.2em 0}
+.post-hero-img{border-radius:var(--radius);margin:0 0 1.4em!important}
+.post-body a{font-weight:600}
+.aside-label{margin:16px 0 6px;font-weight:700;color:#fff}
+.aside h2,.aside .h3{color:#fff}

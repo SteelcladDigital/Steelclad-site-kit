@@ -60,6 +60,66 @@ TEXTURES = {
  "grid": "M0 0H240M0 60H240M0 120H240M0 180H240M0 0V240M60 0V240M120 0V240M180 0V240",
 }
 
+
+# ============================================================== blog: posts + mini markdown
+def parse_post(path):
+    """Post file = front matter between --- lines (key: value) + Markdown body."""
+    raw = open(path, encoding="utf-8").read()
+    meta, body = {}, raw
+    if raw.startswith("---"):
+        _, fm, body = raw.split("---", 2)
+        for line in fm.strip().splitlines():
+            if ":" in line:
+                k, v = line.split(":", 1); meta[k.strip()] = v.strip().strip('"')
+    for k in ("services", "areas", "tags"):
+        meta[k] = [x.strip() for x in meta.get(k, "").split(",") if x.strip()]
+    meta["draft"] = meta.get("draft", "false").lower() in ("true", "yes", "1")
+    base = os.path.basename(path)[:-3]
+    meta.setdefault("slug", re.sub(r"^\d{4}-\d{2}-\d{2}-", "", base))
+    meta.setdefault("date", base[:10] if re.match(r"\d{4}-\d{2}-\d{2}", base) else TODAY)
+    meta["body_md"] = body.strip()
+    meta["words"] = len(re.findall(r"\w+", body))
+    return meta
+
+def md_inline(t, link):
+    t = esc(t, quote=False)
+    t = re.sub(r"!\[([^\]]*)\]\(([^)]+)\)", lambda m: f'<img src="{link(m.group(2))}" alt="{m.group(1)}" loading="lazy">', t)
+    t = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", lambda m: f'<a href="{link(m.group(2))}">{m.group(1)}</a>', t)
+    t = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", t)
+    t = re.sub(r"(?<![\w*])\*(?!\s)(.+?)(?<!\s)\*(?![\w*])", r"<em>\1</em>", t)
+    return t
+
+def markdown(md, link):
+    """Small Markdown subset: ## / ### headings (# is demoted to ## so a post keeps one H1),
+    paragraphs, - and 1. lists, > quotes, images, links, bold, italic."""
+    out, para, lst = [], [], None
+    def flush():
+        nonlocal para, lst
+        if para: out.append("<p>" + md_inline(" ".join(para), link) + "</p>"); para = []
+        if lst: out.append(f"<{lst[0]}>" + "".join(f"<li>{md_inline(i, link)}</li>" for i in lst[1]) + f"</{lst[0]}>"); lst = None
+    for line in md.splitlines():
+        st = line.strip()
+        if not st: flush(); continue
+        m = re.match(r"^(#{1,4})\s+(.*)", st)
+        if m:
+            flush(); lvl = min(max(len(m.group(1)), 2), 4)
+            hid = re.sub(r"[^a-z0-9]+", "-", m.group(2).lower()).strip("-")
+            out.append(f'<h{lvl} id="{hid}">{md_inline(m.group(2), link)}</h{lvl}>'); continue
+        m = re.match(r"^([-*]|\d+\.)\s+(.*)", st)
+        if m:
+            kind = "ol" if m.group(1)[0].isdigit() else "ul"
+            if para:
+                out.append("<p>" + md_inline(" ".join(para), link) + "</p>"); para = []
+            if lst and lst[0] != kind: flush()
+            lst = lst or (kind, []); lst[1].append(m.group(2)); continue
+        if st.startswith(">"):
+            flush(); out.append("<blockquote><p>" + md_inline(st.lstrip("> "), link) + "</p></blockquote>"); continue
+        if lst: flush()
+        para.append(st)
+    flush()
+    return "\n".join(out)
+
+
 # ============================================================== builder
 class Site:
     def __init__(self, client, preview):
@@ -74,6 +134,16 @@ class Site:
         T = self.c.get("tiers") or {}; self.tiers = T if T.get("enabled") else None
         A = self.c.get("areas") or {}; self.areas = A if A.get("enabled") else None
         R = self.c.get("resource") or {}; self.resource = R if R.get("enabled") else None
+        B = self.c.get("blog") or {}; self.blog = B if B.get("enabled") else None
+        self.posts = []
+        if self.blog:
+            pdir = os.path.join(ROOT, "clients", client, "posts")
+            if os.path.isdir(pdir):
+                for f in sorted(os.listdir(pdir)):
+                    if f.endswith(".md"):
+                        p = parse_post(os.path.join(pdir, f))
+                        if not p["draft"]: self.posts.append(p)
+            self.posts.sort(key=lambda p: p["date"], reverse=True)
 
     # ---------- links
     def href(self, cur, target):
@@ -164,6 +234,7 @@ class Site:
                 dd += f'<li class="sep">{esc(g["name"])}</li>' + "".join(f'<li><a href="{self.href(cur,a["slug"])}">{esc(a["city"])}</a></li>' for a in self.areas["pages"] if a["slug"] in g["slugs"])
             items.append(f'<li><a class="nl" href="{self.href(cur,self.areas["hub_slug"])}"{ca(self.areas["hub_slug"])}>{esc(self.areas["nav_label"])} ▾</a><ul class="dropdown">{dd}</ul></li>')
         if self.resource: items.append(f'<li><a class="nl" href="{self.href(cur,self.resource["slug"])}"{ca(self.resource["slug"])}>{esc(self.resource["nav_label"])}</a></li>')
+        if self.blog: items.append(f'<li><a class="nl" href="{self.href(cur,self.blog["index_slug"])}"{ca(self.blog["index_slug"])}>{esc(self.blog["nav_label"])}</a></li>')
         items.append(f'<li><a class="nl" href="{self.href(cur,"about")}"{ca("about")}>About</a></li>')
         promise = f'<span class="promise"><span class="dot"></span><span>{esc(L["topbar_promise"])}</span></span>' if L.get("topbar_promise") else "<span></span>"
         return f'''<a class="skip" href="#main">Skip to content</a>
@@ -188,6 +259,7 @@ class Site:
         social = "".join(f'<a href="{u}" aria-label="{k.title()}">{icon("fb" if k=="facebook" else "ig")}</a>' for k, u in b.get("social", {}).items() if u and k in ("facebook", "instagram"))
         company = [("about", "About Us"), ("contact", L["cta"])]
         if self.resource: company.insert(1, (self.resource["slug"], self.resource["nav_label"]))
+        if self.blog: company.insert(1, (self.blog["index_slug"], self.blog["nav_label"]))
         if self.areas: company.append((self.areas["hub_slug"], "All Service Areas"))
         comp = "".join(f'<li><a href="{self.href(cur,p)}">{esc(n)}</a></li>' for p, n in company)
         legal = " · ".join(f'<a href="{self.href(cur,s)}">{esc(n)}</a>' for s, n in self.c.get("legal_pages", []))
@@ -199,7 +271,7 @@ class Site:
 </div><div class="legal"><span>© {date.today().year} {esc(b["legal_name"])}. All rights reserved.</span><span>{legal}</span></div></div></footer>
 <nav class="mbar" aria-label="Quick actions"><a href="tel:{b["tel"]}">{icon("phone")}Call</a><a href="{L.get("mbar_second_href") or "sms:"+b["tel"]}">{icon(L.get("mbar_second_icon","chat"))}{esc(L.get("mbar_second_label","Text"))}</a><a class="go" href="{self.href(cur,"contact")}">{icon("calendar")}{esc(L["cta_short"])}</a></nav>'''
 
-    def page(self, cur, title, meta, body, schema=None, trail=None, noindex=False):
+    def page(self, cur, title, meta, body, schema=None, trail=None, noindex=False, og_override=None, og_type="website"):
         brand = self.b["name"]; base = title.split(" | ")[0]
         title = f"{base} | {brand}" if len(base) + len(brand) <= 62 else base
         ig = self.c.get("integrations", {})
@@ -212,18 +284,19 @@ class Site:
         chat = f'<script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="{ig["ghl_chat_widget_id"]}"></script>' if ig.get("ghl_chat_widget_id") else "<!-- GHL chat: set integrations.ghl_chat_widget_id -->"
         fonts = {self.c["theme"]["fonts"]["display"], self.c["theme"]["fonts"]["body"]}
         pre = "".join(f'<link rel="preload" href="{self.asset(cur,"fonts/"+f+".woff2")}" as="font" type="font/woff2" crossorigin>' for f in fonts)
-        og = self.c.get("og_image", "og-image.jpg")
+        og = og_override or self.c.get("og_image", "og-image.jpg")
+        rss = f'<link rel="alternate" type="application/rss+xml" title="{esc(brand)}" href="{self.D}/{self.blog["index_slug"]}/rss.xml">' if self.blog and self.posts else ""
         return f'''<!DOCTYPE html>
 <html lang="en-US"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)}</title><meta name="description" content="{esc(meta)}">
 <link rel="canonical" href="{self.canon(cur)}"><meta name="robots" content="{'noindex' if noindex else 'index, follow, max-image-preview:large'}">
-<meta property="og:type" content="website"><meta property="og:site_name" content="{esc(brand)}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(meta)}">
+<meta property="og:type" content="{og_type}"><meta property="og:site_name" content="{esc(brand)}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(meta)}">
 <meta property="og:url" content="{self.canon(cur)}"><meta property="og:image" content="{self.D}/assets/{og}"><meta name="twitter:card" content="summary_large_image">
 <meta name="geo.region" content="US-{self.b["address"]["region"]}"><meta name="geo.placename" content="{esc(self.b["address"]["locality"])}">
 <meta name="theme-color" content="{self.c["theme"]["colors"]["primary"]}"><link rel="icon" href="{self.asset(cur,"favicon.svg")}" type="image/svg+xml">
 {pre}<link rel="stylesheet" href="{self.asset(cur,"theme.css")}"><link rel="stylesheet" href="{self.asset(cur,"site.css")}">
-<script type="application/ld+json">{ld}</script>{gtm}
+<script type="application/ld+json">{ld}</script>{gtm}{rss}
 </head><body>
 {self.header(cur)}
 <main id="main">
@@ -350,9 +423,13 @@ class Site:
         if self.areas:
             S["areas"] = f'<section class="bg-sand"><div class="wrap"><div class="section-head center"><span class="eyebrow">{esc(self.areas["nav_label"])}</span><h2>{esc(self.areas["home_title"])}</h2></div>{self.area_block(cur)}</div></section>'
         S["visit"] = self.visit_block(cur) if not self.areas else ""
+        if self.blog and self.posts:
+            S["blog"] = (f'<section><div class="wrap"><div class="section-head"><span class="eyebrow">{esc(self.blog["nav_label"])}</span>'
+                         f'<h2>{esc(self.blog.get("home_title","Latest articles"))}</h2></div>{self.post_cards(cur, self.posts[:3])}'
+                         f'<p style="margin-top:24px"><a href="{self.href(cur,self.blog["index_slug"])}"><strong>All articles →</strong></a></p></div></section>')
         S["faq"] = f'<section><div class="wrap"><div class="section-head center"><span class="eyebrow">FAQ</span><h2>Common questions</h2></div>{self.faq_block(self.c["faqs"])}</div></section>'
         S["cta"] = self.cta_band(cur)
-        order = h.get("order", ["trust", "tiers", "why", "steps", "services", "reviews", "quiz", "areas", "visit", "faq", "cta"])
+        order = h.get("order", ["trust", "tiers", "why", "steps", "services", "reviews", "quiz", "areas", "visit", "blog", "faq", "cta"])
         body = hero + "".join(S.get(k, "") for k in order)
         self.pages[cur] = self.page(cur, h["title"], h["meta"], body, [self.faq_schema(self.c["faqs"])])
 
@@ -397,7 +474,7 @@ class Site:
 {f'<h2>{esc(s["signs_title"])}</h2><ul class="checklist">{signs}</ul>' if signs else ""}{faq_html}{where}</div>
 <aside class="aside"><h3>{esc(self.L["aside_title"])}</h3><p>{esc(self.L["aside_text"])}</p><a class="phone" href="tel:{self.b["tel"]}">{self.b["phone"]}</a>
 <a class="btn btn-gold" href="{self.href(cur,"contact")}">{esc(self.L["cta"])}</a>{alt}<p style="margin:12px 0 0;font-size:.85rem">{esc(self.L["aside_badges"])}</p></aside></div></section>
-<section class="bg-sand"><div class="wrap"><div class="section-head"><span class="eyebrow">More</span><h2>Other ways we can help</h2></div>{self.service_cards(cur, exclude=s["slug"])}</div></section>{self.cta_band(cur)}'''
+{self.related_posts_block(cur, "services", s["slug"]) if self.blog else ""}<section class="bg-sand"><div class="wrap"><div class="section-head"><span class="eyebrow">More</span><h2>Other ways we can help</h2></div>{self.service_cards(cur, exclude=s["slug"])}</div></section>{self.cta_band(cur)}'''
         sch = [self.service_schema(s["name"], s["meta"], cur)] + ([self.faq_schema(s["faqs"])] if s.get("faqs") else [])
         self.pages[cur] = self.page(cur, s["title"], s["meta"], body, sch, trail)
 
@@ -421,7 +498,7 @@ class Site:
 <p style="color:var(--c-muted);font-size:.92rem">Serving {esc(a["city"])}, {esc(a["county"])} · ZIP codes {esc(a["zips"])}</p></div>
 <aside class="aside"><h3>{f(A["aside_title"])}</h3><p>{esc(self.L["aside_text"])}</p><a class="phone" href="tel:{self.b["tel"]}">{self.b["phone"]}</a>
 <a class="btn btn-gold" href="{self.href(cur,"contact")}">{esc(self.L["cta"])}</a><p style="margin:14px 0 6px;font-weight:700;color:#fff">Also serving</p><ul class="city-links" style="grid-template-columns:1fr">{nearby}</ul></aside></div></section>
-{f'<section class="bg-sand"><div class="wrap"><div class="section-head center"><span class="eyebrow">Reviews</span><h2>What our neighbors say</h2></div>{self.reviews_block()}</div></section>' if self.c["reviews"] else ""}{self.cta_band(cur)}'''
+{self.related_posts_block(cur, "areas", a["slug"], self.blog.get("area_related_title", "Tips for {city}").format(city=a["city"])) if self.blog else ""}{f'<section class="bg-sand"><div class="wrap"><div class="section-head center"><span class="eyebrow">Reviews</span><h2>What our neighbors say</h2></div>{self.reviews_block()}</div></section>' if self.c["reviews"] else ""}{self.cta_band(cur)}'''
         sch = [self.service_schema(f(A["page_title"]), a["intro"], cur, [a["city"]]), self.faq_schema(faqs)]
         self.pages[cur] = self.page(cur, f(A["page_title"]), f(A["page_meta"]), body, sch, trail)
 
@@ -432,6 +509,97 @@ class Site:
 <section><div class="wrap"><div class="section-head center"><span class="eyebrow">FAQ</span><h2>{esc(R["faq_title"])}</h2></div>{self.faq_block(R["faqs"])}</div></section>{self.cta_band(cur, R["cta_title"], R["cta_text"])}'''
         sch = [self.faq_schema(R["faqs"]), {"@type": "Article", "headline": R["h1"], "author": {"@id": self.D + "/#business"}, "publisher": {"@id": self.D + "/#business"}, "dateModified": TODAY, "mainEntityOfPage": self.canon(cur)}]
         self.pages[cur] = self.page(cur, R["title"], R["meta"], body, sch, trail)
+
+
+    # ---------- blog
+    def post_path(self, p): return f'{self.blog["post_prefix"]}/{p["slug"]}'
+    def post_link(self, cur):
+        def link(u):
+            if u.startswith(("http://", "https://", "mailto:", "tel:", "#")): return u
+            if u.startswith("/assets/"): return self.asset(cur, u[len("/assets/"):])
+            if u.startswith("/"): return self.href(cur, u.strip("/"))
+            return u
+        return link
+    @staticmethod
+    def nice_date(d):
+        y, m, dd = d.split("-")
+        months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
+        return f"{months[int(m)-1]} {int(dd)}, {y}"
+    def read_time(self, p): return max(1, round(p["words"] / 220))
+    def post_cards(self, cur, posts, h="h3"):
+        out = []
+        for p in posts:
+            img = f'<img class="post-thumb" src="{self.asset(cur,p["image"])}" alt="{esc(p.get("image_alt",""))}" loading="lazy">' if p.get("image") else ""
+            out.append(f'<a class="card post-card" href="{self.href(cur,self.post_path(p))}">{img}<span class="kicker">{esc(p.get("category",""))}</span>'
+                       f'<{h}>{esc(p["title"])}</{h}><p>{esc(p.get("description",""))}</p><span class="more">{self.nice_date(p["date"])} · {self.read_time(p)} min read</span></a>')
+        return '<div class="grid-3">' + "".join(out) + "</div>"
+    def related_posts_block(self, cur, key, val, title="Related articles"):
+        rel = [p for p in self.posts if val in p.get(key, [])][:3]
+        if not rel: return ""
+        return (f'<section><div class="wrap"><div class="section-head"><span class="eyebrow">{esc(self.blog["nav_label"])}</span>'
+                f'<h2>{esc(title)}</h2></div>{self.post_cards(cur, rel)}</div></section>')
+
+    def blog_index(self):
+        B = self.blog; cur = B["index_slug"]; trail = self.trail((B["nav_label"], cur))
+        cats = sorted({p.get("category") for p in self.posts if p.get("category")})
+        chips = "".join(f'<span class="chip">{esc(c)}</span>' for c in cats)
+        chips_html = f'<div class="chips">{chips}</div>' if chips else ""
+        listing = self.post_cards(cur, self.posts) if self.posts else "<p>New articles are on the way.</p>"
+        body = (self.page_hero(cur, trail, B["h1"], esc(B["lead"]), ctas=False) +
+                f'<section><div class="wrap"><div class="section-head"><h2>{esc(B.get("list_title","Latest articles"))}</h2>{chips_html}</div>{listing}</div></section>' +
+                self.cta_band(cur))
+        sch = [{"@type": "Blog", "@id": self.canon(cur) + "#blog", "name": B["title"], "url": self.canon(cur), "publisher": {"@id": self.D + "/#business"},
+                "blogPost": [{"@type": "BlogPosting", "headline": p["title"], "url": self.canon(self.post_path(p)), "datePublished": p["date"]} for p in self.posts]}]
+        self.pages[cur] = self.page(cur, B["title"], B["meta"], body, sch, trail)
+
+    def post_page(self, p):
+        B = self.blog; cur = self.post_path(p); trail = self.trail((B["nav_label"], B["index_slug"]), (p["title"], cur))
+        author = p.get("author") or B.get("default_author") or self.b["name"]
+        upd = f' · Updated {self.nice_date(p["updated"])}' if p.get("updated") else ""
+        meta_line = f'<p class="post-meta">By {esc(author)} · {self.nice_date(p["date"])}{upd} · {self.read_time(p)} min read</p>'
+        hero_img = f'<img class="post-hero-img" src="{self.asset(cur,p["image"])}" alt="{esc(p.get("image_alt",""))}" width="1200" height="630">' if p.get("image") else ""
+        body_html = markdown(p["body_md"], self.post_link(cur))
+        svc = [s for s in self.c["services"] if s["slug"] in p["services"]]
+        svc_links = "".join(f'<li><a href="{self.href(cur,self.svc_path(s))}">{esc(s["name"])}</a></li>' for s in svc)
+        area_links = ""
+        if self.areas and p["areas"]:
+            area_links = "".join(f'<li><a href="{self.href(cur,a["slug"])}">{esc(a["city"])}, {self.b["address"]["region"]}</a></li>'
+                                 for a in self.areas["pages"] if a["slug"] in p["areas"])
+        aside_links = ""
+        if svc_links: aside_links += f'<p class="aside-label">Related services</p><ul class="city-links" style="grid-template-columns:1fr">{svc_links}</ul>'
+        if area_links: aside_links += f'<p class="aside-label">Areas we serve</p><ul class="city-links" style="grid-template-columns:1fr">{area_links}</ul>'
+        others = [o for o in self.posts if o is not p]
+        rel = sorted(others, key=lambda o: (len(set(o["services"]) & set(p["services"])) + (o.get("category") == p.get("category")), o["date"]), reverse=True)[:3]
+        rel_html = ""
+        if rel:
+            rel_html = (f'<section class="bg-sand"><div class="wrap"><div class="section-head"><span class="eyebrow">Keep reading</span>'
+                        f'<h2>More from the {esc(B["nav_label"].lower())}</h2></div>{self.post_cards(cur, rel)}</div></section>')
+        bc = " / ".join(f'<a href="{self.href(cur,pp)}">{esc(n)}</a>' for n, pp in trail[:-1])
+        body = (f'<section class="hero page-hero on-dark">{self.texture()}<div class="wrap"><div><nav class="crumbs" aria-label="Breadcrumb">{bc}</nav>'
+                f'<span class="eyebrow">{esc(p.get("category", B["nav_label"]))}</span><h1>{esc(p["title"])}</h1>'
+                f'<p class="lead">{esc(p.get("description",""))}</p>{meta_line}</div></div>{self.divider()}</section>'
+                f'<section><div class="wrap layout-side"><article class="prose post-body">{hero_img}{body_html}</article>'
+                f'<aside class="aside"><h2 class="h3">{esc(self.L["aside_title"])}</h2><p>{esc(self.L["aside_text"])}</p>'
+                f'<a class="phone" href="tel:{self.b["tel"]}">{self.b["phone"]}</a>'
+                f'<a class="btn btn-gold" href="{self.href(cur,"contact")}">{esc(self.L["cta"])}</a>{aside_links}</aside></div></section>'
+                f'{rel_html}{self.cta_band(cur)}')
+        is_person = author != self.b["name"] and author != self.b["legal_name"]
+        bp = {"@type": "BlogPosting", "@id": self.canon(cur) + "#article", "headline": p["title"][:110], "description": p.get("description", ""),
+              "datePublished": p["date"], "dateModified": p.get("updated") or p["date"], "mainEntityOfPage": self.canon(cur),
+              "author": ({"@type": "Person", "name": author, "worksFor": {"@id": self.D + "/#business"}} if is_person else {"@id": self.D + "/#business"}),
+              "publisher": {"@id": self.D + "/#business"}, "wordCount": p["words"], "inLanguage": "en-US"}
+        if p.get("category"): bp["articleSection"] = p["category"]
+        if p.get("image"): bp["image"] = f'{self.D}/assets/{p["image"]}'
+        if svc: bp["about"] = [{"@type": "Service", "name": s["name"], "url": self.canon(self.svc_path(s))} for s in svc]
+        self.pages[cur] = self.page(cur, p.get("seo_title") or p["title"], p.get("description", ""), body, [bp], trail,
+                                    og_override=p.get("image"), og_type="article")
+
+    def rss(self):
+        B = self.blog
+        items = "".join(f'<item><title>{esc(p["title"])}</title><link>{self.canon(self.post_path(p))}</link><guid>{self.canon(self.post_path(p))}</guid>'
+                        f'<description>{esc(p.get("description",""))}</description></item>' for p in self.posts[:20])
+        return (f'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>{esc(B["title"])}</title>'
+                f'<link>{self.canon(B["index_slug"])}</link><description>{esc(B["meta"])}</description>{items}</channel></rss>')
 
     def about_page(self):
         A = self.c["about"]; cur = "about"; trail = self.trail(("About", cur))
@@ -481,6 +649,9 @@ class Site:
             self.areas_hub()
             for a in self.areas["pages"]: self.area_page(a)
         if self.resource: self.resource_page()
+        if self.blog:
+            self.blog_index()
+            for p in self.posts: self.post_page(p)
         if os.path.exists(self.out): shutil.rmtree(self.out)
         for path, h in self.pages.items():
             d = os.path.join(self.out, path); os.makedirs(d, exist_ok=True)
@@ -497,7 +668,10 @@ class Site:
         if os.path.isdir(self.client_assets): shutil.copytree(self.client_assets, A, dirs_exist_ok=True)
         if not self.preview:
             self.pages_404()
-            urls = "".join(f"<url><loc>{self.canon(p)}</loc><lastmod>{TODAY}</lastmod></url>" for p in self.pages if p != "404")
+            post_dates = {self.post_path(p): (p.get("updated") or p["date"]) for p in self.posts} if self.blog else {}
+            urls = "".join(f"<url><loc>{self.canon(p)}</loc><lastmod>{post_dates.get(p, TODAY)}</lastmod></url>" for p in self.pages if p != "404")
+            if self.blog and self.posts:
+                open(os.path.join(self.out, self.blog["index_slug"], "rss.xml"), "w").write(self.rss())
             open(os.path.join(self.out, "sitemap.xml"), "w").write(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>')
             open(os.path.join(self.out, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\n\nSitemap: {self.D}/sitemap.xml\n")
             open(os.path.join(self.out, "_redirects"), "w").write("".join(f"{a}  {b}  301\n" for a, b in self.c.get("redirects", [])))

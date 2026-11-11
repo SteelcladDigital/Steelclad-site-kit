@@ -65,6 +65,42 @@ Two reference clients:
 3. Put the logo and photos in `clients/new-client/assets/`.
 4. Run `python3 build.py new-client --preview` and review.
 
+## Blog
+
+Turn it on with the `blog` block in a client's `site.py`. Set `index_slug` (usually `blog`) and `post_prefix`, which is the URL folder for posts. Match the old site's pattern so existing URLs keep ranking: `post` gives `/post/<slug>/` (GHL style), and `blog` gives `/blog/<slug>/`.
+
+Each post is one file at `clients/<client>/posts/YYYY-MM-DD-slug.md`:
+
+```markdown
+---
+title: Saltwater Pool Maintenance in Lexington, SC: What Your Salt Cell Needs
+seo_title: Saltwater Pool Maintenance in Lexington, SC     # optional, shorter <title>
+slug: saltwater-pool-maintenance-lexington-sc              # optional, defaults to the filename
+date: 2026-11-11
+updated: 2026-12-01                                         # optional
+description: One or two sentences. Used as the meta description and the card text.
+category: Pool Equipment
+author: Mike Brazell, owner                                # a person's name gets Person author markup
+services: specialized-pool-cleaning, weekly-pool-maintenance  # service slugs, cross-linked both ways
+areas: pool-service-lexington-sc, pool-service-irmo-sc        # area slugs, cross-linked both ways
+image: blog/salt-cell.jpg                                  # optional, from clients/<client>/assets/
+image_alt: Technician cleaning a salt cell
+draft: false                                               # true = not built
+---
+
+Body in Markdown: ## and ### headings, - lists, 1. lists, **bold**, *italic*,
+[links](/services/specialized-pool-cleaning/), > callouts, ![images](/assets/blog/x.jpg).
+Internal links start with "/" and work in both preview and live builds.
+```
+
+What the build does with each post:
+- Creates the post page (BlogPosting markup, breadcrumbs, author, read time, sidebar call to action, related services and areas, "keep reading")
+- Adds it to the `/blog/` index (Blog markup, category chips) and the homepage "latest articles" section (add `"blog"` to `home.order`)
+- Lists it under "Related articles" on every service page and city page it's tagged with
+- Adds it to `/blog/rss.xml` and `sitemap.xml`, with the post date as `lastmod`
+
+Keyword strategy for posts: each post targets one question or informational keyword that a service or city page can't rank for on its own. Tag the posts so they pass authority to the money pages. Never write a post that targets the same keyword as an existing service or city page, because the two pages would compete with each other.
+
 ## GoHighLevel and tracking
 
 Set these in `integrations`, then rebuild:
