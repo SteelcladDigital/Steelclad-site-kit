@@ -312,7 +312,7 @@ class Site:
             stats = "".join(f'<div class="reading"><b>{esc(v)}</b><small>{esc(l)}</small></div>' for v, l in k.get("stats", []))
             checks = "".join(f"<li>{esc(x)}</li>" for x in k.get("checks", []))
             return f'''<aside class="hanger{'' if k.get("hanger") else ' plain'}" aria-label="{esc(k["title"])}">{f'<span class="sample">{esc(k["badge"])}</span>' if k.get("badge") else ""}
-<div class="tag">{esc(k["label"])}</div><h3>{esc(k["title"])}</h3><div class="date">{esc(k.get("sub",""))}</div>
+<div class="tag">{esc(k["label"])}</div><p class="hanger-title">{esc(k["title"])}</p><div class="date">{esc(k.get("sub",""))}</div>
 {f'<div class="readings">{stats}</div>' if stats else ""}{f'<ul class="checks">{checks}</ul>' if checks else ""}{f'<p class="note">{esc(k["note"])}</p>' if k.get("note") else ""}</aside>'''
         return ""
 
@@ -372,14 +372,14 @@ class Site:
 <a class="btn btn-navy" href="{self.href(cur,"contact")}">{esc(self.L["cta_long"])}</a></div><div><h3>{esc(pe["factors_title"])}</h3><ul class="checklist">{"".join("<li>"+esc(f)+"</li>" for f in pe["factors"])}</ul></div></div></section>''' if pe else ""
         quiz = f'<section><div class="wrap"><div class="section-head center"><span class="eyebrow">{esc(T["quiz"]["eyebrow"])}</span><h2>{esc(T["quiz"]["title"])}</h2></div>{self.quiz(cur)}</div></section>' if T.get("quiz") else ""
         compare = f'<section class="bg-sand"><div class="wrap"><div class="section-head"><span class="eyebrow">Side by side</span><h2>Compare what\'s included</h2><p class="lead">{esc(T["compare_lead"])}</p></div>{self.compare_table()}</div></section>' if T.get("compare") else ""
-        body = self.page_hero(cur, trail, T["h1"], esc(T["lead"])) + f'<section><div class="wrap">{self.tier_cards(cur)}</div></section>{compare}{quiz}{pricing}' + \
+        body = self.page_hero(cur, trail, T["h1"], esc(T["lead"])) + f'<section><div class="wrap"><div class="section-head center"><h2>{esc(T["home_title"])}</h2></div>{self.tier_cards(cur)}</div></section>{compare}{quiz}{pricing}' + \
             f'<section><div class="wrap"><div class="section-head center"><span class="eyebrow">FAQ</span><h2>{esc(T["nav_label"])} questions</h2></div>{self.faq_block(T["faqs"])}</div></section>{self.cta_band(cur)}'
         self.pages[cur] = self.page(cur, T["title"], T["meta"], body, [self.faq_schema(T["faqs"]), self.service_schema(T["nav_label"], T["meta"], cur)], trail)
 
     def services_hub(self):
         sh = self.c["services_hub"]; cur = sh["slug"]; trail = self.trail((sh["nav_label"], cur))
         extra = f'<section class="bg-sand"><div class="wrap"><div class="section-head center"><span class="eyebrow">{esc(self.tiers["nav_label"])}</span><h2>{esc(self.tiers["home_title"])}</h2></div>{self.tier_cards(cur)}</div></section>' if self.tiers else ""
-        body = self.page_hero(cur, trail, sh["h1"], esc(sh["lead"])) + f'<section><div class="wrap">{self.service_cards(cur)}</div></section>{extra}{self.cta_band(cur)}'
+        body = self.page_hero(cur, trail, sh["h1"], esc(sh["lead"])) + f'<section><div class="wrap"><div class="section-head"><h2>{esc(sh["home_title"])}</h2></div>{self.service_cards(cur)}</div></section>{extra}{self.cta_band(cur)}'
         self.pages[cur] = self.page(cur, sh["title"], sh["meta"], body, None, trail)
 
     def service_page(self, s):
@@ -403,7 +403,7 @@ class Site:
 
     def areas_hub(self):
         A = self.areas; cur = A["hub_slug"]; trail = self.trail((A["nav_label"], cur))
-        body = self.page_hero(cur, trail, A["hub_h1"], esc(A["hub_lead"])) + f'<section><div class="wrap">{self.area_block(cur)}</div></section>{self.cta_band(cur)}'
+        body = self.page_hero(cur, trail, A["hub_h1"], esc(A["hub_lead"])) + f'<section><div class="wrap"><div class="section-head center"><h2>{esc(A["home_title"])}</h2></div>{self.area_block(cur)}</div></section>{self.cta_band(cur)}'
         self.pages[cur] = self.page(cur, A["hub_title"], A["hub_meta"], body, None, trail)
 
     def area_page(self, a):
@@ -428,7 +428,7 @@ class Site:
     def resource_page(self):
         R = self.resource; cur = R["slug"]; trail = self.trail((R["nav_label"], cur))
         cards = "".join(f'<article class="month"><small>{esc(k)}</small><h3>{esc(t)}</h3><ul>{"".join("<li>"+esc(i)+"</li>" for i in items)}</ul></article>' for k, t, items in R["cards"])
-        body = self.page_hero(cur, trail, R["h1"], esc(R["lead"]), sand=True) + f'''<section class="bg-sand" style="padding-top:40px"><div class="wrap"><div class="cal">{cards}</div></div></section>
+        body = self.page_hero(cur, trail, R["h1"], esc(R["lead"]), sand=True) + f'''<section class="bg-sand" style="padding-top:40px"><div class="wrap"><h2 class="skip">{esc(R["nav_label"])}</h2><div class="cal">{cards}</div></div></section>
 <section><div class="wrap"><div class="section-head center"><span class="eyebrow">FAQ</span><h2>{esc(R["faq_title"])}</h2></div>{self.faq_block(R["faqs"])}</div></section>{self.cta_band(cur, R["cta_title"], R["cta_text"])}'''
         sch = [self.faq_schema(R["faqs"]), {"@type": "Article", "headline": R["h1"], "author": {"@id": self.D + "/#business"}, "publisher": {"@id": self.D + "/#business"}, "dateModified": TODAY, "mainEntityOfPage": self.canon(cur)}]
         self.pages[cur] = self.page(cur, R["title"], R["meta"], body, sch, trail)
@@ -462,8 +462,8 @@ class Site:
 <div class="form-msg" role="status">Preview only: this form will submit into your GoHighLevel pipeline once the GHL form is connected.</div></form>'''
         nxt = "".join(f"<li>{esc(x)}</li>" for x in C["next_steps"])
         body = self.page_hero(cur, trail, C["h1"], esc(C["lead"]), ctas=False, sand=True) + f'''<section class="bg-sand" style="padding-top:40px"><div class="wrap layout-side"><div>{form}</div>
-<aside class="aside"><h3>{esc(self.L["phone_prefix"])}</h3><a class="phone" href="tel:{b["tel"]}">{b["phone"]}</a><p>{esc(b["hours_text"])}</p>
-<h3 style="margin-top:20px">What happens next</h3><ul class="checklist" style="color:rgba(255,255,255,.86)">{nxt}</ul></aside></div></section>'''
+<aside class="aside"><h2 class="h3">{esc(self.L["phone_prefix"])}</h2><a class="phone" href="tel:{b["tel"]}">{b["phone"]}</a><p>{esc(b["hours_text"])}</p>
+<h2 class="h3" style="margin-top:20px">What happens next</h2><ul class="checklist" style="color:rgba(255,255,255,.86)">{nxt}</ul></aside></div></section>'''
         self.pages[cur] = self.page(cur, C["title"], C["meta"], body, None, trail)
 
     def legal_pages(self):
@@ -493,6 +493,7 @@ class Site:
             open(os.path.join(A, "logo.svg"), "w").write(self.c["logo"]["svg"].replace("<svg ", f'<svg xmlns="http://www.w3.org/2000/svg" style="background:{self.c["theme"]["colors"]["primary"]}" ', 1))
         open(os.path.join(A, "favicon.svg"), "w").write(self.c.get("favicon_svg") or
             f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="{self.c["theme"]["colors"]["primary"]}"/><text x="16" y="22" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="16" fill="#fff">{esc(self.b["name"][0])}</text></svg>')
+        if not os.path.exists(os.path.join(self.client_assets, self.c.get("og_image", "og-image.jpg"))): self.make_og(os.path.join(A, "og-image.jpg"))
         if os.path.isdir(self.client_assets): shutil.copytree(self.client_assets, A, dirs_exist_ok=True)
         if not self.preview:
             self.pages_404()
@@ -501,6 +502,29 @@ class Site:
             open(os.path.join(self.out, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\n\nSitemap: {self.D}/sitemap.xml\n")
             open(os.path.join(self.out, "_redirects"), "w").write("".join(f"{a}  {b}  301\n" for a, b in self.c.get("redirects", [])))
         print(f"[{self.client}] built {len(self.pages)} pages -> {os.path.relpath(self.out, ROOT)}/")
+
+    def make_og(self, path):
+        """Branded 1200x630 social share image (used when the client has no og-image.jpg of their own)."""
+        try:
+            from PIL import Image, ImageDraw, ImageFont
+        except ImportError:
+            print("  (pip install pillow to auto-generate og-image.jpg)"); return
+        col = self.c["theme"]["colors"]; hx = lambda h: tuple(int(h.lstrip("#")[i:i+2], 16) for i in (0, 2, 4))
+        im = Image.new("RGB", (1200, 630), hx(col["primary"])); d = ImageDraw.Draw(im)
+        d.rectangle([0, 600, 1200, 630], fill=hx(col["accent"])); d.rectangle([80, 120, 200, 128], fill=hx(col["secondary"]))
+        font = lambda f, sz: ImageFont.truetype(os.path.join(ROOT, "core", "fonts", f + ".woff2"), sz) if False else None
+        def load(sz, bold=True):
+            for p in ["/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", "DejaVuSans.ttf"]:
+                try: return ImageFont.truetype(p, sz)
+                except OSError: pass
+            return ImageFont.load_default()
+        d.text((80, 160), self.b["name"], font=load(72), fill=(255, 255, 255))
+        import textwrap
+        y = 270
+        for line in textwrap.wrap(re.sub("<[^>]+>", "", self.c["home"]["title"]), 40)[:3]:
+            d.text((80, y), line, font=load(40, False), fill=hx(col["secondary_wash"])); y += 56
+        d.text((80, 500), f'{self.b["phone"]}  ·  {self.b["domain"].split("//")[-1]}', font=load(34), fill=hx(col["accent"]))
+        im.save(path, quality=88)
 
     def pages_404(self):
         h = self.page("404", "Page not found", "Page not found.", self.page_hero("404", self.trail(("Not found", "404")), "That page isn't here", "It may have moved. Try the menu above or give us a call."), noindex=True)

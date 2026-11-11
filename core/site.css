@@ -14,7 +14,7 @@ p{margin:0 0 1em}
 .eyebrow::before{content:"";width:22px;height:2px;background:currentColor}
 .on-dark .eyebrow{color:var(--c-secondary)}
 .lead{font-size:1.15rem;color:var(--c-muted);max-width:62ch}
-.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;z-index:99;background:#fff;padding:8px 12px}
+.skip{position:absolute;left:-999px;width:1px;height:1px;overflow:hidden}.skip:focus{left:12px;top:12px;z-index:99;background:#fff;padding:8px 12px}
 
 /* buttons */
 .btn{border-radius:var(--btn-radius);display:inline-flex;align-items:center;justify-content:center;gap:.5em;font-weight:700;font-size:1rem;text-decoration:none;padding:.95em 1.6em;border:2px solid transparent;cursor:pointer;transition:transform .15s,box-shadow .15s,background .15s;font-family:var(--body);line-height:1.1}
@@ -307,3 +307,5 @@ a.card:hover{border-color:var(--c-secondary);transform:translateY(-3px);box-shad
 .hours-table td{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.12)}
 .hours-table td:last-child{text-align:right}
 .map-link{display:inline-block;margin-top:8px}
+.hanger-title{font-family:var(--display);font-size:1.25rem;color:var(--c-primary);margin:.2em 0 .1em;line-height:1.15}
+.h3{font-size:1.35rem;font-weight:500}
