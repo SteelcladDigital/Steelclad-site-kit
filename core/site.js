@@ -20,11 +20,32 @@
     });
   }
 
-  // demo form (only when no GHL form is configured)
+  // demo form (no GHL connection yet): never pretends to send
   document.querySelectorAll('form[data-demo]').forEach(function(f){
     f.addEventListener('submit',function(e){
       e.preventDefault();
       var m=f.querySelector('.form-msg'); if(m){m.classList.add('show');}
+    });
+  });
+
+  // native form captured by the GoHighLevel External Tracking script.
+  // The tracking script listens for the submit event; we wait a moment so it can send, then confirm.
+  // Spam bots that fill the hidden "website" field are dropped. If the tracking script never loaded
+  // (ad blocker, outage) the visitor is told to call/text instead of seeing a false "sent".
+  document.querySelectorAll('form[data-native-ghl]').forEach(function(f){
+    f.addEventListener('submit',function(e){
+      e.preventDefault();
+      var hp=f.querySelector('[name=website]');
+      if(hp&&hp.value){return;}
+      var btn=f.querySelector('button[type=submit]'); if(btn){btn.disabled=true;}
+      var loaded=(performance.getEntriesByType('resource')||[]).some(function(r){
+        return /external-tracking|leadconnector|msgsndr|link\./i.test(r.name)&&r.responseEnd>0&&(r.transferSize>0||r.decodedBodySize>0||r.duration>0);
+      });
+      setTimeout(function(){
+        var ok=f.querySelector('.form-msg'),err=f.querySelector('.form-err');
+        if(loaded){ if(ok)ok.classList.add('show'); f.reset(); }
+        else { if(err)err.classList.add('show'); if(btn)btn.disabled=false; }
+      },1200);
     });
   });
 

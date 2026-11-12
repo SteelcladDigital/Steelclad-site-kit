@@ -331,3 +331,7 @@ a.card:hover{border-color:var(--c-secondary);transform:translateY(-3px);box-shad
 .post-body a{font-weight:600}
 .aside-label{margin:16px 0 6px;font-weight:700;color:#fff}
 .aside h2,.aside .h3{color:#fff}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form-err{display:none;background:#fde8e8;color:#8a1c1c;border-radius:10px;padding:14px;margin-top:14px;font-weight:600}
+.form-err.show{display:block}
+.form-msg a,.form-err a{color:inherit}

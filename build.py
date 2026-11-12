@@ -282,6 +282,8 @@ class Site:
         ld = json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False)
         gtm = f"<script>(function(w,d,s,l,i){{w[l]=w[l]||[];w[l].push({{'gtm.start':new Date().getTime(),event:'gtm.js'}});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);}})(window,document,'script','dataLayer','{ig['gtm_id']}');</script>" if ig.get("gtm_id") else "<!-- GTM: set integrations.gtm_id -->"
         chat = f'<script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="{ig["ghl_chat_widget_id"]}"></script>' if ig.get("ghl_chat_widget_id") else "<!-- GHL chat: set integrations.ghl_chat_widget_id -->"
+        snip = ig.get("ghl_tracking_snippet", "").strip()
+        track = ("\n" + snip) if snip and not self.preview else "<!-- GHL external tracking: set integrations.ghl_tracking_snippet -->"
         fonts = {self.c["theme"]["fonts"]["display"], self.c["theme"]["fonts"]["body"]}
         pre = "".join(f'<link rel="preload" href="{self.asset(cur,"fonts/"+f+".woff2")}" as="font" type="font/woff2" crossorigin>' for f in fonts)
         og = og_override or self.c.get("og_image", "og-image.jpg")
@@ -303,7 +305,7 @@ class Site:
 {body}
 </main>
 {self.footer(cur)}
-<script src="{self.asset(cur,"site.js")}" defer></script>{chat}
+<script src="{self.asset(cur,"site.js")}" defer></script>{chat}{track}
 </body></html>'''
 
     # ---------- shared blocks
@@ -610,8 +612,9 @@ class Site:
 
     def contact_page(self):
         C = self.c["contact"]; cur = "contact"; trail = self.trail((self.L["cta"], cur)); b = self.b
-        fid = self.c.get("integrations", {}).get("ghl_form_id")
-        if fid:
+        ig = self.c.get("integrations", {}); fid = ig.get("ghl_form_id")
+        mode = self.form_mode()
+        if mode == "ghl_embed":
             form = f'<div class="form-card"><iframe src="https://api.leadconnectorhq.com/widget/form/{fid}" style="width:100%;height:{C.get("ghl_height",760)}px;border:none;border-radius:4px" id="inline-{fid}" data-layout="{{\'id\':\'INLINE\'}}" data-form-id="{fid}" title="{esc(self.L["cta"])}"></iframe><script src="https://link.msgsndr.com/js/form_embed.js"></script></div>'
         else:
             selects = ""
@@ -621,13 +624,21 @@ class Site:
                 selects = '<div class="full"><label for="f-city">City</label><select id="f-city" name="city">' + "".join(f"<option>{esc(a['city'])}</option>" for a in self.areas["pages"]) + "<option>Other / not sure</option></select></div>" + selects
             if self.tiers:
                 selects += '<div class="full"><label for="f-plan">Interested in</label><select id="f-plan" name="plan"><option value="">Not sure yet</option>' + "".join(f'<option value="{t["slug"]}">{esc(t["name"])}</option>' for t in self.tiers["items"]) + "</select></div>"
-            form = f'''<form class="form-card" data-demo><!-- DEMO FORM: set integrations.ghl_form_id to replace with the GoHighLevel form -->
+            live = mode == "native"
+            attrs = 'data-native-ghl name="website-lead"' if live else "data-demo"
+            note = ("<!-- LIVE FORM: captured into GoHighLevel by the External Tracking script (integrations.ghl_tracking_snippet) -->" if live
+                    else "<!-- DEMO FORM: set integrations.ghl_form_id (or form_mode native + ghl_tracking_snippet) to go live -->")
+            msg = (f'<div class="form-msg" role="status">Thanks! We got your request and will reach out shortly. Need us sooner? Call or text <a href="tel:{b["tel"]}">{b["phone"]}</a>.</div>'
+                   f'<div class="form-err" role="alert">Something went wrong sending the form. Please call or text <a href="tel:{b["tel"]}">{b["phone"]}</a> so we don\'t miss you.</div>'
+                   if live else '<div class="form-msg" role="status">Preview only: this form will submit into your GoHighLevel pipeline once the GHL form is connected.</div>')
+            form = f'''<form class="form-card" {attrs}>{note}
+<div class="hp" aria-hidden="true"><label for="f-website">Leave this empty</label><input id="f-website" name="website" tabindex="-1" autocomplete="off"></div>
 <div class="form-grid"><div><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required></div>
 <div><label for="f-phone">Mobile phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" required></div>
 <div class="full"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email"></div>{selects}
 <div class="full"><label for="f-msg">{esc(C["message_label"])}</label><textarea id="f-msg" name="message" rows="4"></textarea></div></div>
 <button class="btn btn-gold" type="submit" style="width:100%;margin-top:16px">{esc(C["submit"])}</button><p class="form-note">{esc(C["note"])}</p>
-<div class="form-msg" role="status">Preview only: this form will submit into your GoHighLevel pipeline once the GHL form is connected.</div></form>'''
+{msg}</form>'''
         nxt = "".join(f"<li>{esc(x)}</li>" for x in C["next_steps"])
         body = self.page_hero(cur, trail, C["h1"], esc(C["lead"]), ctas=False, sand=True) + f'''<section class="bg-sand" style="padding-top:40px"><div class="wrap layout-side"><div>{form}</div>
 <aside class="aside"><h2 class="h3">{esc(self.L["phone_prefix"])}</h2><a class="phone" href="tel:{b["tel"]}">{b["phone"]}</a><p>{esc(b["hours_text"])}</p>
@@ -636,9 +647,56 @@ class Site:
 
     def legal_pages(self):
         for slug, name in self.c.get("legal_pages", []):
+            f = os.path.join(ROOT, "clients", self.client, "legal", slug + ".md")
+            if os.path.exists(f):
+                inner = markdown(open(f, encoding="utf-8").read(), self.post_link(slug) if self.blog else (lambda u: u))
+            else:
+                inner = f'<!-- TODO before launch: create clients/{self.client}/legal/{slug}.md --><p>[Paste the {esc(name)} text here before launch.]</p>'
             self.pages[slug] = self.page(slug, name, f'{name} for {self.b["legal_name"]}.',
                 self.page_hero(slug, self.trail((name, slug)), esc(name), "", ctas=False) +
-                f'<section><div class="wrap prose"><!-- TODO before launch: paste {name} text --><p>[Paste the {esc(name)} text here before launch.]</p></div></section>')
+                f'<section><div class="wrap prose">{inner}</div></section>')
+
+    def form_mode(self):
+        ig = self.c.get("integrations", {})
+        mode = ig.get("form_mode") or ("ghl_embed" if ig.get("ghl_form_id") else "demo")
+        if mode == "ghl_embed" and not ig.get("ghl_form_id"): mode = "demo"
+        if mode == "native" and not ig.get("ghl_tracking_snippet"): mode = "demo"
+        return mode
+
+    # ============================================================== launch check
+    def launch_check(self):
+        """Returns (blockers, warnings). Blockers = things that lose leads, break URLs or show placeholder text."""
+        ig = self.c.get("integrations", {}); B, W = [], []
+        mode = self.form_mode()
+        if mode == "demo":
+            B.append("Contact form is the DEMO form, so leads go nowhere. Set integrations.ghl_form_id, or form_mode 'native' + ghl_tracking_snippet.")
+        if not ig.get("ghl_tracking_snippet"):
+            B.append("GHL External Tracking script not set (integrations.ghl_tracking_snippet): no UTM/source attribution or page-view tracking in GHL.")
+        if mode == "native":
+            W.append("Native form mode: send one real test submission after launch and confirm it appears in GHL > Contacts and fires the owner-notification workflow.")
+        if mode == "ghl_embed":
+            W.append("Send one real test submission after launch and confirm the owner-notification workflow fires.")
+        if not ig.get("gtm_id"): W.append("No Google Tag Manager ID (integrations.gtm_id): GA4 / conversion tracking not installed.")
+        if not ig.get("google_reviews_url"): W.append("No google_reviews_url: the 'Read more reviews on Google' button is hidden.")
+        for slug, name in self.c.get("legal_pages", []):
+            if not os.path.exists(os.path.join(ROOT, "clients", self.client, "legal", slug + ".md")):
+                B.append(f"{name} page is placeholder text. Create clients/{self.client}/legal/{slug}.md.")
+        pdir = os.path.join(ROOT, "clients", self.client, "posts")
+        if self.blog and os.path.isdir(pdir):
+            for f in sorted(os.listdir(pdir)):
+                if f.endswith(".md"):
+                    p = parse_post(os.path.join(pdir, f))
+                    if p["draft"] and p.get("migrate_from"):
+                        B.append(f"Blog post not migrated (old URL will 404): /{self.blog['post_prefix']}/{p['slug']}/ (posts/{f})")
+                    elif p["draft"]:
+                        W.append(f"Draft post not published: posts/{f}")
+        og = self.c.get("og_image", "og-image.jpg")
+        if not os.path.exists(os.path.join(self.client_assets, og)):
+            W.append(f"No assets/{og} committed: social share image will be missing on Cloudflare builds.")
+        if self.c["logo"]["type"] == "text": W.append("Logo is a text placeholder; add the real logo to assets/.")
+        if any("placeholder" in (t or "").lower() for _, _, t in self.c.get("reviews", [])): B.append("Reviews contain placeholder text.")
+        if "example.com" in self.D: B.append("business.domain is still example.com.")
+        return B, W
 
     # ============================================================== write
     def build(self):
@@ -711,4 +769,25 @@ if __name__ == "__main__":
     if "--list" in sys.argv or not args:
         print("Clients:", ", ".join(clients) or "(none)"); print("Usage: python3 build.py <client|--all> [--preview]"); sys.exit(0)
     targets = clients if args[0] == "all" else args
-    for c in targets: Site(c, "--preview" in sys.argv).build()
+    failed = False
+    for c in targets:
+        site = Site(c, "--preview" in sys.argv)
+        blockers, warnings = site.launch_check()
+        launched = site.c.get("launched", False)
+        if "--check" in sys.argv:
+            print(f"\n=== Launch check: {c} ({'LIVE' if launched else 'not launched'}) ===")
+            print(f"BLOCKERS ({len(blockers)}):" if blockers else "BLOCKERS: none")
+            for x in blockers: print("  [X] " + x)
+            print(f"TO VERIFY / NICE TO HAVE ({len(warnings)}):" if warnings else "")
+            for x in warnings: print("  [ ] " + x)
+            print("READY TO LAUNCH" if not blockers else "NOT READY: fix blockers before setting launched: True / pointing the domain")
+            failed |= bool(blockers)
+            continue
+        if launched and blockers and "--preview" not in sys.argv:
+            print(f"[{c}] BUILD STOPPED: site is marked launched but has launch blockers:")
+            for x in blockers: print("  [X] " + x)
+            sys.exit(1)
+        if blockers and not launched:
+            print(f"[{c}] note: {len(blockers)} launch blocker(s); run `python3 build.py {c} --check`")
+        site.build()
+    if "--check" in sys.argv and failed: sys.exit(1)
