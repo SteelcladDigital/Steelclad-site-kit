@@ -1,5 +1,7 @@
 # Palmetto Pool Solutions: client notes
 
+Run `python3 build.py palmetto-pool --check` for the live list of launch blockers.
+
 ## Before launch: blog migration (blocker)
 
 The 8 existing posts keep their exact URLs (`/post/<slug>`). Each has a stub in `posts/` with its title, date, description, category, author and service/area tags already filled in, and `draft: true`. For each one, copy the article text from the live URL (listed as `migrate_from` in the file), paste it as Markdown, and remove `draft: true`. Drafts aren't built, so an unmigrated post would 404 after launch.

@@ -101,13 +101,44 @@ What the build does with each post:
 
 Keyword strategy for posts: each post targets one question or informational keyword that a service or city page can't rank for on its own. Tag the posts so they pass authority to the money pages. Never write a post that targets the same keyword as an existing service or city page, because the two pages would compete with each other.
 
-## GoHighLevel and tracking
+## GoHighLevel integration
 
-Set these in `integrations`, then rebuild:
-- `ghl_form_id`: replaces the demo form on `/contact/` with the live GHL form
-- `ghl_chat_widget_id`: adds the chat widget to every page
-- `gtm_id`: Google Tag Manager. Load GA4, pixels and call tracking inside GTM.
-- `google_reviews_url`: adds a "Read more reviews on Google" button
+GHL stays the lead inbox, automation engine, chat, reviews and Social Planner. The website just feeds it. Everything lives in `integrations` in the client's `site.py`.
+
+| Setting | Where to get it in GHL | What it does |
+|---|---|---|
+| `ghl_tracking_snippet` | Settings → External Tracking → Copy Script (paste the whole `<script …></script>`) | Added to every page of the live build (never the preview). Gives source/UTM attribution and page views in GHL, and captures the native form. **Required to launch.** |
+| `form_mode: "ghl_embed"` + `ghl_form_id` | Sites → Forms → your form → Integrate | Contact page shows the GHL form (iframe). The most proven option, and the default. |
+| `form_mode: "native"` | (uses the tracking snippet) | Contact page shows the site's own styled form. The tracking script captures submissions into GHL Contacts and Form Submissions. If the script didn't load (ad blocker or outage), the visitor sees "please call or text" instead of a false "sent". Includes a hidden spam trap. |
+| `ghl_chat_widget_id` | Sites → Chat Widget | Chat bubble on every page |
+| `gtm_id` | Google Tag Manager | GA4 and conversion tags |
+| `google_reviews_url` | Google Business Profile | "Read more reviews on Google" button |
+
+Without a form ID or native mode, the contact page shows a **demo form** that clearly says it's a preview. The launch check blocks it.
+
+**In GHL, for every client:**
+- A workflow on the form submission (embed) or on "External form submitted" (native) → notify the owner by SMS and email, plus your normal follow-up.
+- Social Planner → New Post → RSS Post → `https://<domain>/blog/rss.xml`, so new blog posts auto-share to Facebook, Instagram and GBP.
+
+## Launch check (nothing falls through the cracks)
+
+```bash
+python3 build.py palmetto-pool --check
+```
+
+**Blockers** (any one stops a launch):
+- Demo form still in place
+- Missing GHL tracking script
+- Placeholder legal pages: write them to `clients/<client>/legal/<slug>.md`
+- Blog posts not yet migrated from the old site, since their URLs would 404
+- Placeholder reviews
+- `example.com` domain
+
+**Warnings** (things to verify by hand):
+- Send a real test lead and confirm it lands in GHL and the owner gets notified
+- GTM, the Google reviews link, the share image, and a text placeholder logo
+
+Set `"launched": True` in the client's `site.py` when the domain points to Cloudflare. From then on, any blocker **stops the Cloudflare build**, so the live site keeps serving its last good version instead of shipping a broken form or a 404.
 
 ## Deploying (Cloudflare Pages, free)
 
@@ -136,9 +167,9 @@ How it behaves:
 
 ## Pre-launch checklist (per client)
 
-- [ ] Client confirmed every fact: services, plans and pricing, hours, service areas, certifications
-- [ ] Legal pages filled in (they're placeholders)
-- [ ] Old URLs either kept or 301-redirected; blog posts migrated
-- [ ] Real logo and photos in `assets/`; `og-image.jpg` added (1200×630)
-- [ ] GHL form, chat and GTM IDs set
-- [ ] Mobile check, form test, Search Console and sitemap submitted
+1. `python3 build.py <client> --check` shows **READY TO LAUNCH**.
+2. Client approved the preview, including every fact: services, plans and prices, hours, areas, certifications.
+3. Cloudflare Pages project created and reviewed on `<project>.pages.dev`.
+4. Custom domain added. Set `"launched": True` and push.
+5. Live test: submit the form, confirm the GHL contact and owner notification arrive, and check the chat widget.
+6. Search Console: verify the site and submit `sitemap.xml`. Then update the GBP website link and the Social Planner RSS feed.

@@ -412,7 +412,12 @@ CONFIG = {
   },
   "logo": {"type": "svg", "svg": LOGO_SVG},
   "favicon_svg": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#1d2b4d"/><path d="M16 29c.5-6 .5-11-.3-16" stroke="#fff" stroke-width="2.4" fill="none"/><path d="M15.7 13c-3-3-7-3-10-1M15.7 13c-1-4-4-6-7-6M15.7 13c2-4 5-6 9-6M15.7 13c3-2 7-2 10 1" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M24 3a4.5 4.5 0 1 0 3 8 3.6 3.6 0 1 1-3-8z" fill="#27b3c2"/></svg>',
-  "integrations": {"ghl_form_id": "", "ghl_chat_widget_id": "", "gtm_id": "", "google_reviews_url": ""},
+  "integrations": {
+    "form_mode": "ghl_embed",        # "ghl_embed" (GHL form iframe) or "native" (site's own form, captured by the tracking script)
+    "ghl_form_id": "",               # GHL > Sites > Forms > Integrate
+    "ghl_tracking_snippet": "",      # GHL > Settings > External Tracking > Copy Script (paste the whole <script ...></script>)
+    "ghl_chat_widget_id": "", "gtm_id": "", "google_reviews_url": ""},
+  "launched": False,                 # set True when the domain points here; launch blockers then STOP the build
   "labels": {
     "cta": "Free Pool Evaluation", "cta_short": "Free Evaluation", "cta_long": "Get a Free Pool Evaluation",
     "phone_prefix": "Call or text", "topbar_promise": "We answer our phone. Missed us? Callback within the hour.",
