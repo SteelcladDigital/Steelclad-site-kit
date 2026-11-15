@@ -49,10 +49,55 @@
     });
   });
 
-  // preselect plan from ?plan= or #plan- hash
-  var sel=document.getElementById('f-plan');
-  if(sel){
-    var h=(location.hash||'').replace('#plan-','');
-    if(h){for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===h){sel.selectedIndex=i}}}
-  }
+  // first-touch attribution: remember how the visitor first arrived (UTMs, click IDs, referrer, landing page)
+  // so a lead that converts three pages later still carries its source. Storage can be blocked: never fatal.
+  var KEY='sk_attr',attr={};
+  try{attr=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  try{
+    var qs=new URLSearchParams(location.search),seen=false;
+    ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid','fbclid'].forEach(function(k){if(qs.get(k)){seen=true}});
+    if(seen||!attr.landing_page){
+      attr={landing_page:location.href,referrer:document.referrer||'(direct)'};
+      ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid','fbclid'].forEach(function(k){if(qs.get(k))attr[k]=qs.get(k)});
+      try{localStorage.setItem(KEY,JSON.stringify(attr))}catch(e){}
+    }
+  }catch(e){}
+  document.querySelectorAll('[data-track]').forEach(function(i){
+    var k=i.getAttribute('data-track');i.value=k==='page'?location.href:(attr[k]||'');
+  });
+
+  // Web3Forms: post with fetch, show a real success or error message (never a false "sent"),
+  // fire a GA4/GTM 'generate_lead' event, then go to the thank-you page if one is set.
+  // Without JavaScript the form still posts to Web3Forms and its redirect field takes over.
+  document.querySelectorAll('form[data-web3forms]').forEach(function(f){
+    f.addEventListener('submit',function(e){
+      e.preventDefault();
+      var bc=f.querySelector('[name=botcheck]'); if(bc&&bc.checked){return;}
+      var btn=f.querySelector('button[type=submit]'),ok=f.querySelector('.form-msg'),err=f.querySelector('.form-err');
+      if(btn){btn.disabled=true;btn.dataset.label=btn.textContent;btn.textContent='Sending…';}
+      if(err)err.classList.remove('show');
+      var data={};new FormData(f).forEach(function(v,k){if(k!=='redirect')data[k]=v});
+      fetch(f.action,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(data)})
+        .then(function(r){return r.json().catch(function(){return {}}).then(function(j){return r.ok&&j.success!==false})})
+        .then(function(sent){
+          if(!sent)throw new Error('not sent');
+          window.dataLayer=window.dataLayer||[];
+          window.dataLayer.push({event:'generate_lead',form_name:data.form||'',lead_source:data.utm_source||data.referrer||''});
+          var to=f.getAttribute('data-thanks');
+          if(to){setTimeout(function(){location.href=to},400);return;}
+          if(ok)ok.classList.add('show'); f.reset();
+          if(btn){btn.textContent=btn.dataset.label;}
+        })
+        .catch(function(){
+          if(err)err.classList.add('show');
+          if(btn){btn.disabled=false;btn.textContent=btn.dataset.label;}
+        });
+    });
+  });
+
+  // preselect plan from #plan-<slug> (links from plan cards)
+  var h=(location.hash||'').replace('#plan-','');
+  if(h){document.querySelectorAll('select[name=plan]').forEach(function(sel){
+    for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===h){sel.selectedIndex=i}}
+  });}
 })();

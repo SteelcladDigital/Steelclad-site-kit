@@ -28,7 +28,7 @@ clients/<client>/assets/ optional: logo.png, photos, og-image.jpg (copied to /as
 Everything about a site's look and structure lives in that client's `site.py`.
 
 **Theme**
-- `colors`: primary, primary_deep, secondary, secondary_deep, secondary_wash, accent, accent_text, surface
+- `colors`: primary, primary_deep, secondary, secondary_deep, secondary_wash, accent, accent_text, surface (optional: ink, muted, texture = hero texture line color)
 - `fonts`: display and body. Choose from: oswald, inter, fraunces, playfair-display, outfit, space-grotesk, dm-sans, archivo, nunito-sans, manrope, bricolage-grotesque, source-serif-4
 - `radius`: sharp, soft or round
 - `heading_case`: none or uppercase
@@ -100,6 +100,37 @@ What the build does with each post:
 - Adds it to `/blog/rss.xml` and `sitemap.xml`, with the post date as `lastmod`
 
 Keyword strategy for posts: each post targets one question or informational keyword that a service or city page can't rank for on its own. Tag the posts so they pass authority to the money pages. Never write a post that targets the same keyword as an existing service or city page, because the two pages would compete with each other.
+
+## Forms without GHL: Web3Forms mode
+
+For clients (and Steelclad itself) that don't use GoHighLevel, forms post to [Web3Forms](https://web3forms.com), which emails every submission. No CRM, no tracking script, nothing to host.
+
+```python
+"integrations": {
+    "form_mode": "web3forms",
+    "web3forms_access_key": "...",   # web3forms.com > enter the owner's email > copy the key (public by design)
+    "web3forms_subject": "New lead from example.com",   # optional
+    "web3forms_cc": "",              # optional second inbox; Web3Forms paid plan only (free plan: use a mail forwarding rule)
+    "thank_you_slug": "thank-you",   # optional: builds a noindex /thank-you/ page and sends successful leads there
+    "gtm_id": "GTM-XXXX",            # required in this mode (launch blocker): it's the only lead measurement
+    "chat_snippet": "",              # optional: any chat embed (e.g. tawk.to), live build only
+}
+```
+
+What each submission carries: name, phone, email, every form field, which form it came from (`form`), the page it was sent from, and **first-touch attribution** (landing page, referrer, `utm_*`, `gclid`, `fbclid`) remembered from the visitor's first page. The form uses Web3Forms' own `botcheck` spam trap, shows a real error (and keeps the phone number in front of the visitor) if sending fails, works without JavaScript, and pushes a `generate_lead` event to the GTM dataLayer. In GTM: a GA4 event tag on `generate_lead` (mark it as a key event), or count `/thank-you/` page views.
+
+Launch check in this mode: the demo form and a missing `gtm_id` are blockers; the GHL tracking script is not required.
+
+## More config options
+
+- `contact.slug`: the primary lead page every CTA button points to (default `contact`). Example: `"strategy-call"`.
+- `lead_pages`: extra pages built like the contact page (same form, own copy), so an old `/contact` or `/quote` URL can stay a real page. Each entry overrides any `contact` key: `slug`, `title`, `meta`, `h1`, `lead`, `form_name`, `next_steps`, `faqs`, `steps`, `body_html`, `page_type` (e.g. `ContactPage`).
+- Form fields (on `contact`, a lead page, or `home.form.form`): `extra_inputs` (name, label, autocomplete, required, full width), `selects` (use `""` as the first option for a "Choose one" placeholder, set by `select_placeholder`), `select_names`, `required_selects`, `consent_text` (SMS consent checkbox), `email_required`, `city_select`, `plan_select`, `success`.
+- `home.form` + `"form"` in `home.order`: the lead form right on the home page.
+- `tiers.items[].price` + `price_amount` (e.g. `"497"`): shows the price and adds it to the structured data as a monthly offer. `tiers.addons`: a priced add-ons list on the plans page.
+- `blog.category_prefix` (e.g. `blog/c`, GHL style) + `blog.categories`: category archive pages, so old category URLs keep working. Map each category name to a slug, or to `{slug, h1, title, lead, meta}`.
+- `business.legal_entity`, `founder`, `slogan`: extra organization structured data. `theme.colors.texture`: hero texture line color.
+- Pages built with `noindex` (thank-you, 404) are left out of `sitemap.xml`.
 
 ## GoHighLevel integration
 

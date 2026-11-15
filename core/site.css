@@ -335,3 +335,18 @@ a.card:hover{border-color:var(--c-secondary);transform:translateY(-3px);box-shad
 .form-err{display:none;background:#fde8e8;color:#8a1c1c;border-radius:10px;padding:14px;margin-top:14px;font-weight:600}
 .form-err.show{display:block}
 .form-msg a,.form-err a{color:inherit}
+/* add-ons list (tiers.addons) */
+.addons{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.addon{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--c-line);border-radius:var(--radius);padding:18px 20px}
+.addon h3{font-size:1.05rem;margin:0 0 .3em}.addon p{margin:0;color:var(--c-muted);font-size:.93rem}
+.addon b{font-family:var(--display);color:var(--c-primary);white-space:nowrap;font-size:1.05rem}
+/* category chips as links, form consent line */
+a.chip{text-decoration:none;color:var(--c-secondary-deep)}a.chip:hover{background:var(--c-secondary);color:#fff}
+.consent label{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:.85rem;color:var(--c-muted);line-height:1.45}
+.consent input{width:auto;margin-top:3px;flex:none}
+.page-hero .eyebrow a{color:inherit;text-decoration:none}
+/* plan grids size to the number of plans (2-plan sites center instead of leaving a gap) */
+.plans.n2{grid-template-columns:repeat(2,minmax(0,400px));justify-content:center}
+.plan .price.num{font-size:2.3rem;line-height:1.1;font-weight:800}
+.plan .price.num small{margin-top:4px;font-weight:400}
+@media (max-width:900px){.plans.n2{grid-template-columns:1fr}}
