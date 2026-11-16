@@ -1,4 +1,4 @@
-Last Updated: January 30, 2026
+Last Updated: November 16, 2026
 
 ## Section 1: Agreement to Terms
 
@@ -22,7 +22,7 @@ Steelclad Digital offers the following services:
 - Social media management (Facebook & Instagram)
 - Review generation and reputation monitoring
 - Paid social advertising (Facebook & Instagram)
-- Lead capture and automated follow-up systems
+- Lead capture forms, lead alerts and lead source tracking
 - Hosting, security, and website maintenance
 - Monthly performance reporting
 
@@ -33,8 +33,8 @@ Specific services delivered to each client are outlined in their individual serv
 A one-time setup fee is required before work begins. This fee covers:
 
 - Building or rebuilding your website
-- Configuring your CRM and lead capture system
-- Setting up automated follow-up sequences
+- Setting up lead capture forms and lead alerts
+- Setting up lead and traffic tracking (such as Google Analytics and Google Tag Manager)
 - Optimizing your Google Business Profile
 - Connecting hosting, security, and maintenance systems
 
@@ -74,7 +74,8 @@ You own everything Steelclad Digital builds for your business. This includes:
 - Your domain (if purchased on your behalf)
 - Your Google Business Profile
 - Your social media accounts and content
-- Your CRM data and lead information
+- Your lead information and form submissions
+- Your analytics and tracking accounts
 - All ad accounts created in your name
 
 Steelclad Digital will never hold your assets hostage or restrict your access to accounts and data that belong to you.
