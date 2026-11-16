@@ -396,7 +396,7 @@ CONFIG = {
     "web3forms_subject": "New lead from steelcladdigital.com",
     "web3forms_cc": "",                  # optional second inbox (paid Web3Forms plan only)
     "thank_you_slug": "thank-you",       # forms land on /thank-you/ after sending: count it as a GA4 / Ads conversion
-    "gtm_id": "",                        # Google Tag Manager (GA4 + 'generate_lead' event + thank-you page conversion)
+    "gtm_id": "GTM-MKD488Q8",            # Google Tag Manager (GA4 + 'generate_lead' event + thank-you page conversion)
     "chat_snippet": "",                  # optional: tawk.to embed, only if someone will answer chats
     "google_reviews_url": "",
   },
