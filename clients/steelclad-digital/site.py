@@ -398,7 +398,7 @@ CONFIG = {
     "chat_snippet": "",                  # optional: tawk.to embed, only if someone will answer chats
     "google_reviews_url": "",
   },
-  "launched": False,
+  "launched": True,                  # live on steelcladdigital.com since Nov 16, 2026: launch blockers now STOP the build
   "labels": {
     "cta": "Free Strategy Call", "cta_short": "Book Call", "cta_long": "Book Your Free Strategy Call",
     "phone_prefix": "Call or text", "topbar_promise": "Published pricing · Month-to-month · Owner-operated in Lexington, SC",

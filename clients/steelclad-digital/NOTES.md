@@ -1,5 +1,7 @@
 # Steelclad Digital (steelcladdigital.com): rebuild notes
 
+**LIVE since Nov 16, 2026** on Cloudflare Pages (project `steelclad-digital`), DNS on Cloudflare (nameservers harlee/kyle.ns.cloudflare.com, registrar Namecheap). Email: Proton (records verified after the move).
+
 The agency's own site, and the first site off GoHighLevel. Built Nov 15, 2026 from the live GHL site, its Terms of Service and Privacy Policy.
 
 - Build: `python3 build.py steelclad-digital` → `dist/steelclad-digital/`
