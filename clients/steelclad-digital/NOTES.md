@@ -10,7 +10,7 @@ The agency's own site, and the first site off GoHighLevel. Built Nov 15, 2026 fr
 
 **Blockers (the build will refuse to launch without these):**
 1. ~~**Web3Forms access key**~~ Done (Nov 16). The key was created with **steelcladdigital@gmail.com**, so every lead is emailed there. To send leads to team@ instead, create a new key with that address and swap it in `integrations.web3forms_access_key`.
-2. ~~**GTM container ID**~~ Done (Nov 16): `GTM-MKD488Q8`, with GA4 property `G-BS0V5J9Y7N` set up inside it (not in the site config). In GTM: GA4 config tag, a GA4 event tag on the `generate_lead` dataLayer event (mark it as a key event in GA4), or count page views of `/thank-you/`.
+2. ~~**GTM container ID**~~ Done (Nov 16): `GTM-KP9LD8WV` (Steelclad-owned account; replaces GTM-MKD488Q8, which sat under the TruePoint client account). GA4 Measurement ID goes inside GTM, not in the site config. In GTM: GA4 config tag, a GA4 event tag on the `generate_lead` dataLayer event (mark it as a key event in GA4), or count page views of `/thank-you/`.
 
 **Facts to confirm:**
 3. **Exit fee conflict.** The old /pricing page says a one-time **$500 exit fee**. Your Terms of Service (Section 8) say **no cancellation fee**, with migration help quoted only if you ask. The new site follows the Terms. If the $500 fee is real, the Terms need updating too.
