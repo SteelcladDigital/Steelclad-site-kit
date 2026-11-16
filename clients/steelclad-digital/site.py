@@ -367,7 +367,7 @@ CONFIG = {
   "business": {
     "name": "Steelclad Digital", "legal_name": "Steelclad Digital Marketing", "legal_entity": "Meadowlark Consulting Group",
     "domain": "https://steelcladdigital.com",
-    "phone": "(803) 205-2732", "tel": "+18032052732", "email": "team@steelcladdigital.com",
+    "phone": "(803) 881-1446", "tel": "+18038811446", "email": "team@steelcladdigital.com",
     "schema_type": ["LocalBusiness", "ProfessionalService"],
     "description": "Owner-operated digital marketing agency in Lexington, SC for home services businesses: websites, local SEO, Google Business Profile management, social media, review management and paid ads. Published pricing, month-to-month.",
     "slogan": "Get found. Get calls.",
@@ -434,7 +434,7 @@ CONFIG = {
                       ("calendar", "Month-to-month.", "We earn your business every month instead of locking you in."),
                       ("shield", "Full transparency.", "You own every account, asset and piece of data. No black boxes.")]},
     "steps": {"eyebrow": "How it works", "title": "From first call to a phone that rings",
-              "items": [("Book a free call", "Fill out the short form or call (803) 205-2732. We reply within one business day."),
+              "items": [("Book a free call", "Fill out the short form or call (803) 881-1446. We reply within one business day."),
                         ("See where you stand", "On the 30-minute call we go through your website, Google profile, local rankings and lead flow together."),
                         ("Get a straight plan", "A clear recommendation at a published price. If we're not the right fit, we'll say so."),
                         ("We build and run it", "Your foundation goes live, then we work it every month and report in plain English.")]},
@@ -579,7 +579,7 @@ CONFIG = {
   "lead_pages": [
     {"slug": "contact", "crumb": "Contact", "form_name": "contact", "page_type": "ContactPage",
      "title": "Contact Our Lexington, SC Agency",
-     "meta": "Contact Steelclad Digital in Lexington, SC. Call or text (803) 205-2732, email team@steelcladdigital.com, or send a message. Mon–Fri 8am–6pm.",
+     "meta": "Contact Steelclad Digital in Lexington, SC. Call or text (803) 881-1446, email team@steelcladdigital.com, or send a message. Mon–Fri 8am–6pm.",
      "h1": "Contact Steelclad Digital",
      "lead": "Questions about a service, pricing or your account? Call, text or email, or send a note below and we'll get back to you within one business day.",
      "extra_inputs": [("company", "Business name (optional)", "organization", False, True)], "required_selects": [],

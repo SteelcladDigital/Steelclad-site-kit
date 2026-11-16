@@ -20,7 +20,7 @@ The agency's own site, and the first site off GoHighLevel. Built Nov 15, 2026 fr
 7. **Owner name.** The old About page's photo alt text says "Founder Marcus Vance" on what looks like a stock photo. If that's the owner, add `"founder"` in `business` plus a real photo and a short bio (big trust and E-E-A-T win for an owner-operated agency). If not, nothing on the new site uses it.
 8. **City pages** (Lexington, Columbia, West Columbia, Cayce, Irmo, Chapin) assume you take clients in all six. The local notes are general market observations, not stats. Remove any city you don't want work from.
 9. **"Do you only work with businesses in South Carolina?"** The answer on the new strategy-call page is a proposal ("Midlands and across SC, reach out anyway"). The old answer wasn't readable.
-10. **Phone number (803) 205-2732.** If it's a GHL/LeadConnector number, **port it out before cancelling GHL**, and re-register A2P texting with the new provider. The SMS consent text on the form was kept from the old form.
+10. **Phone number changed (Nov 16):** the GHL number (803) 205-2732 is replaced by a Google Voice number, **(803) 881-1446**, forwarding to the owner's cell. Update it on Google Business Profile and Bing Places the same day the site goes live; cancel GHL only after that. Free Google Voice suits one-to-one calls and texts, not bulk/automated texting (the SMS consent line on the form covers call confirmations and reminders).
 11. **Privacy Policy**: migrated as-is, plus one sentence naming Web3Forms as the form processor, and a new Last Updated date (Nov 15, 2026). Review it.
 12. **Logo** was redrawn as SVG from the live header. Drop the original file in `assets/` and switch `logo.type` to `image` if you prefer.
 

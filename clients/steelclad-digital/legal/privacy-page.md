@@ -40,7 +40,7 @@ If you opt in to receive text messages from Steelclad Digital Marketing, we may 
 - **Message frequency.** Message frequency varies (for example, based on appointments, service activity, and your interactions with us).
 - **Rates.** Message and data rates may apply.
 - **Opt out.** You can opt out at any time by replying STOP. After you send STOP, we may send a one-time confirmation of your opt-out, and you will no longer receive SMS messages unless you opt back in.
-- **Help.** For help, reply HELP or contact us at [team@steelcladdigital.com](mailto:team@steelcladdigital.com) or [(803) 205-2732](tel:+18032052732).
+- **Help.** For help, reply HELP or contact us at [team@steelcladdigital.com](mailto:team@steelcladdigital.com) or [(803) 881-1446](tel:+18038811446).
 - **Consent.** Consent to receive text messages is not a condition of purchase.
 - **Sharing.** We do not sell or share your mobile number, SMS opt-in data, or consent information with third parties for their own marketing purposes. We may share information with vendors that help us deliver messages (such as SMS platform providers) solely to provide services on our behalf.
 
@@ -91,4 +91,4 @@ We may update this Privacy Policy from time to time. The updated version will be
 For data access requests, disclosure concerns, or other privacy questions, contact us directly:
 
 - **Email:** [team@steelcladdigital.com](mailto:team@steelcladdigital.com)
-- **Phone:** [(803) 205-2732](tel:+18032052732)
+- **Phone:** [(803) 881-1446](tel:+18038811446)

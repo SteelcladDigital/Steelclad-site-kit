@@ -9,7 +9,7 @@ By engaging Meadowlark Consulting Group, doing business as Steelclad Digital Mar
 Steelclad Digital Marketing is a trade name of Meadowlark Consulting Group. Operating as Steelclad Digital, we are an owner-operated digital marketing agency based in Lexington, South Carolina. We provide digital marketing services to home services businesses and other small businesses. All services are delivered directly by the owner.
 
 - **Email:** [team@steelcladdigital.com](mailto:team@steelcladdigital.com)
-- **Phone:** (803) 205-2732
+- **Phone:** (803) 881-1446
 - **Location:** Lexington, SC
 
 ## Section 3: Services Provided
@@ -130,5 +130,5 @@ These Terms of Service are governed by the laws of the State of South Carolina. 
 If you have any questions about these Terms of Service, reach out directly:
 
 - **Email:** [team@steelcladdigital.com](mailto:team@steelcladdigital.com)
-- **Phone:** (803) 205-2732
+- **Phone:** (803) 881-1446
 - **Location:** Lexington, SC
