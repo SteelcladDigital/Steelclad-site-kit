@@ -9,7 +9,7 @@ The agency's own site, and the first site off GoHighLevel. Built Nov 15, 2026 fr
 ## Before launch: decisions and facts to confirm
 
 **Blockers (the build will refuse to launch without these):**
-1. **Web3Forms access key**: web3forms.com → enter team@steelcladdigital.com → paste the key into `integrations.web3forms_access_key`.
+1. ~~**Web3Forms access key**~~ Done (Nov 16). The key was created with **steelcladdigital@gmail.com**, so every lead is emailed there. To send leads to team@ instead, create a new key with that address and swap it in `integrations.web3forms_access_key`.
 2. **GTM container ID** in `integrations.gtm_id`. In GTM: GA4 config tag, a GA4 event tag on the `generate_lead` dataLayer event (mark it as a key event in GA4), or count page views of `/thank-you/`.
 
 **Facts to confirm:**
@@ -62,7 +62,7 @@ Next posts should target questions the service and city pages can't (e.g. "how m
 
 1. Fill the two blockers above, then `python3 build.py steelclad-digital --check` → READY TO LAUNCH.
 2. Cloudflare: Workers & Pages → Create → Pages → Connect to Git → `Steelclad-site-kit`. Project `steelclad-digital`, framework None, build `python3 build.py steelclad-digital`, output `dist/steelclad-digital`. Review on `steelclad-digital.pages.dev`.
-3. Send a test lead from the pages.dev URL; confirm the email arrives (check spam once) with page + UTM fields.
+3. Send a test lead from the pages.dev URL; confirm it arrives at steelcladdigital@gmail.com (check spam once) with page + UTM fields.
 4. Custom domain: add `steelcladdigital.com` in the Pages project. **Copy the existing MX/TXT records first** so team@ email keeps working when DNS moves off GHL.
 5. Set `"launched": True`, push, and resubmit `https://steelcladdigital.com/sitemap.xml` in Search Console.
 6. Point your social scheduler's RSS feature (if it has one) at `/blog/rss.xml`.

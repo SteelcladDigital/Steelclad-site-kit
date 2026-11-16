@@ -392,7 +392,7 @@ CONFIG = {
   "favicon_svg": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="4" fill="#111a2e"/><path d="M16 4l10 3.6v8.2c0 6.6-4.4 10.6-10 12.6-5.6-2-10-6-10-12.6V7.6z" fill="#f97316"/><path d="M20 11.4c-1-1-2.4-1.5-4-1.5-2.4 0-3.9 1.2-3.9 2.9 0 1.9 1.5 2.5 3.6 2.9 1.7.4 2.3.7 2.3 1.4 0 .8-.8 1.3-2.1 1.3-1.4 0-2.6-.5-3.5-1.5L11.2 18.6c1.2 1.1 2.8 1.8 4.7 1.8 2.6 0 4.2-1.3 4.2-3.1 0-1.9-1.5-2.6-3.7-3-1.7-.3-2.2-.6-2.2-1.3 0-.6.7-1.1 1.8-1.1 1 0 2 .4 2.8 1.1z" fill="#111a2e"/></svg>',
   "integrations": {
     "form_mode": "web3forms",            # no GHL: forms post to Web3Forms, which emails each lead
-    "web3forms_access_key": "244cce77-89f5-4b2f-bb23-9955aae95c9e",   # Web3Forms key for team@steelcladdigital.com (public by design)
+    "web3forms_access_key": "244cce77-89f5-4b2f-bb23-9955aae95c9e",   # Web3Forms key: leads are emailed to steelcladdigital@gmail.com (public by design)
     "web3forms_subject": "New lead from steelcladdigital.com",
     "web3forms_cc": "",                  # optional second inbox (paid Web3Forms plan only)
     "thank_you_slug": "thank-you",       # forms land on /thank-you/ after sending: count it as a GA4 / Ads conversion
