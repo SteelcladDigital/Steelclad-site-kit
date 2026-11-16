@@ -200,7 +200,8 @@ class Site:
              "url": self.D + "/", "telephone": b["tel"], "description": b["description"], "address": addr,
              "openingHoursSpecification": [{"@type": "OpeningHoursSpecification", "dayOfWeek": d, "opens": o, "closes": c} for d, o, c in b["hours"]],
              "sameAs": [u for u in b.get("social", {}).values() if u]}
-        logo = self.c["logo"].get("file") or "logo.svg"; s["logo"] = s["image"] = self.D + "/assets/" + logo
+        logo = self.c["logo"].get("schema_file") or self.c["logo"].get("file") or "logo.svg"   # schema_file: a version for light backgrounds (Google shows logos on white)
+        s["logo"] = s["image"] = self.D + "/assets/" + logo
         if b.get("geo"): s["geo"] = {"@type": "GeoCoordinates", "latitude": b["geo"][0], "longitude": b["geo"][1]}
         if b.get("price_range"): s["priceRange"] = b["price_range"]
         if b.get("email"): s["email"] = b["email"]
@@ -312,7 +313,7 @@ class Site:
 <meta property="og:type" content="{og_type}"><meta property="og:site_name" content="{esc(brand)}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(meta)}">
 <meta property="og:url" content="{self.canon(cur)}"><meta property="og:image" content="{self.D}/assets/{og}"><meta name="twitter:card" content="summary_large_image">
 <meta name="geo.region" content="US-{self.b["address"]["region"]}"><meta name="geo.placename" content="{esc(self.b["address"]["locality"])}">
-<meta name="theme-color" content="{self.c["theme"]["colors"]["primary"]}"><link rel="icon" href="{self.asset(cur,"favicon.svg")}" type="image/svg+xml">
+<meta name="theme-color" content="{self.c["theme"]["colors"]["primary"]}"><link rel="icon" href="{self.asset(cur,"favicon.svg")}" type="image/svg+xml">{f'<link rel="apple-touch-icon" href="{self.asset(cur,"apple-touch-icon.png")}">' if os.path.exists(os.path.join(self.client_assets, "apple-touch-icon.png")) else ""}
 {pre}<link rel="stylesheet" href="{self.asset(cur,"theme.css")}"><link rel="stylesheet" href="{self.asset(cur,"site.css")}">
 <script type="application/ld+json">{ld}</script>{gtm}{rss}
 </head><body>
