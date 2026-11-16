@@ -19,11 +19,11 @@ PLANS = [
         "items": [
             "Professional website, or management of your current one",
             "Google Business Profile management (52 posts a year)",
-            "Lead capture and automated follow-up",
+            "Lead capture forms with instant lead alerts",
             "Monthly locally optimized SEO blog post (600–800 words)",
             "Local citations and directory listings",
             "Hosting, security and maintenance",
-            "Monthly performance report in plain English",
+            "Monthly plain-English report, including where your leads came from",
         ],
     },
     {
@@ -351,7 +351,7 @@ GENERAL_FAQS = [
 ]
 
 PRICING_FAQS = [
-    ("Why is there a setup fee?", "It covers the work before launch: building or rebuilding your website, setting up lead capture and notifications, optimizing your Google Business Profile and connecting hosting and maintenance. It's a one-time cost, not a contract or a deposit."),
+    ("Why is there a setup fee?", "It covers the work before launch: building or rebuilding your website, setting up lead capture forms, lead alerts and tracking, optimizing your Google Business Profile and connecting hosting and maintenance. It's a one-time cost, not a contract or a deposit."),
     ("What if I want to leave?", "Service is month-to-month. Send written notice and service ends at the close of your billing cycle, with no cancellation fee. You keep your content, data, domain and accounts."),
     ("Why only two plans?", "Bronze-silver-gold packages make you pay for things you don't need. Foundation is the starting point; Growth adds social and reviews; add-ons cover anything else, and you can add or remove them with 30 days' notice."),
     ("Is ad spend included?", "No. If you run ads, you pay the platform (Meta) directly and own the ad account. Our fee covers setup, management and optimization only."),
@@ -459,7 +459,7 @@ CONFIG = {
     "compare": [
         ("Professional website or management of your current site", 1, 1), ("Hosting, security & maintenance", 1, 1),
         ("Google Business Profile management (52 posts/yr)", 1, 1), ("Monthly local SEO blog post (600–800 words)", 1, 1),
-        ("Local citations & directory listings", 1, 1), ("Lead capture & automated follow-up", 1, 1),
+        ("Local citations & directory listings", 1, 1), ("Lead capture forms & instant lead alerts", 1, 1), ("Lead source tracking (which page, search or ad)", 1, 1),
         ("Monthly plain-English performance report", 1, 1),
         ("Social media: 2 posts/week on Facebook & Instagram", "+$197/mo", 1),
         ("Review generation & reputation monitoring", "+$197/mo", 1),
@@ -470,7 +470,7 @@ CONFIG = {
     "pricing_explainer": {"title": "How our pricing works",
         "body_html": "<p>Most marketing agencies hide their prices behind a sales call. We publish ours, because you should know what something costs before you spend 30 minutes on the phone.</p><p><strong>Foundation</strong> is the starting point for every client. <strong>Growth</strong> adds social media and review generation. Anything else is an add-on you can turn on or off with 30 days' notice. There's a <strong>one-time setup fee</strong> for the work before launch, and after that it's one monthly price, month-to-month.</p>",
         "factors_title": "What the one-time setup fee covers",
-        "factors": ["Building or rebuilding your website", "Setting up lead capture and notifications", "Setting up automated follow-up",
+        "factors": ["Building or rebuilding your website", "Setting up lead capture forms and lead alerts", "Setting up lead and traffic tracking",
                     "Optimizing your Google Business Profile", "Connecting hosting, security and maintenance"]},
     "faqs": PRICING_FAQS,
   },
