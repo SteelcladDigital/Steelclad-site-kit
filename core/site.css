@@ -174,9 +174,9 @@ a.card:hover{border-color:var(--c-secondary);transform:translateY(-3px);box-shad
 .promise-list{list-style:none;padding:0;margin:0;display:grid;gap:14px}
 .promise-list li{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:18px 20px;display:flex;gap:14px}
 .promise-list b{color:#fff;display:block;font-size:1.05rem}
-.promise-list svg{width:28px;height:28px;color:var(--c-accent);flex:none;margin-top:2px}
+.promise-list svg{width:28px;height:28px;color:var(--c-highlight);flex:none;margin-top:2px}
 .bigquote{font-family:var(--display);font-size:clamp(1.6rem,3vw,2.3rem);color:#fff;line-height:1.25}
-.bigquote em{color:var(--c-accent);font-style:normal}
+.bigquote em{color:var(--c-highlight);font-style:normal}
 
 /* reviews */
 .reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
@@ -350,3 +350,16 @@ a.chip{text-decoration:none;color:var(--c-secondary-deep)}a.chip:hover{backgroun
 .plan .price.num{font-size:2.3rem;line-height:1.1;font-weight:800}
 .plan .price.num small{margin-top:4px;font-weight:400}
 @media (max-width:900px){.plans.n2{grid-template-columns:1fr}}
+
+/* theme.header: "light" — white header for full-color logos that don't read on a dark bar */
+.hdr-light .site-header{background:#fff;box-shadow:0 1px 0 var(--c-line),0 6px 18px rgba(0,0,0,.04)}
+.hdr-light .logo img{height:64px;width:auto}
+.hdr-light .nav a.nl,.hdr-light .nav button.nl{color:var(--c-primary)}
+.hdr-light .nav a.nl:hover,.hdr-light .nav button.nl:hover,.hdr-light .nav a.nl[aria-current]{background:var(--c-secondary-wash);color:var(--c-primary-deep)}
+.hdr-light .menu-toggle{color:var(--c-primary)}
+@media (max-width:1020px){
+  .hdr-light .nav{background:#fff;box-shadow:0 12px 24px rgba(0,0,0,.08)}
+  .hdr-light .dropdown a{color:var(--c-ink)}.hdr-light .dropdown a:hover{background:var(--c-secondary-wash)}
+  .hdr-light .dropdown .sep{color:var(--c-muted)}
+}
+@media (max-width:560px){.hdr-light .logo img{height:50px}}

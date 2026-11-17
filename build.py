@@ -173,7 +173,7 @@ class Site:
         faces = "".join(f'@font-face{{font-family:"{FONT_FAMILY[f]}";src:url(fonts/{f}.woff2) format("woff2");font-weight:100 900;font-display:swap}}\n' for f in sorted({disp, body}))
         return faces + f''':root{{
 --c-primary:{col["primary"]};--c-primary-deep:{col["primary_deep"]};--c-secondary:{col["secondary"]};--c-secondary-deep:{col["secondary_deep"]};
---c-secondary-wash:{col["secondary_wash"]};--c-accent:{col["accent"]};--c-accent-text:{col.get("accent_text","#121c35")};
+--c-secondary-wash:{col["secondary_wash"]};--c-accent:{col["accent"]};--c-highlight:{col.get("highlight", col["accent"])};--c-accent-text:{col.get("accent_text","#121c35")};
 --c-surface:{col["surface"]};--c-ink:{col.get("ink","#16213a")};--c-muted:{col.get("muted","#4a5674")};--c-line:#dfe3ea;--c-white:#fff;
 --radius:{radius[0]};--btn-radius:{radius[1]};--shadow:0 10px 30px rgba(18,28,53,.12);
 --display:"{FONT_FAMILY[disp]}",system-ui,sans-serif;--body:"{FONT_FAMILY[body]}",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -184,10 +184,11 @@ class Site:
 '''
 
     # ---------- logo
-    def logo(self, cur):
+    def logo(self, cur, where="header"):
         lg = self.c["logo"]
-        if lg["type"] == "svg": return lg["svg"]
-        if lg["type"] == "image": return f'<img src="{self.asset(cur, lg["file"])}" alt="{esc(self.b["name"])}" width="{lg.get("width",160)}" height="{lg.get("height",58)}">'
+        if lg["type"] == "svg": return lg.get("footer_svg", lg["svg"]) if where == "footer" else lg["svg"]
+        # logo.footer_file: a version for the dark footer (e.g. full-color logo on a light header + a knockout in the footer)
+        if lg["type"] == "image": return f'<img src="{self.asset(cur, lg.get("footer_file", lg["file"]) if where == "footer" else lg["file"])}" alt="{esc(self.b["name"])}" width="{lg.get("width",160)}" height="{lg.get("height",58)}">'
         return '<span class="logo-text">' + "<br>".join(esc(x) for x in lg["lines"]) + "</span>"
 
     # ---------- schema
@@ -279,7 +280,7 @@ class Site:
         comp = "".join(f'<li><a href="{self.href(cur,p)}">{esc(n)}</a></li>' for p, n in company)
         legal = " · ".join(f'<a href="{self.href(cur,s)}">{esc(n)}</a>' for s, n in self.c.get("legal_pages", []))
         return f'''<footer class="site-footer"><div class="wrap"><div class="cols">
-<div><a class="logo" href="{self.href(cur,"")}">{self.logo(cur)}</a><p style="margin-top:16px">{esc(L["footer_blurb"])}</p>
+<div><a class="logo" href="{self.href(cur,"")}">{self.logo(cur, "footer")}</a><p style="margin-top:16px">{esc(L["footer_blurb"])}</p>
 <p><a href="tel:{b["tel"]}"><strong>{b["phone"]}</strong></a><br>{esc(b["hours_text"])}</p><div class="social">{social}</div></div>
 <div><h4>{esc(L.get("footer_services_title","Services"))}</h4><ul>{svc}</ul></div>{col3}
 <div><h4>Company</h4><ul>{comp}</ul></div>
@@ -316,7 +317,7 @@ class Site:
 <meta name="theme-color" content="{self.c["theme"]["colors"]["primary"]}"><link rel="icon" href="{self.asset(cur,"favicon.svg")}" type="image/svg+xml">{f'<link rel="apple-touch-icon" href="{self.asset(cur,"apple-touch-icon.png")}">' if os.path.exists(os.path.join(self.client_assets, "apple-touch-icon.png")) else ""}
 {pre}<link rel="stylesheet" href="{self.asset(cur,"theme.css")}"><link rel="stylesheet" href="{self.asset(cur,"site.css")}">
 <script type="application/ld+json">{ld}</script>{gtm}{rss}
-</head><body>
+</head><body{' class="hdr-light"' if self.c["theme"].get("header") == "light" else ""}>
 {self.header(cur)}
 <main id="main">
 {body}
@@ -382,11 +383,13 @@ class Site:
         return f'''<section><div class="wrap"><div class="cta-band"><div><h2>{h}</h2><p>{p}</p></div>
 <div class="btn-row"><a class="btn btn-gold" href="{self.href(cur,self.cta)}">{esc(self.L["cta"])}</a><a class="btn btn-ghost" href="tel:{self.b["tel"]}">{self.b["phone"]}</a></div></div></div></section>'''
 
-    def svc_path(self, s): return f'{self.c["services_hub"]["slug"]}/{s["slug"]}'
-    def service_cards(self, cur, exclude=None):
+    def svc_path(self, s):   # services_hub.flat_urls: service pages at /<slug>/ (keeps old top-level URLs like /lawn-care-lexington-sc)
+        return s["slug"] if self.c["services_hub"].get("flat_urls") else f'{self.c["services_hub"]["slug"]}/{s["slug"]}'
+    def service_cards(self, cur, exclude=None, limit=None):
+        svcs = [s for s in self.c["services"] if s["slug"] != exclude][:limit]
         return '<div class="grid-3">' + "".join(
             f'<a class="card" href="{self.href(cur,self.svc_path(s))}"><span class="ic">{icon(s["icon"])}</span><h3>{esc(s["name"])}</h3><p>{esc(s["short"])}</p><span class="more">Learn more →</span></a>'
-            for s in self.c["services"] if s["slug"] != exclude) + "</div>"
+            for s in svcs) + "</div>"
 
     def area_block(self, cur):
         A = self.areas; cols = ""
@@ -437,7 +440,9 @@ class Site:
             st = h["steps"]
             S["steps"] = f'<section class="bg-sand"><div class="wrap"><div class="section-head"><span class="eyebrow">{esc(st["eyebrow"])}</span><h2>{esc(st["title"])}</h2></div><div class="steps">' + "".join(f'<div class="step"><h3>{esc(t)}</h3><p>{esc(d)}</p></div>' for t, d in st["items"]) + "</div></div></section>"
         sh = self.c["services_hub"]
-        S["services"] = f'<section><div class="wrap"><div class="section-head"><span class="eyebrow">{esc(sh["nav_label"])}</span><h2>{esc(sh["home_title"])}</h2><p class="lead">{esc(sh["home_lead"])}</p></div>{self.service_cards(cur)}</div></section>'
+        n_svc = len(self.c["services"]); hc = sh.get("home_count")   # services_hub.home_count: feature the first N services on the home page, link the rest
+        more_svc = f'<p style="margin-top:28px"><a class="btn btn-outline" href="{self.href(cur, sh["slug"])}">See all {n_svc} services →</a></p>' if hc and hc < n_svc else ""
+        S["services"] = f'<section><div class="wrap"><div class="section-head"><span class="eyebrow">{esc(sh["nav_label"])}</span><h2>{esc(sh["home_title"])}</h2><p class="lead">{esc(sh["home_lead"])}</p></div>{self.service_cards(cur, limit=sh.get("home_count"))}{more_svc}</div></section>'
         S["reviews"] = f'<section class="bg-sand"><div class="wrap"><div class="section-head center"><span class="eyebrow">Reviews</span><h2>{esc(L["reviews_title"])}</h2></div>{self.reviews_block()}</div></section>' if self.c["reviews"] else ""
         if self.areas:
             S["areas"] = f'<section class="bg-sand"><div class="wrap"><div class="section-head center"><span class="eyebrow">{esc(self.areas["nav_label"])}</span><h2>{esc(self.areas["home_title"])}</h2></div>{self.area_block(cur)}</div></section>'
@@ -534,6 +539,7 @@ class Site:
         R = self.resource; cur = R["slug"]; trail = self.trail((R["nav_label"], cur))
         cards = "".join(f'<article class="month"><small>{esc(k)}</small><h3>{esc(t)}</h3><ul>{"".join("<li>"+esc(i)+"</li>" for i in items)}</ul></article>' for k, t, items in R["cards"])
         body = self.page_hero(cur, trail, R["h1"], esc(R["lead"]), sand=True) + f'''<section class="bg-sand" style="padding-top:40px"><div class="wrap"><h2 class="skip">{esc(R["nav_label"])}</h2><div class="cal">{cards}</div></div></section>
+{f'<section><div class="wrap"><div class="prose" style="max-width:860px">{self.rel_links(cur, R["body_html"])}</div></div></section>' if R.get("body_html") else ""}
 <section><div class="wrap"><div class="section-head center"><span class="eyebrow">FAQ</span><h2>{esc(R["faq_title"])}</h2></div>{self.faq_block(R["faqs"])}</div></section>{self.cta_band(cur, R["cta_title"], R["cta_text"])}'''
         sch = [self.faq_schema(R["faqs"]), {"@type": "Article", "headline": R["h1"], "author": {"@id": self.D + "/#business"}, "publisher": {"@id": self.D + "/#business"}, "dateModified": TODAY, "mainEntityOfPage": self.canon(cur)}]
         self.pages[cur] = self.page(cur, R["title"], R["meta"], body, sch, trail)
