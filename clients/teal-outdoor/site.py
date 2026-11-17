@@ -598,7 +598,7 @@ CONFIG = {
     "gtm_id": "GTM-W3KKNTH5",          # client's OWN Tag Manager account
     "google_reviews_url": "",           # TODO: GBP "read reviews" link once confirmed
   },
-  "launched": False,                   # set True only after client approval + clean --check, when DNS points to Cloudflare
+  "launched": True,                    # approved by Billy Nov 17, 2026: any launch blocker now stops the Cloudflare build
   "labels": {
     "cta": "Get a Free Estimate", "cta_short": "Free Estimate", "cta_long": "Get Your Free Estimate",
     "phone_prefix": "Call or text", "topbar_promise": "We do what we say. When we say we'll do it.",

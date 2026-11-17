@@ -5,7 +5,7 @@ Domain registrar: Namecheap · Email: personal Gmail (no email on the domain) ·
 
 - Build: `python3 build.py teal-outdoor` → `dist/teal-outdoor`
 - Preview: `python3 build.py teal-outdoor --preview`
-- Status: **not live**. Branch `teal-outdoor-rebuild`, not merged to `main`. `launched` is off.
+- Status: **approved by Billy (Nov 17, 2026)**, merged to `main`, `launched: True`. Goes live when tealoutdoorservices.com is added to the `teal-outdoor` Cloudflare Pages project.
 
 ## Billy's answers (Nov 17, 2026): applied
 
