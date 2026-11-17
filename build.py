@@ -443,6 +443,9 @@ class Site:
         n_svc = len(self.c["services"]); hc = sh.get("home_count")   # services_hub.home_count: feature the first N services on the home page, link the rest
         more_svc = f'<p style="margin-top:28px"><a class="btn btn-outline" href="{self.href(cur, sh["slug"])}">See all {n_svc} services →</a></p>' if hc and hc < n_svc else ""
         S["services"] = f'<section><div class="wrap"><div class="section-head"><span class="eyebrow">{esc(sh["nav_label"])}</span><h2>{esc(sh["home_title"])}</h2><p class="lead">{esc(sh["home_lead"])}</p></div>{self.service_cards(cur, limit=sh.get("home_count"))}{more_svc}</div></section>'
+        g = h.get("gallery")
+        S["gallery"] = (f'<section><div class="wrap"><div class="section-head"><span class="eyebrow">{esc(g.get("eyebrow","Our work"))}</span><h2>{esc(g["title"])}</h2>'
+                        + (f'<p>{esc(g["lead"])}</p>' if g.get("lead") else "") + '</div>' + self.photo_grid(cur, g["photos"]) + '</div></section>') if g else ""
         S["reviews"] = f'<section class="bg-sand"><div class="wrap"><div class="section-head center"><span class="eyebrow">Reviews</span><h2>{esc(L["reviews_title"])}</h2></div>{self.reviews_block()}</div></section>' if self.c["reviews"] else ""
         if self.areas:
             S["areas"] = f'<section class="bg-sand"><div class="wrap"><div class="section-head center"><span class="eyebrow">{esc(self.areas["nav_label"])}</span><h2>{esc(self.areas["home_title"])}</h2></div>{self.area_block(cur)}</div></section>'
@@ -492,6 +495,11 @@ class Site:
         body = self.page_hero(cur, trail, sh["h1"], esc(sh["lead"])) + f'<section><div class="wrap"><div class="section-head"><h2>{esc(sh["home_title"])}</h2></div>{self.service_cards(cur)}</div></section>{extra}{self.cta_band(cur)}'
         self.pages[cur] = self.page(cur, sh["title"], sh["meta"], body, None, trail)
 
+    def photo_grid(self, cur, photos):
+        """Real job photos: [{"file": "photos/x.webp", "alt": "...", "caption": "...", "w": 1200, "h": 900}] from clients/<client>/assets/."""
+        figs = "".join(f'<figure><img src="{self.asset(cur, ph["file"])}" alt="{esc(ph["alt"])}" width="{ph.get("w",1200)}" height="{ph.get("h",900)}" loading="lazy" decoding="async">'
+                       f'{"<figcaption>" + esc(ph["caption"]) + "</figcaption>" if ph.get("caption") else ""}</figure>' for ph in photos)
+        return f'<div class="photo-grid">{figs}</div>'
     def service_page(self, s):
         sh = self.c["services_hub"]; cur = self.svc_path(s); trail = self.trail((sh["nav_label"], sh["slug"]), (s["name"], cur))
         inc = "".join(f'<div class="inc"><h3>{esc(t)}</h3><p>{esc(d)}</p></div>' for t, d in s["included"])
@@ -504,6 +512,7 @@ class Site:
         alt = f'<a class="btn btn-ghost" href="{self.href(cur,self.tiers["slug"])}">Compare {esc(self.tiers["nav_label"].lower())}</a>' if self.tiers else ""
         body = self.page_hero(cur, trail, esc(s["h1"]), esc(s["lead"])) + f'''
 <section><div class="wrap layout-side"><div class="prose"><h2>{esc(s["included_title"])}</h2><div class="included">{inc}</div>
+{f'<h2>{esc(s.get("photos_title","Recent work"))}</h2>' + self.photo_grid(cur, s["photos"]) if s.get("photos") else ""}
 {f'<h2>{esc(s["signs_title"])}</h2><ul class="checklist">{signs}</ul>' if signs else ""}{faq_html}{where}</div>
 <aside class="aside"><h3>{esc(self.L["aside_title"])}</h3><p>{esc(self.L["aside_text"])}</p><a class="phone" href="tel:{self.b["tel"]}">{self.b["phone"]}</a>
 <a class="btn btn-gold" href="{self.href(cur,self.cta)}">{esc(self.L["cta"])}</a>{alt}<p style="margin:12px 0 0;font-size:.85rem">{esc(self.L["aside_badges"])}</p></aside></div></section>
@@ -660,9 +669,14 @@ class Site:
 
     def about_page(self):
         A = self.c["about"]; cur = "about"; trail = self.trail(("About", cur))
+        ph = A.get("photo")   # about.photo: owner/team photo beside the story; about.photos: a work gallery section
+        photo_html = (f'<figure class="about-photo"><img src="{self.asset(cur, ph["file"])}" alt="{esc(ph["alt"])}" width="{ph.get("w",600)}" height="{ph.get("h",800)}" loading="lazy">'
+                      + (f'<figcaption>{esc(ph["caption"])}</figcaption>' if ph.get("caption") else "") + '</figure>') if ph else ""
+        gallery = (f'<section class="bg-sand"><div class="wrap"><div class="section-head"><h2>{esc(A.get("photos_title", "Our work"))}</h2></div>'
+                   + self.photo_grid(cur, A["photos"]) + '</div></section>') if A.get("photos") else ""
         body = self.page_hero(cur, trail, A["h1"], esc(A["lead"])) + f'''<section><div class="wrap grid-2"><div class="prose"><span class="eyebrow">Our story</span><h2>{esc(A["story_title"])}</h2>{A["story_html"]}</div>
-<div><h3>{esc(A["list_title"])}</h3><ul class="checklist">{"".join("<li>"+esc(x)+"</li>" for x in A["list"])}</ul></div></div></section>
-{f'<section class="bg-sand"><div class="wrap"><div class="section-head center"><span class="eyebrow">Reviews</span><h2>What our customers say</h2></div>{self.reviews_block()}</div></section>' if self.c["reviews"] else ""}{self.cta_band(cur)}'''
+<div>{photo_html}<h3>{esc(A["list_title"])}</h3><ul class="checklist">{"".join("<li>"+esc(x)+"</li>" for x in A["list"])}</ul></div></div></section>
+{gallery}{f'<section class="bg-sand"><div class="wrap"><div class="section-head center"><span class="eyebrow">Reviews</span><h2>What our customers say</h2></div>{self.reviews_block()}</div></section>' if self.c["reviews"] else ""}{self.cta_band(cur)}'''
         self.pages[cur] = self.page(cur, A["title"], A["meta"], body, None, trail)
 
     # ---------- lead forms (contact page, extra lead pages, optional home-page section)

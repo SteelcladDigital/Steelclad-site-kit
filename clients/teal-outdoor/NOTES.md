@@ -16,6 +16,18 @@ Domain registrar: Namecheap · Email: personal Gmail (no email on the domain) ·
 - **Aiken County:** added `/property-maintenance-aiken-county-sc/` (county-level page), plus Aiken in the hub group, schema areaServed and the general FAQ. Confirm how far he goes (e.g. North Augusta).
 - **Customer email (Greg Boling, Holtzman Propane | Valley Ice):** NOT published. Get Greg's permission first, then use it as "Greg B., Holtzman Propane" (no phone number), or ask Greg for a Google review.
 
+## Photos (Nov 17, 2026)
+
+These are 8 real photos from Billy, stored in `assets/photos/*.webp` (resized to 1200px, about 200–360 KB each).
+- **Blurred:** the customer's signs (Edisto Recycling) on the roadside planting photo and the house number on the residential bed.
+- **Where they're used:**
+  - Home page: "Recent jobs" gallery
+  - Commercial page: before/after pair plus two installs
+  - Landscaping page
+  - Fence page
+  - About page: Billy's portrait and the equipment shot
+- **Still wanted:** pond and right-of-way photos, the two growth services with no pictures yet. Before-and-after pond banks would be ideal.
+
 ## Before launch: still open (original list; items 3–6 resolved above)
 
 1. **The old site is losing leads right now.** The GHL form shows "Unable to find form" on the contact page and every service page, and the header "Get a Free Estimate" button links to `#`. The new site posts to Web3Forms, which emails tealoutdoorservices@gmail.com. After launch, send one test from the live domain and check spam the first time.

@@ -7,6 +7,19 @@ LICENSE = "SC pesticide applicator license #C0035614 (Category 5 Aquatic, Catego
 
 FAVICON_SVG = open(__file__.replace("site.py", "source/favicon.svg")).read()
 
+# ---------------------------------------------------------------- PHOTOS (real job photos from Billy, Nov 2026)
+# Customer signage blurred on the roadside photo; house number blurred on the residential bed.
+def P(f, alt, caption="", w=1200, h=900): return {"file": "photos/" + f + ".webp", "alt": alt, "caption": caption, "w": w, "h": h}
+PH = {
+    "before": P("commercial-before", "Overgrown shrubs covering the side of a commercial metal building before trimming", "Before: overgrown shrubs swallowing a commercial building"),
+    "after": P("commercial-after", "The same commercial building after shrubs were cut back and the beds cleaned up", "After: shrubs cut back, beds cleaned up"),
+    "roadside": P("commercial-roadside-planting", "New crape myrtles and shrubs with fresh pine straw along a commercial fence line by a highway", "Commercial fence-line planting with pine straw"),
+    "planting": P("commercial-shrub-planting", "Rows of newly planted hollies and junipers with pine straw along a chain-link fence at a commercial site", "New commercial landscape install"),
+    "bed": P("residential-landscape-bed", "Residential front-yard bed with new mulch, steel edging and blooming azaleas", "Residential bed: new mulch, edging and azaleas"),
+    "fence": P("privacy-fence-lattice", "New wood privacy fence with a lattice and pergola-style top section in a backyard", "Wood privacy fence with lattice topper"),
+    "equipment": P("teal-truck-equipment", "Teal Outdoor Services truck, zero-turn and stand-on mowers and a John Deere tractor outside the shop", "Our truck, mowers and tractor"),
+}
+
 # ---------------------------------------------------------------- SERVICES
 # Slugs = the CURRENT live URLs. Order = growth priority (the first five also list on every city page).
 SERVICES = [
@@ -28,6 +41,7 @@ SERVICES = [
             ("Investment property cleanup", "Overgrown lots, neglected landscaping and debris cleared before you list or lease."),
             ("Reporting you can forward", "What was done, what we noticed and photos when you need them for owners, boards or inspectors."),
         ],
+        "photos_title": "Recent commercial work", "photos": [PH["before"], PH["after"], PH["roadside"], PH["planting"]],
         "signs_title": "Built for properties like these",
         "signs": [
             "Office parks, strip centers and retail pads",
@@ -161,6 +175,7 @@ SERVICES = [
             ("Bed renovation", "Overgrown or dated beds cleared, reworked and replanted."),
             ("Hardscape coordination", "Walkways, borders and other hardscape elements planned to fit the landscape."),
         ],
+        "photos_title": "Recent landscaping work", "photos": [PH["planting"], PH["bed"], PH["roadside"]],
         "signs_title": "Common landscaping projects",
         "signs": [
             "Refreshing a front yard before you sell",
@@ -279,6 +294,7 @@ SERVICES = [
             ("Repairs", "Panel replacement, post correction and section replacement."),
             ("Commercial fencing", "Fencing for commercial properties."),
         ],
+        "photos_title": "Recent fence work", "photos": [PH["fence"]],
         "signs_title": "Repair or replace?",
         "signs": [
             "A few leaning posts or broken boards: usually a repair",
@@ -622,7 +638,10 @@ CONFIG = {
     "form": {"eyebrow": "Free estimate", "title": "Tell us about your property",
              "lead": "Commercial, HOA, municipal or residential: send the basics and we'll get back to you, typically within one business day.",
              "points": ["Written estimate before any work", "Photo pricing for many jobs", "One point of contact: the owner"]},
-    "order": ["trust", "services", "why", "reviews", "steps", "areas", "form", "blog", "faq", "cta"],
+    "gallery": {"eyebrow": "Our work", "title": "Recent jobs around the Midlands",
+                "lead": "Real photos from real properties: no stock images.",
+                "photos": [PH["before"], PH["after"], PH["planting"], PH["roadside"], PH["fence"], PH["equipment"]]},
+    "order": ["trust", "services", "why", "gallery", "reviews", "steps", "areas", "form", "blog", "faq", "cta"],
   },
   "services_hub": {"slug": "services", "flat_urls": True, "home_count": 6, "nav_label": "Services",
     "title": "Outdoor & Grounds Services in Lexington, SC",
@@ -680,6 +699,8 @@ CONFIG = {
     "lead": "Teal Outdoor Services is owner-run and Lexington-based. Billy Lander oversees every job and stays in touch with every client.",
     "story_title": "Why Billy started Teal",
     "story_html": "<p>Teal Outdoor Services didn't start in a boardroom. Billy Lander spent about a decade in corporate sales and customer relationships, and he watched businesses succeed or fail mostly on how they treated their customers.</p><p>When a downsizing opened the door, he started an outdoor services company built the way he'd always wanted to be treated as a customer: crews that arrive when promised, calls that get returned, work that's done right, and a follow-up afterward.</p><p><strong>That's not a tagline. It's how we've operated from day one.</strong> You work directly with the owner, from the first estimate to the last cleanup.</p>",
+    "photo": {"file": "photos/billy-lander.webp", "alt": "Billy Lander, owner of Teal Outdoor Services, standing by his truck", "caption": "Billy Lander, owner", "w": 600, "h": 816},
+    "photos_title": "Our equipment and our work", "photos": [PH["equipment"], PH["before"], PH["after"]],
     "list_title": "How we work",
     "list": ["Communication first: when we're coming, what we'll do, what we found", "No shortcuts: done right, or redone", "Relationships over transactions", "Written estimates before any work starts", "SC pesticide applicator license #C0035614: Category 5 (Aquatic) & Category 6 (Right-of-Way)", "Insured, with certificates on request"]},
   "contact": {"title": "Free Estimate | Teal Outdoor Services, Lexington SC",
