@@ -484,9 +484,9 @@ AREAS = [
         ],
     },
     {
-        "slug": "property-maintenance-aiken-county-sc", "city": "Aiken County", "county": "Aiken County",
-        "zips": "29801, 29803, 29164, 29841 and surrounding",
-        "intro": "Aiken County borders western Lexington County, just past Batesburg-Leesville. It runs from small towns like Wagener to the county seat of Aiken and on to North Augusta, with commercial properties, subdivisions, horse farms and plenty of rural acreage.",
+        "slug": "property-maintenance-aiken-county-sc", "city": "Aiken County", "county": "South Carolina",
+        "zips": "29801, 29803 (Aiken), 29841 (North Augusta), 29164 (Wagener) and the rest of the county",
+        "intro": "Aiken County borders western Lexington County, just past Batesburg-Leesville. It We serve all of it, from Wagener to the county seat of Aiken and on to North Augusta, with commercial properties, subdivisions, horse farms and plenty of rural acreage.",
         "local": [
             ("Commercial & HOA ponds", "Retention pond maintenance, aquatic weed control, dredging and repairs for commercial sites and neighborhoods, with photos after every visit."),
             ("Roadsides & easements", "Right-of-way mowing and licensed vegetation control for public and private clients."),
@@ -494,7 +494,8 @@ AREAS = [
             ("Commercial grounds", "Recurring mowing, weed control and cleanups on a set schedule."),
         ],
         "faqs": [
-            ("Do you serve Aiken County?", "Yes. We serve Aiken County, especially commercial, retention pond and right-of-way clients. Call or text (803) 240-8356 to confirm your location."),
+            ("Do you serve all of Aiken County?", "Yes. We serve the whole county, including Aiken, North Augusta, Wagener and the communities in between, for commercial, retention pond, right-of-way and residential work."),
+            ("Do you serve North Augusta?", "Yes. North Augusta is part of our Aiken County service area. Call or text (803) 240-8356 for a free estimate."),
         ],
     },
 ]
