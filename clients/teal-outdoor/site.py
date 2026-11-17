@@ -3,6 +3,8 @@ Service-area business (Lexington, SC; no storefront). Build: python3 build.py te
 Forms: Web3Forms (owner's Gmail). Tracking: client's own GTM. No GoHighLevel.
 Every URL on the old GHL site is kept (service pages stay at the top level via services_hub.flat_urls)."""
 
+LICENSE = "SC pesticide applicator license #C0035614 (Category 5 Aquatic, Category 6 Right-of-Way)"   # confirmed by Billy, Nov 2026
+
 FAVICON_SVG = open(__file__.replace("site.py", "source/favicon.svg")).read()
 
 # ---------------------------------------------------------------- SERVICES
@@ -35,7 +37,7 @@ SERVICES = [
             "Multi-site accounts that want one contractor and one point of contact",
         ],
         "faqs": [
-            ("Do you offer ongoing commercial maintenance contracts?", "Yes. Most commercial clients are on recurring service with a set schedule and consistent pricing, built around the property's size, the services needed and the budget."),
+            ("Do you require a contract?", "It's your choice. Service agreements are optional, but most commercial accounts prefer one: you get a set schedule and consistent pricing, built around the property's size, the services needed and the budget."),
             ("Can you handle several properties at once?", "Yes. Multi-site clients get one point of contact, consistent service across every location and a single conversation when something needs attention."),
             ("Can you provide proof of insurance?", "Yes. Teal Outdoor Services, LLC carries insurance, and we send a certificate on request, which most property managers need before the first visit."),
             ("How quickly can you start?", "After a walkthrough and a written estimate, we set the schedule with you. Tell us your deadline when you reach out and we'll be straight with you about whether we can meet it."),
@@ -44,20 +46,22 @@ SERVICES = [
     {
         "slug": "retention-pond-maintenance-lexington-sc",
         "name": "Retention Pond Maintenance",
-        "short": "Bank mowing, shoreline vegetation control and debris removal for HOA, commercial and municipal stormwater ponds.",
+        "short": "Bank mowing, aquatic weed control, debris removal, dredging and repairs for HOA, commercial and municipal stormwater ponds.",
         "icon": "drop",
         "title": "Retention Pond Maintenance in Lexington, SC",
-        "meta": "Retention & detention pond maintenance in Lexington & Columbia, SC: bank mowing, woody growth removal, debris and outlet clearing, with visit records.",
+        "meta": "Retention pond maintenance in Lexington & Columbia, SC: bank mowing, aquatic weed control, outlet clearing, dredging and repairs, with visit records.",
         "h1": "Retention &amp; Detention Pond Maintenance in Lexington, SC",
-        "lead": "Stormwater ponds are infrastructure, and the county expects them maintained. We keep banks mowed, woody growth off the embankments, and inlets and outlets clear, then document every visit so you're ready when the inspection letter arrives.",
-        "included_title": "What we do on a pond visit",
+        "lead": "Stormwater ponds are infrastructure, and the county expects them maintained. We keep banks mowed, woody growth off the embankments, weeds out of the water and outlets clear, handle dredging and repairs when they're needed, and document every visit so you're ready when the inspection letter arrives.",
+        "included_title": "Pond services, start to finish",
         "included": [
             ("Bank & slope mowing", "Embankments, side slopes and access areas mowed and trimmed, including the steep, wet ground a standard mowing crew skips."),
             ("Woody growth removal", "Saplings, brush and vines cut back from embankments and around pipes and structures, where county maintenance requirements call for it."),
-            ("Shoreline vegetation control", "Licensed chemical and mechanical control of overgrowth and invasive plants along the water's edge."),
+            ("Aquatic weed control", "Licensed control of aquatic weeds, algae and invasive plants in the water and along the shoreline. We hold SC Category 5 (Aquatic) certification."),
             ("Inlets, outlets & trash racks", "Litter, limbs and debris removed from inlets, outlet structures and trash racks so water keeps moving."),
             ("Fence lines & access", "Perimeter fence lines sprayed and cleared, and access paths kept open for maintenance and inspections."),
-            ("Visit documentation", "Before-and-after photos and notes on erosion, washouts or structure problems, ready for your HOA board or county inspector."),
+            ("Dredging & sediment removal", "Built-up sediment removed to restore the pond's capacity and keep outlets working."),
+            ("Structural & erosion repairs", "Washouts, eroded slopes, headwalls and outlet structures repaired and stabilized."),
+            ("Visit documentation", "Before-and-after photos and notes after every visit, ready for your HOA board, property owner or county inspector."),
         ],
         "signs_title": "Your pond needs attention if…",
         "signs": [
@@ -65,14 +69,15 @@ SERVICES = [
             "Grass on the banks hasn't been cut this season",
             "The outlet structure or trash rack is clogged with debris",
             "You've received an inspection notice from the county",
+            "Algae or weeds are taking over the water surface",
             "Residents are complaining about odor, mosquitoes or an overgrown eyesore",
         ],
         "faqs": [
             ("How often does a retention pond need to be maintained?", "Most commercial and HOA ponds in the Midlands do well with monthly or every-other-month visits during the growing season, with more frequent service for high-visibility or regulated sites. We set the schedule after looking at the pond."),
-            ("Do you handle chemical vegetation control around ponds?", "Yes. We're licensed for chemical weed and vegetation control, including around water features, and we choose products suited to use near water."),
+            ("Are you licensed for aquatic weed control?", "Yes. We hold a South Carolina pesticide applicator license (#C0035614) with Category 5 (Aquatic) certification, so we can treat weeds and algae in the water as well as on the banks."),
             ("Can you take care of multiple ponds across several properties?", "Yes. HOAs and property managers with several ponds get one point of contact and the same standard of service at every site."),
-            ("Do you provide documentation after visits?", "Yes. We provide before-and-after documentation you can use for HOA reporting, property owners or county inspections."),
-            ("Do you do dredging or structural repairs?", "Our work is the routine maintenance: mowing, vegetation, debris and documentation. If we find sediment build-up, erosion or a damaged structure, we photograph it, tell you right away and point you to the right engineer or contractor."),
+            ("Do you provide documentation after visits?", "Yes, after every visit. You get before-and-after photos and notes you can use for HOA reporting, property owners or county inspections."),
+            ("Do you do dredging or structural repairs?", "Yes. Beyond routine maintenance, we handle dredging and sediment removal, erosion and washout repairs, and outlet and headwall repairs. If your permit or the county requires an engineer's inspection or sign-off, we'll work alongside your engineer."),
         ],
     },
     {
@@ -89,7 +94,7 @@ SERVICES = [
             ("Roadside mowing & trimming", "Roadsides, shoulders, fence lines and access roads mowed and trimmed on a recurring cycle."),
             ("Utility corridor clearing", "Vegetation control along power line, telecom and pipeline easements."),
             ("Brush & invasive removal", "Heavy overgrowth, brush and invasive species cleared back to the easement line."),
-            ("Licensed vegetation control", "Herbicide application by a licensed applicator to keep regrowth down between mowing cycles."),
+            ("Licensed vegetation control", "Herbicide application under our SC Category 6 (Right-of-Way) certification to keep regrowth down between mowing cycles."),
             ("Ditch & drainage ROW", "Drainage ditches and swales kept clear so water moves where it's designed to."),
             ("Post-storm clearing", "Downed limbs and debris cleared from rights-of-way after storms, for clients in our service area."),
         ],
@@ -102,8 +107,8 @@ SERVICES = [
             "Commercial and industrial owners with fence lines and access roads",
         ],
         "faqs": [
-            ("Are you licensed for chemical vegetation control?", "Yes. We're licensed for weed and vegetation control, including right-of-way and utility corridor applications."),
-            ("Do you offer ongoing right-of-way contracts?", "Yes. We run recurring programs on monthly, seasonal or custom cycles, set around your growth season and compliance requirements."),
+            ("Are you licensed for chemical vegetation control?", "Yes. We hold a South Carolina pesticide applicator license (#C0035614) with Category 6 (Right-of-Way) certification, covering roadside, utility corridor and easement applications."),
+            ("Do you offer ongoing right-of-way contracts?", "Yes. We run recurring programs under a service agreement on monthly, seasonal or custom cycles, set around your growth season and compliance requirements."),
             ("Do you provide records for compliance reporting?", "Yes. We provide records of completed work for municipal reporting and utility compliance programs."),
             ("Can you handle emergency storm clearing?", "Yes. We respond to post-storm right-of-way clearing in our service area. Call (803) 240-8356."),
         ],
@@ -134,7 +139,7 @@ SERVICES = [
         ],
         "faqs": [
             ("How often will you mow my lawn?", "Most residential clients are on a weekly or bi-weekly schedule, depending on the season and how fast the yard grows."),
-            ("Do I have to sign up for recurring service?", "No. We offer one-time cuts and cleanups as well as recurring plans."),
+            ("Do I have to sign a contract?", "No. Service agreements are optional. We offer one-time cuts and cleanups as well as recurring plans, with or without an agreement."),
             ("Do you mow commercial properties too?", "Yes. We work with property managers, landlords and commercial owners across Lexington County, including multi-unit and multi-location properties."),
         ],
     },
@@ -177,7 +182,7 @@ SERVICES = [
         "title": "Weed Control in Lexington, SC | Licensed Applicator",
         "meta": "Licensed weed control in Lexington, SC: pre-emergent and post-emergent treatments for lawns, commercial lots, fence lines and large areas. Free estimates.",
         "h1": "Licensed Weed Control in Lexington, SC",
-        "lead": "Licensed chemical treatments that hit weeds at the root and stop new ones before they start. We'll tell you exactly what we're applying and what to expect.",
+        "lead": "Licensed chemical treatments (SC pesticide applicator license #C0035614) that hit weeds at the root and stop new ones before they start. We'll tell you exactly what we're applying and what to expect.",
         "included_title": "Weed control services",
         "included": [
             ("Pre-emergent treatments", "Applied ahead of the season to stop new weeds before they come up."),
@@ -478,6 +483,20 @@ AREAS = [
             ("Is Prosperity in your service area?", "Yes. Prosperity (29127) and the upper Lake Murray area are part of our service area."),
         ],
     },
+    {
+        "slug": "property-maintenance-aiken-county-sc", "city": "Aiken County", "county": "Aiken County",
+        "zips": "29801, 29803, 29164, 29841 and surrounding",
+        "intro": "Aiken County borders western Lexington County, just past Batesburg-Leesville. It runs from small towns like Wagener to the county seat of Aiken and on to North Augusta, with commercial properties, subdivisions, horse farms and plenty of rural acreage.",
+        "local": [
+            ("Commercial & HOA ponds", "Retention pond maintenance, aquatic weed control, dredging and repairs for commercial sites and neighborhoods, with photos after every visit."),
+            ("Roadsides & easements", "Right-of-way mowing and licensed vegetation control for public and private clients."),
+            ("Farms & acreage", "Large-area mowing, fence lines, field edges and brush clearing."),
+            ("Commercial grounds", "Recurring mowing, weed control and cleanups on a set schedule."),
+        ],
+        "faqs": [
+            ("Do you serve Aiken County?", "Yes. We serve Aiken County, especially commercial, retention pond and right-of-way clients. Call or text (803) 240-8356 to confirm your location."),
+        ],
+    },
 ]
 
 # Real reviews from the current site only (homepage). The three software/analytics "testimonials" on the old
@@ -490,10 +509,10 @@ REVIEWS = [
 
 GENERAL_FAQS = [
     ("How do your free estimates work?", "Tell us about the property and the work you need by form, call or text. Many jobs can be ballpark-priced from photos; larger projects get an on-site walkthrough. Either way, you get a written estimate before any work starts."),
-    ("What areas do you serve?", "We're based in Lexington, SC and serve Lexington County and the Midlands: Lexington, West Columbia, Cayce, Irmo, Chapin, Gilbert, Batesburg-Leesville, Gaston, Swansea, Columbia, Newberry and Prosperity. Not on the list? Ask. We may already be nearby."),
+    ("What areas do you serve?", "We're based in Lexington, SC and serve Lexington County and the Midlands: Lexington, West Columbia, Cayce, Irmo, Chapin, Gilbert, Batesburg-Leesville, Gaston, Swansea, Columbia, Newberry, Prosperity and Aiken County. Not on the list? Ask. We may already be nearby."),
     ("Do you work with commercial properties, HOAs and municipalities?", "Yes. Commercial property maintenance, retention pond maintenance and right-of-way work are our focus, and we provide documentation for boards, owners and compliance reporting."),
-    ("Are you licensed and insured?", "We're licensed for chemical weed and vegetation control. Teal Outdoor Services, LLC carries insurance, and we send a certificate on request."),
-    ("Do you offer ongoing maintenance plans?", "Yes. Homes are usually on weekly or bi-weekly plans. Commercial, pond and right-of-way clients get recurring schedules (monthly, seasonal or custom) built around the property."),
+    ("Are you licensed and insured?", "Yes. We hold a South Carolina pesticide applicator license (#C0035614) with Category 5 (Aquatic) and Category 6 (Right-of-Way) certifications. Teal Outdoor Services, LLC carries insurance, and we send a certificate on request."),
+    ("Do you offer ongoing maintenance plans? Do I need a contract?", "Yes, and contracts are optional. Homes are usually on weekly or bi-weekly plans. Commercial accounts usually prefer a service agreement. Commercial, pond and right-of-way clients get recurring schedules (monthly, seasonal or custom) built around the property."),
     ("How fast will I hear back?", "We typically respond within one business day, and often the same day. Hours are Monday to Friday, 8 AM to 6 PM."),
 ]
 
@@ -503,7 +522,7 @@ POND_CHECKLIST = [
     ("Growing season · monthly", "Keep vegetation in check", ["Mow often enough that woody growth never gets established", "Treat shoreline overgrowth and invasive plants", "Spray the perimeter fence line for vines and brush", "Keep the access path open for inspectors and equipment"]),
     ("After heavy rain", "Storm check", ["Clear limbs and trash from inlets, the outlet and the trash rack", "Look for new erosion on the banks and around headwalls", "Check that swales and channels into the pond are flowing", "Photograph damage before it's repaired"]),
     ("Fall & winter", "Woody growth season", ["Cut saplings and brush off fill embankments and dams", "Clear woody growth within 30 feet of pipes and structures", "Remove leaf and limb build-up around the outlet", "Plan repairs before spring storms"]),
-    ("Once a year", "Annual inspection", ["Lexington County: complete the annual stormwater pond (BMP) inspection checklist", "Richland County: expect the Private Pond Inspection Program to check private ponds", "Keep dated records and photos of the maintenance you've done", "Flag sediment build-up or structural cracks for an engineer"]),
+    ("Once a year", "Annual inspection", ["Lexington County: complete the annual stormwater pond (BMP) inspection checklist", "Richland County: expect the Private Pond Inspection Program to check private ponds", "Keep dated records and photos of the maintenance you've done", "Schedule dredging or repairs for sediment build-up and structural damage"]),
     ("What inspectors flag", "Common failure points", ["Trees or brush on the dam or embankment", "Clogged orifices, outlet structures or trash racks", "Eroded slopes, headwalls or washouts", "Sediment build-up and blocked swales, plus mowing that's fallen behind"]),
 ]
 
@@ -514,8 +533,8 @@ POND_BODY = """
 <p>Lexington County's post-construction pond maintenance requirements cover the same items over and over: <strong>no woody vegetation on fill embankments</strong> or within 30 feet of any structure or pipe; sediment and debris kept clear around the outlet structure and pipes; trash racks clear and secure; eroded slopes and headwalls repaired and stabilized; perimeter fence lines kept free of trees, vines and shrubs; and swales and channels kept flowing. Owners of private stormwater ponds are also asked to complete an annual inspection checklist.</p>
 <h2>What Richland County does</h2>
 <p>Richland County's Private Pond Inspection Program inspects privately owned detention and retention ponds. It names poor maintenance as the leading cause of pond failure. Owners who receive a Notice of Violation get 30 days to make corrections before daily penalties can apply.</p>
-<h2>What we handle, and what we'll flag</h2>
-<p>Teal Outdoor Services handles the routine work on this checklist: mowing banks and slopes, removing woody growth, shoreline and fence-line vegetation control (licensed), clearing debris from inlets, outlets and trash racks, and documenting each visit with photos and notes. Sediment removal, structural repairs and engineering inspections are specialty work. If we see a problem, we photograph it, tell you right away and point you to the right professional. See <a href="/retention-pond-maintenance-lexington-sc/">retention pond maintenance</a> or <a href="/contact/">request a free pond walkthrough</a>.</p>
+<h2>What we handle</h2>
+<p>Teal Outdoor Services handles everything on this checklist: mowing banks and slopes, removing woody growth, aquatic and shoreline weed control, fence-line vegetation control, clearing debris from inlets, outlets and trash racks, dredging and sediment removal, and erosion and structure repairs. We document every visit with photos and notes. Our herbicide work is done under South Carolina pesticide applicator license #C0035614, with Category 5 (Aquatic) and Category 6 (Right-of-Way) certifications. If your permit calls for an engineer's inspection or sign-off, we work alongside your engineer. See <a href="/retention-pond-maintenance-lexington-sc/">retention pond maintenance</a> or <a href="/contact/">request a free pond walkthrough</a>.</p>
 <p style="font-size:.9rem;color:var(--c-muted)">Sources: <a href="https://lex-co.sc.gov/sites/lexco/files/Documents/Lexington%20County/Departments/Community%20Dev/Land%20Development/LexCo%20Pond%20maintenance%20requirements%202025v1.pdf" rel="noopener">Lexington County post-construction pond maintenance requirements (2025)</a> ·
 <a href="https://lex-co.sc.gov/sites/lexco/files/Documents/Lexington%20County/Departments/Community%20Dev/Land%20Development/Pond-Inspection-Form-LDM-rev-2025.pdf" rel="noopener">Lexington County annual pond inspection checklist</a> ·
 <a href="https://richlandcountysc.gov/Portals/0/Departments/PublicWorks/StormDocs/Private%20Pond%20Inspection%202024.pdf" rel="noopener">Richland County Private Pond Inspection Program</a> ·
@@ -535,7 +554,7 @@ CONFIG = {
     "geo": (33.9815, -81.2362),
     "hours": [(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "08:00", "18:00")],
     "hours_text": "Mon–Fri 8 AM – 6 PM",
-    "counties": ["Lexington County, SC", "Richland County, SC", "Newberry County, SC"],
+    "counties": ["Lexington County, SC", "Richland County, SC", "Newberry County, SC", "Aiken County, SC"],
     "knows_about": ["Commercial grounds maintenance", "Stormwater retention pond maintenance", "Right-of-way vegetation management", "Chemical weed control", "Lawn care", "Landscaping"],
     "founder": "Billy Lander",
     "slogan": "We do what we say. When we say we'll do it.",
@@ -572,7 +591,7 @@ CONFIG = {
     "cta_band_title": "Ready to stop chasing your grounds crew?",
     "cta_band_text": "Get a free, no-obligation estimate. We'll look at your property and give you a straight answer in writing, with no pressure and no runaround.",
     "aside_title": "Get a free estimate", "aside_text": "Talk directly to the owner. We typically respond within one business day.",
-    "aside_badges": "✓ Licensed weed & vegetation control · ✓ Insured · ✓ Written estimates",
+    "aside_badges": "✓ SC pesticide license #C0035614 · ✓ Insured · ✓ Written estimates",
   },
   "home": {
     "title": "Commercial Property & Pond Maintenance, Lexington SC",
@@ -581,11 +600,11 @@ CONFIG = {
     "h1": "Commercial property, pond &amp; right-of-way maintenance from a crew that <em>shows up and follows through</em>",
     "lead": "Teal Outdoor Services keeps commercial grounds, HOA retention ponds and rights-of-way across the Midlands on schedule, and tells you what we did and what we found. Lawn care and landscaping for homeowners, too.",
     "secondary_cta": ("See Our Services", "services"),
-    "proof": ["Licensed vegetation control", "Before & after documentation", "Talk directly to the owner"],
+    "proof": ["SC licensed: aquatic & right-of-way", "Before & after photos every visit", "Talk directly to the owner"],
     "hero_card": {"label": "Visit report", "title": "Retention pond · HOA common area", "sub": "What you get after a maintenance visit", "badge": "Example", "hanger": False,
                   "checks": ["Banks & slopes mowed", "Woody growth cut back", "Outlet & trash rack cleared", "Litter & debris removed", "Fence line sprayed", "Before & after photos"],
-                  "note": "Noted: small washout on the north bank by the inlet pipe. Photos attached. Recommend repair before the next heavy rain."},
-    "trust": [("doc", "Written estimates", "Before any work starts"), ("shield", "Licensed application", "Weed & vegetation control"),
+                  "note": "Noted: small washout on the north bank by the inlet pipe. Photos attached. We can repair it before the next heavy rain. Want a quote?"},
+    "trust": [("doc", "Written estimates", "Before any work starts"), ("shield", "SC licensed #C0035614", "Aquatic & right-of-way categories"),
               ("check", "Documented visits", "Photos & notes for boards and inspectors"), ("phone", "Owner-run", "Billy oversees every job")],
     "why": {"eyebrow": "Why Teal",
             "quote_html": "We do what we say. <em>When we say we'll do it.</em>",
@@ -615,12 +634,12 @@ CONFIG = {
   "areas": {
     "enabled": True, "hub_slug": "service-area", "nav_label": "Service Area", "link_prefix": "Property Maintenance",
     "hub_title": "Service Area: Lexington County & the Midlands, SC",
-    "hub_meta": "Teal Outdoor Services serves Lexington, West Columbia, Cayce, Irmo, Chapin, Gilbert, Batesburg-Leesville, Gaston, Swansea, Columbia, Newberry & Prosperity.",
+    "hub_meta": "Teal Outdoor Services serves Lexington County, Columbia, Irmo, Chapin, Batesburg-Leesville, Swansea, Newberry, Prosperity and Aiken County, SC.",
     "hub_h1": "Local Service for Lexington County &amp; the Midlands",
-    "hub_lead": "Based in Lexington, SC, we cover Lexington County and reach into Richland and Newberry counties for commercial, pond and right-of-way clients.",
+    "hub_lead": "Based in Lexington, SC, we cover Lexington County and reach into Richland, Newberry and Aiken counties for commercial, pond and right-of-way clients.",
     "home_title": "Proudly serving Lexington County & beyond",
     "groups": [{"name": "Lexington County", "note": "Home base", "slugs": ["property-maintenance-lexington-sc", "property-maintenance-west-columbia-sc", "property-maintenance-cayce-sc", "property-maintenance-irmo-sc", "property-maintenance-chapin-sc", "property-maintenance-gilbert-sc", "property-maintenance-batesburg-leesville-sc", "property-maintenance-gaston-sc", "property-maintenance-swansea-sc"]},
-               {"name": "Richland & Newberry Counties", "note": "Commercial, pond & ROW", "slugs": ["property-maintenance-columbia-sc", "property-maintenance-irmo-sc", "property-maintenance-newberry-sc", "property-maintenance-prosperity-sc"]}],
+               {"name": "Richland, Newberry & Aiken Counties", "note": "Commercial, pond & ROW", "slugs": ["property-maintenance-columbia-sc", "property-maintenance-irmo-sc", "property-maintenance-newberry-sc", "property-maintenance-prosperity-sc", "property-maintenance-aiken-county-sc"]}],
     "outside_note": "Don't see your town? Call or text. Chances are we cover it.",
     "service_where_text": "We serve properties throughout Lexington County and the Midlands, including",
     "page_title": "Property Maintenance & Lawn Care in {city}, {region}",
@@ -661,7 +680,7 @@ CONFIG = {
     "story_title": "Why Billy started Teal",
     "story_html": "<p>Teal Outdoor Services didn't start in a boardroom. Billy Lander spent about a decade in corporate sales and customer relationships, and he watched businesses succeed or fail mostly on how they treated their customers.</p><p>When a downsizing opened the door, he started an outdoor services company built the way he'd always wanted to be treated as a customer: crews that arrive when promised, calls that get returned, work that's done right, and a follow-up afterward.</p><p><strong>That's not a tagline. It's how we've operated from day one.</strong> You work directly with the owner, from the first estimate to the last cleanup.</p>",
     "list_title": "How we work",
-    "list": ["Communication first: when we're coming, what we'll do, what we found", "No shortcuts: done right, or redone", "Relationships over transactions", "Written estimates before any work starts", "Licensed chemical weed & vegetation control", "Insured, with certificates on request"]},
+    "list": ["Communication first: when we're coming, what we'll do, what we found", "No shortcuts: done right, or redone", "Relationships over transactions", "Written estimates before any work starts", "SC pesticide applicator license #C0035614: Category 5 (Aquatic) & Category 6 (Right-of-Way)", "Insured, with certificates on request"]},
   "contact": {"title": "Free Estimate | Teal Outdoor Services, Lexington SC",
     "meta": "Request a free, no-obligation estimate for commercial, pond, right-of-way, lawn or landscaping work in Lexington County & the Midlands. (803) 240-8356.",
     "h1": "Let's Talk About Your Property",

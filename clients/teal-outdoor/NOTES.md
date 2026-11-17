@@ -7,7 +7,16 @@ Domain registrar: Namecheap · Email: personal Gmail (no email on the domain) ·
 - Preview: `python3 build.py teal-outdoor --preview`
 - Status: **not live**. Branch `teal-outdoor-rebuild`, not merged to `main`. `launched` is off.
 
-## Before launch: confirm with Billy
+## Billy's answers (Nov 17, 2026): applied
+
+- **Visit documentation:** yes, before-and-after photos and notes after every commercial/pond visit. The copy now says "every visit".
+- **Ponds:** he also does dredging, structural/erosion repairs and aquatic weed control. These were added to the pond page, the checklist page and the Aiken County page. The copy no longer says he refers this work out.
+- **License:** SC pesticide applicator license #C0035614, Category 5 (Aquatic) and Category 6 (Right-of-Way). It now shows in the home trust bar, the hero proof line, the sidebar badges, the pond, ROW and weed control pages, the general FAQ and the About list.
+- **Contracts:** service agreements are optional, and commercial accounts are preferred on one. The FAQs and the commercial blog post's closing line ("No contracts") were updated.
+- **Aiken County:** added `/property-maintenance-aiken-county-sc/` (county-level page), plus Aiken in the hub group, schema areaServed and the general FAQ. Confirm how far he goes (e.g. North Augusta).
+- **Customer email (Greg Boling, Holtzman Propane | Valley Ice):** NOT published. Get Greg's permission first, then use it as "Greg B., Holtzman Propane" (no phone number), or ask Greg for a Google review.
+
+## Before launch: still open (original list; items 3–6 resolved above)
 
 1. **The old site is losing leads right now.** The GHL form shows "Unable to find form" on the contact page and every service page, and the header "Get a Free Estimate" button links to `#`. The new site posts to Web3Forms, which emails tealoutdoorservices@gmail.com. After launch, send one test from the live domain and check spam the first time.
 2. **Fake testimonials removed.** The old /about and /contact pages show three software/analytics "testimonials" (Ashwin Santiago, Kaden Scott, unnamed). They're template filler, so they were not carried over. Only the three real homepage reviews (Jim B., Ashley W., Sean L) are used.

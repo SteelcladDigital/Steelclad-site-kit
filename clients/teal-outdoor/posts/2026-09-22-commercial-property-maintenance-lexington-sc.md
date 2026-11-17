@@ -98,4 +98,4 @@ We offer free, no-obligation estimates for commercial property managers in Lexin
 
 **Call [(803) 240-8356](tel:+18032408356) or [get a free estimate →](/contact/)**
 
-No contracts. No runaround. Just a straight conversation about what your property needs and how we can help.
+Service agreements are optional, though most commercial accounts prefer one. No runaround. Just a straight conversation about what your property needs and how we can help.
