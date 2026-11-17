@@ -1,4 +1,4 @@
-*Last updated: November 2026. Draft for Teal Outdoor Services to review before launch.*
+*Last updated: November 17, 2026.*
 
 Teal Outdoor Services, LLC ("Teal Outdoor Services," "we," "us") respects your privacy. This policy explains what information we collect through tealoutdoorservices.com, how we use it, and the choices you have.
 
