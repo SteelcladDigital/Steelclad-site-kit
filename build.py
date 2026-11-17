@@ -243,12 +243,13 @@ class Site:
         if self.tiers: items.append(f'<li><a class="nl" href="{self.href(cur,self.tiers["slug"])}"{ca(self.tiers["slug"])}>{esc(self.tiers["nav_label"])}</a></li>')
         svc = "".join(f'<li><a href="{self.href(cur,self.svc_path(s))}">{esc(s["name"])}</a></li>' for s in self.c["services"])
         sh = self.c["services_hub"]
-        items.append(f'<li><a class="nl" href="{self.href(cur,sh["slug"])}"{ca(sh["slug"])}>{esc(sh["nav_label"])} ▾</a><ul class="dropdown">{svc}</ul></li>')
+        # .dd-all: hub link shown only in the mobile accordion (on phones, tapping the parent opens the list instead of navigating)
+        items.append(f'<li><a class="nl" href="{self.href(cur,sh["slug"])}"{ca(sh["slug"])}>{esc(sh["nav_label"])} ▾</a><ul class="dropdown"><li class="dd-all"><a href="{self.href(cur,sh["slug"])}">{esc(sh["nav_label"])} overview →</a></li>{svc}</ul></li>')
         if self.areas:
             dd = ""
             for g in self.areas["groups"]:
                 dd += f'<li class="sep">{esc(g["name"])}</li>' + "".join(f'<li><a href="{self.href(cur,a["slug"])}">{esc(a["city"])}</a></li>' for a in self.areas["pages"] if a["slug"] in g["slugs"])
-            items.append(f'<li><a class="nl" href="{self.href(cur,self.areas["hub_slug"])}"{ca(self.areas["hub_slug"])}>{esc(self.areas["nav_label"])} ▾</a><ul class="dropdown">{dd}</ul></li>')
+            items.append(f'<li><a class="nl" href="{self.href(cur,self.areas["hub_slug"])}"{ca(self.areas["hub_slug"])}>{esc(self.areas["nav_label"])} ▾</a><ul class="dropdown"><li class="dd-all"><a href="{self.href(cur,self.areas["hub_slug"])}">{esc(self.areas["nav_label"])} overview →</a></li>{dd}</ul></li>')
         if self.resource: items.append(f'<li><a class="nl" href="{self.href(cur,self.resource["slug"])}"{ca(self.resource["slug"])}>{esc(self.resource["nav_label"])}</a></li>')
         if self.blog: items.append(f'<li><a class="nl" href="{self.href(cur,self.blog["index_slug"])}"{ca(self.blog["index_slug"])}>{esc(self.blog["nav_label"])}</a></li>')
         items.append(f'<li><a class="nl" href="{self.href(cur,"about")}"{ca("about")}>About</a></li>')

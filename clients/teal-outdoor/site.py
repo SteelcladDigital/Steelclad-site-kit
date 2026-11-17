@@ -659,7 +659,7 @@ CONFIG = {
     "hub_lead": "Based in Lexington, SC, we cover Lexington County and reach into Richland, Newberry and Aiken counties for commercial, pond and right-of-way clients.",
     "home_title": "Proudly serving Lexington County & beyond",
     "groups": [{"name": "Lexington County", "note": "Home base", "slugs": ["property-maintenance-lexington-sc", "property-maintenance-west-columbia-sc", "property-maintenance-cayce-sc", "property-maintenance-irmo-sc", "property-maintenance-chapin-sc", "property-maintenance-gilbert-sc", "property-maintenance-batesburg-leesville-sc", "property-maintenance-gaston-sc", "property-maintenance-swansea-sc"]},
-               {"name": "Richland, Newberry & Aiken Counties", "note": "Commercial, pond & ROW", "slugs": ["property-maintenance-columbia-sc", "property-maintenance-irmo-sc", "property-maintenance-newberry-sc", "property-maintenance-prosperity-sc", "property-maintenance-aiken-county-sc"]}],
+               {"name": "Richland, Newberry & Aiken Counties", "note": "Commercial, pond & ROW", "slugs": ["property-maintenance-columbia-sc", "property-maintenance-newberry-sc", "property-maintenance-prosperity-sc", "property-maintenance-aiken-county-sc"]}],
     "outside_note": "Don't see your town? Call or text. Chances are we cover it.",
     "service_where_text": "We serve properties throughout Lexington County and the Midlands, including",
     "page_title": "Property Maintenance & Lawn Care in {city}, {region}",

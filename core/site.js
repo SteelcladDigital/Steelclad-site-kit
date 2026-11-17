@@ -1,7 +1,14 @@
 (function(){
   // mobile menu
   var t=document.querySelector('.menu-toggle'),n=document.getElementById('nav');
-  if(t&&n){t.addEventListener('click',function(){var o=n.classList.toggle('open');t.setAttribute('aria-expanded',o)});}
+  if(t&&n){t.addEventListener('click',function(){var o=n.classList.toggle('open');t.setAttribute('aria-expanded',o);
+    if(o){n.style.setProperty('--navtop',Math.max(0,n.getBoundingClientRect().top)+'px')}});}
+  // mobile: Services / Service Area open as accordions (tap to expand) instead of navigating, so every menu item stays reachable
+  var mq=window.matchMedia('(max-width:1020px)');
+  document.querySelectorAll('.nav .nl').forEach(function(a){
+    var dd=a.nextElementSibling; if(!dd||!dd.classList.contains('dropdown'))return;
+    a.addEventListener('click',function(e){if(!mq.matches)return;e.preventDefault();var o=a.parentNode.classList.toggle('dd-open');a.setAttribute('aria-expanded',o)});
+  });
 
   // tier finder (config-driven: each radio has data-tier; tiers JSON in data-tiers)
   var q=document.getElementById('plan-finder');
