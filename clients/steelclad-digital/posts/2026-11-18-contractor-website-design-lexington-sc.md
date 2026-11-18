@@ -35,7 +35,7 @@ A lot of businesses pay one company to build a website and later pay someone els
 Ranking in Lexington starts with how the site is put together:
 
 - **One clear topic per page,** with a title and heading that match what people search
-- **Clean page addresses** like `/services/roof-repair/` instead of `/page-id-4471`
+- **Clean page addresses** like "/services/roof-repair/" instead of "/page-id-4471"
 - **Structured data** that tells Google your business name, phone, hours, service area and services
 - **Pages written for the towns you serve,** with real local detail rather than the same paragraph with the city name swapped
 
