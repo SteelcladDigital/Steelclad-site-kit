@@ -196,7 +196,9 @@ class Site:
         lg = self.c["logo"]
         if lg["type"] == "svg": return lg.get("footer_svg", lg["svg"]) if where == "footer" else lg["svg"]
         # logo.footer_file: a version for the dark footer (e.g. full-color logo on a light header + a knockout in the footer)
-        if lg["type"] == "image": return f'<img src="{self.asset(cur, lg.get("footer_file", lg["file"]) if where == "footer" else lg["file"])}" alt="{esc(self.b["name"])}" width="{lg.get("width",160)}" height="{lg.get("height",58)}">'
+        if lg["type"] == "image":
+            fh = f' style="height:{lg["footer_height"]}px"' if where == "footer" and lg.get("footer_height") else ""   # logo.footer_height: footer logo size in px
+            return f'<img src="{self.asset(cur, lg.get("footer_file", lg["file"]) if where == "footer" else lg["file"])}" alt="{esc(self.b["name"])}" width="{lg.get("width",160)}" height="{lg.get("height",58)}"{fh}>'
         return '<span class="logo-text">' + "<br>".join(esc(x) for x in lg["lines"]) + "</span>"
 
     # ---------- schema

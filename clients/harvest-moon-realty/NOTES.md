@@ -72,7 +72,7 @@ Send originals (full size). Phone photos are fine in good light.
 
 ## Logo
 
-Client-supplied `HMR_Logo2.svg` (source/logo-original.svg). Header: full color on white. Footer: knockout version (brown → cream). Favicon: the moon-and-fields mark. The logo reads "Realty Co."; the business name on Google and everywhere else is "Harvest Moon Realty". Keep "Harvest Moon Realty" on citations.
+Client-supplied `HMR_Logo2.svg` (source/logo-original.svg). Header: full color on white. Footer: the full-color logo on a cream rounded badge (true brand colors on the dark footer). Favicon: the moon-and-fields mark. The logo reads "Realty Co."; the business name on Google and everywhere else is "Harvest Moon Realty". Keep "Harvest Moon Realty" on citations.
 
 ## Citation clean-up list (send to the client / do in our listings work)
 
@@ -96,3 +96,4 @@ Barry thinks he has no reviews, but his Google profile has **11 reviews, 5.0 sta
 - Footer shows the office street address when a site has both city pages and a street address.
 - `labels.mbar_second_href: "page:<slug>"` links a site page from the mobile bottom bar.
 - Icons: `key`, `tree`.
+- `logo.footer_height`: footer logo size in px.
