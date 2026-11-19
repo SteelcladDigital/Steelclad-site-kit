@@ -270,7 +270,14 @@ class Site:
         if self.tiers: svc = f'<li><a href="{self.href(cur,self.tiers["slug"])}">{esc(self.tiers["nav_label"])}</a></li>' + svc
         col3 = ""
         if self.areas:
-            col3 = '<div><h4>Service Areas</h4><ul>' + "".join(f'<li><a href="{self.href(cur,a["slug"])}">{esc(self.areas["link_prefix"])} {esc(a["city"])}, {b["address"]["region"]}</a></li>' for a in self.areas["pages"]) + "</ul></div>"
+            A = self.areas; fs = A.get("footer_slugs")   # areas.footer_slugs: compact footer (plain town names for these pages + "All service areas") instead of every "Pool Service <City>, SC" link
+            if fs:
+                names = {a["slug"]: a["city"] for a in A["pages"]}
+                col3 = ('<div><h4>Service Areas</h4><ul>' + "".join(f'<li><a href="{self.href(cur,sl)}">{esc(names[sl])}</a></li>' for sl in fs)
+                        + f'<li><a href="{self.href(cur,A["hub_slug"])}"><strong>All service areas →</strong></a></li></ul>'
+                        + (f'<p style="margin-top:10px;font-size:.88rem;opacity:.8">{esc(A["footer_note"])}</p>' if A.get("footer_note") else "") + '</div>')
+            else:
+                col3 = '<div><h4>Service Areas</h4><ul>' + "".join(f'<li><a href="{self.href(cur,a["slug"])}">{esc(self.areas["link_prefix"])} {esc(a["city"])}, {b["address"]["region"]}</a></li>' for a in self.areas["pages"]) + "</ul></div>"
         else:
             addr = b["address"]; street = f'{esc(addr["street"])}<br>' if addr.get("street") else ""
             col3 = f'<div><h4>Visit</h4><p>{street}{esc(addr["locality"])}, {addr["region"]} {addr.get("zip","")}</p><p>{esc(b["hours_text"])}</p></div>'
@@ -278,7 +285,7 @@ class Site:
         company = [("about", "About Us"), (self.cta, L["cta"])]
         if self.resource: company.insert(1, (self.resource["slug"], self.resource["nav_label"]))
         if self.blog: company.insert(1, (self.blog["index_slug"], self.blog["nav_label"]))
-        if self.areas: company.append((self.areas["hub_slug"], "All Service Areas"))
+        if self.areas and not self.areas.get("footer_slugs"): company.append((self.areas["hub_slug"], "All Service Areas"))
         comp = "".join(f'<li><a href="{self.href(cur,p)}">{esc(n)}</a></li>' for p, n in company)
         legal = " · ".join(f'<a href="{self.href(cur,s)}">{esc(n)}</a>' for s, n in self.c.get("legal_pages", []))
         return f'''<footer class="site-footer"><div class="wrap"><div class="cols">

@@ -552,6 +552,8 @@ CONFIG = {
     "groups": [{"name": "Lexington County", "note": "Home base", "slugs": ["pool-service-lexington-sc", "pool-service-chapin-sc", "pool-service-west-columbia-sc", "pool-service-cayce-sc", "pool-service-irmo-sc", "pool-service-gilbert-sc", "pool-service-batesburg-leesville-sc"],
                 "also": ["Swansea", "Pelion", "Gaston", "Pine Ridge", "South Congaree", "Springdale", "Summit", "Red Bank", "Oak Grove", "Seven Oaks"], "also_tail": " and every other community in Lexington County."},
                {"name": "Richland County", "note": "Weekly routes", "slugs": ["pool-service-columbia-sc", "pool-service-forest-acres-sc", "pool-service-blythewood-sc", "pool-service-irmo-sc"]}],
+    "footer_slugs": ["pool-service-lexington-sc", "pool-service-columbia-sc", "pool-service-irmo-sc", "pool-service-chapin-sc", "pool-service-west-columbia-sc"],   # compact footer: no keyword-stuffed city list
+    "footer_note": "All of Lexington County, plus Columbia and nearby Richland County.",
     "outside_note": "Anywhere in Lexington County is in our service area. In Richland County or near a county line? Call or text; our routes may run right past you.",
     "service_where_text": "We serve homeowners throughout Lexington and Richland counties, including",
     "page_title": "Pool Service & Maintenance Plans in {city}, {region}",
