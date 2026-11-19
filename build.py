@@ -48,6 +48,8 @@ I = {
  "tool":'<path d="M3 21l6-6M14 4l6 6-8 8-6-6z"/>',
  "users":'<circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0112 0"/><circle cx="17" cy="9" r="2.5"/><path d="M15 14a5 5 0 016 6"/>',
  "menu":'<path d="M4 7h16M4 12h16M4 17h16"/>',
+ "key":'<circle cx="8" cy="15" r="4"/><path d="M11 12l8-8M16 7l2 2M14 9l2 2"/>',
+ "tree":'<path d="M12 3l4 5H8z"/><path d="M12 7l5 6H7z"/><path d="M12 11l6 7H6z"/><path d="M12 18v3"/>',
  "fb":'<path d="M14 8h3V4h-3a4 4 0 00-4 4v2H7v4h3v7h4v-7h3l1-4h-4V8z" fill="currentColor" stroke="none"/>',
  "ig":'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>',
 }
@@ -145,6 +147,7 @@ class Site:
         self.rh = f'tel:{self.b["tel"]}' if self.has_phone else f'mailto:{self.b.get("email", "")}'
         self.rt = self.b["phone"] if self.has_phone else self.b.get("email", "")
         self.reach_verb = self.L.get("reach_verb", "Call or text" if self.has_phone else "Email")
+        S = self.c.get("search") or {}; self.search = S if S.get("enabled") else None   # search: IDX / MLS listing-search pages
         self.cta = self.c["contact"].get("slug", "contact"); self.noindex = set()   # every CTA button points at the primary lead page
         self.posts = []
         if self.blog:
@@ -189,6 +192,11 @@ class Site:
         sec = col.get("texture", col["secondary"]).replace("#", "%23")   # colors.texture: optional line color for the hero texture
         tex_css = f"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cpath d='{tex}' fill='none' stroke='{sec}' stroke-width='2'/%3E%3C/svg%3E\")" if tex else "none"
         dark = col.get("accent_text", "#121c35").replace("#", "%23")
+        # theme.hero_bg: optional background image for the home hero (a file in clients/<client>/assets/), under a darkening overlay
+        hero_bg = (f'.hero.home-hero{{background-image:url({t["hero_bg"]});background-size:cover;background-position:{t.get("hero_bg_position","center bottom")}}}'
+                   f'.hero.home-hero::before{{background:{t.get("hero_bg_overlay","linear-gradient(90deg,rgba(0,0,0,.62),rgba(0,0,0,.25))")}}}'
+                   f'@media (max-width:900px){{.hero.home-hero{{background-position:{t.get("hero_bg_position_mobile","center bottom")}}}'
+                   f'.hero.home-hero::before{{background:{t.get("hero_bg_overlay_mobile","rgba(0,0,0,.55)")}}}}}\n') if t.get("hero_bg") else ""
         faces = "".join(f'@font-face{{font-family:"{FONT_FAMILY[f]}";src:url(fonts/{f}.woff2) format("woff2");font-weight:100 900;font-display:swap}}\n' for f in sorted({disp, body}))
         return faces + f''':root{{
 --c-primary:{col["primary"]};--c-primary-deep:{col["primary_deep"]};--c-secondary:{col["secondary"]};--c-secondary-deep:{col["secondary_deep"]};
@@ -200,7 +208,7 @@ class Site:
 --chk-white:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E");
 --chk-dark:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='{dark}' stroke-width='2'/%3E%3C/svg%3E");
 }}
-'''
+''' + hero_bg
 
     # ---------- logo
     def logo(self, cur, where="header"):
@@ -259,6 +267,13 @@ class Site:
         b, L = self.b, self.L
         def ca(p): return ' aria-current="page"' if cur == p else ""
         items = []
+        if self.search:
+            SP = self.search["pages"]
+            if len(SP) == 1:
+                items.append(f'<li><a class="nl" href="{self.href(cur,SP[0]["slug"])}"{ca(SP[0]["slug"])}>{esc(self.search["nav_label"])}</a></li>')
+            else:
+                dd = "".join(f'<li><a href="{self.href(cur,x["slug"])}">{esc(x["nav"])}</a></li>' for x in SP)
+                items.append(f'<li><a class="nl" href="{self.href(cur,SP[0]["slug"])}"{ca(SP[0]["slug"])}>{esc(self.search["nav_label"])} ▾</a><ul class="dropdown">{dd}</ul></li>')
         if self.tiers: items.append(f'<li><a class="nl" href="{self.href(cur,self.tiers["slug"])}"{ca(self.tiers["slug"])}>{esc(self.tiers["nav_label"])}</a></li>')
         svc = "".join(f'<li><a href="{self.href(cur,self.svc_path(s))}">{esc(s["name"])}</a></li>' for s in self.c["services"])
         sh = self.c["services_hub"]
@@ -287,6 +302,13 @@ class Site:
     def footer(self, cur):
         b, L = self.b, self.L
         svc = "".join(f'<li><a href="{self.href(cur,self.svc_path(s))}">{esc(s["name"])}</a></li>' for s in self.c["services"])
+        if self.search: svc = "".join(f'<li><a href="{self.href(cur,x["slug"])}">{esc(x["nav"])}</a></li>' for x in self.search["pages"]) + svc
+        a0 = b["address"]   # office address in the first column when city pages replace the "Visit" column
+        office = f'{esc(a0["street"])}<br>{esc(a0["locality"])}, {a0["region"]} {a0.get("zip","")}<br>' if self.areas and a0.get("street") else ""
+        email = f'<a href="mailto:{b["email"]}">{esc(b["email"])}</a><br>' if b.get("email") and L.get("footer_email") else ""
+        note = f'<p class="footer-note">{L["footer_note_html"]}</p>' if L.get("footer_note_html") else ""   # labels.footer_note_html: license, Equal Housing, MLS disclaimer
+        m2 = L.get("mbar_second_href") or (self.href(cur, L["mbar_second_slug"]) if L.get("mbar_second_slug") else ("sms:" + b["tel"] if self.has_phone else self.href(cur, self.c["services_hub"]["slug"])))
+        if m2.startswith("page:"): m2 = self.href(cur, m2[5:])   # "page:<slug>" links a site page from the mobile bar
         if self.tiers: svc = f'<li><a href="{self.href(cur,self.tiers["slug"])}">{esc(self.tiers["nav_label"])}</a></li>' + svc
         col3 = ""
         if self.areas:
@@ -296,7 +318,7 @@ class Site:
                 col3 = (f'<div><h4>Service Areas</h4><p class="footer-areas-lead">{esc(self.areas.get("footer_lead", self.areas["link_prefix"] + " in:"))}</p>'
                         f'<p class="footer-areas">{towns}</p><p><a class="footer-areas-all" href="{self.href(cur,self.areas["hub_slug"])}">All service areas →</a></p></div>')
             else:
-                col3 = '<div><h4>Service Areas</h4><ul>' + "".join(f'<li><a href="{self.href(cur,a["slug"])}">{esc(self.areas["link_prefix"])} {esc(a["city"])}, {b["address"]["region"]}</a></li>' for a in self.areas["pages"]) + "</ul></div>"
+                col3 = f'<div><h4>{esc(L.get("footer_areas_title", "Service Areas"))}</h4><ul>' + "".join(f'<li><a href="{self.href(cur,a["slug"])}">{esc(self.areas["link_prefix"])} {esc(a["city"])}, {b["address"]["region"]}</a></li>' for a in self.areas["pages"]) + "</ul></div>"
         else:
             addr = b["address"]; street = f'{esc(addr["street"])}<br>' if addr.get("street") else ""
             col3 = f'<div><h4>Visit</h4><p>{street}{esc(addr["locality"])}, {addr["region"]} {addr.get("zip","")}</p><p>{esc(b["hours_text"])}</p></div>'
@@ -305,18 +327,18 @@ class Site:
         if self.resource: company.insert(1, (self.resource["slug"], self.resource["nav_label"]))
         if self.c.get("gallery_page"): company.insert(1, (self.c["gallery_page"]["slug"], self.c["gallery_page"]["nav_label"]))
         if self.blog: company.insert(1, (self.blog["index_slug"], self.blog["nav_label"]))
-        if self.areas and self.areas.get("footer") != "compact": company.append((self.areas["hub_slug"], "All Service Areas"))
+        if self.areas and self.areas.get("footer") != "compact": company.append((self.areas["hub_slug"], L.get("footer_areas_all", "All Service Areas")))
         comp = "".join(f'<li><a href="{self.href(cur,p)}">{esc(n)}</a></li>' for p, n in company)
         wr = self.c.get("integrations", {}).get("google_review_write_url")
         if wr: comp += f'<li><a href="{wr}" rel="noopener" target="_blank">Leave a Google Review</a></li>'
         legal = " · ".join(f'<a href="{self.href(cur,s)}">{esc(n)}</a>' for s, n in self.c.get("legal_pages", []))
         return f'''<footer class="site-footer"><div class="wrap"><div class="cols">
 <div><a class="logo" href="{self.href(cur,"")}">{self.logo(cur, "footer")}</a><p style="margin-top:16px">{esc(L["footer_blurb"])}</p>
-<p><a href="{self.rh}"><strong>{esc(self.rt)}</strong></a><br>{esc(b["hours_text"])}</p><div class="social">{social}</div></div>
+<p>{office}<a href="{self.rh}"><strong>{esc(self.rt)}</strong></a><br>{email}{esc(b["hours_text"])}</p><div class="social">{social}</div></div>
 <div><h4>{esc(L.get("footer_services_title","Services"))}</h4><ul>{svc}</ul></div>{col3}
 <div><h4>Company</h4><ul>{comp}</ul></div>
-</div><div class="legal"><span>© {date.today().year} {esc(b["legal_name"])}. All rights reserved.</span><span>{legal}</span></div></div></footer>
-<nav class="mbar" aria-label="Quick actions"><a href="{self.rh}">{icon("phone" if self.has_phone else "mail")}{"Call" if self.has_phone else "Email"}</a><a href="{L.get("mbar_second_href") or (self.href(cur, L["mbar_second_slug"]) if L.get("mbar_second_slug") else ("sms:" + b["tel"] if self.has_phone else self.href(cur, self.c["services_hub"]["slug"])))}">{icon(L.get("mbar_second_icon","chat"))}{esc(L.get("mbar_second_label","Text"))}</a><a class="go" href="{self.href(cur,self.cta)}">{icon("calendar")}{esc(L["cta_short"])}</a></nav>'''
+</div>{note}<div class="legal"><span>© {date.today().year} {esc(b["legal_name"])}. All rights reserved.</span><span>{legal}</span></div></div></footer>
+<nav class="mbar" aria-label="Quick actions"><a href="{self.rh}">{icon("phone" if self.has_phone else "mail")}{"Call" if self.has_phone else "Email"}</a><a href="{m2}">{icon(L.get("mbar_second_icon","chat"))}{esc(L.get("mbar_second_label","Text"))}</a><a class="go" href="{self.href(cur,self.cta)}">{icon("calendar")}{esc(L["cta_short"])}</a></nav>'''
 
     def page(self, cur, title, meta, body, schema=None, trail=None, noindex=False, og_override=None, og_type="website"):
         brand = self.b["name"]; base = title.split(" | ")[0]
@@ -458,11 +480,17 @@ class Site:
         if not vis: lay = "centered"
         proof = "".join(f"<span>{icon('check')}{esc(x)}</span>" for x in h.get("proof", []))
         sec2 = f'<a class="btn btn-ghost" href="{self.href(cur,h["secondary_cta"][1])}">{esc(h["secondary_cta"][0])}</a>' if h.get("secondary_cta") else ""
-        hero = f'''<section class="hero on-dark layout-{lay}">{self.texture()}<div class="wrap"><div>
+        hero = f'''<section class="hero home-hero on-dark layout-{lay}">{self.texture()}<div class="wrap"><div>
 <span class="eyebrow">{esc(h["eyebrow"])}</span><h1>{h["h1"]}</h1><p class="lead">{esc(h["lead"])}</p>
 <div class="btn-row" style="margin-top:26px"><a class="btn btn-gold" href="{self.href(cur,self.cta)}">{esc(L["cta_long"])}</a>{sec2}</div>
 <div class="hero-proof">{proof}</div></div>{vis}</div>{self.divider()}</section>'''
         S = {}
+        if self.search:
+            SR = self.search
+            cards = "".join(f'<a class="card" href="{self.href(cur,x["slug"])}"><span class="ic">{icon(x.get("icon","search"))}</span><h3>{esc(x["nav"])}</h3><p>{esc(x["short"])}</p><span class="more">{esc(x.get("card_cta","Start searching →"))}</span></a>' for x in SR["pages"])
+            badge = f'<p class="search-badge">{icon("check")}{esc(SR["badge"])}</p>' if SR.get("badge") else ""
+            S["search"] = (f'<section class="search-home"><div class="wrap"><div class="section-head center"><span class="eyebrow">{esc(SR.get("home_eyebrow", SR["nav_label"]))}</span>'
+                           f'<h2>{esc(SR["home_title"])}</h2><p class="lead">{esc(SR["home_lead"])}</p>{badge}</div><div class="grid-{min(len(SR["pages"]),3)}">{cards}</div></div></section>')
         S["trust"] = '<section class="trust"><div class="wrap">' + "".join(f'<div>{icon(i)}<span>{esc(t)}<small>{esc(s)}</small></span></div>' for i, t, s in h["trust"]) + "</div></section>"
         if self.tiers:
             T = self.tiers
@@ -590,6 +618,31 @@ class Site:
 {self.related_posts_block(cur, "areas", a["slug"], self.blog.get("area_related_title", "Tips for {city}").format(city=a["city"])) if self.blog else ""}{f'<section class="bg-sand"><div class="wrap"><div class="section-head center"><span class="eyebrow">Reviews</span><h2>What our neighbors say</h2></div>{self.reviews_block()}</div></section>' if self.c["reviews"] else ""}{self.cta_band(cur)}'''
         sch = [self.service_schema(f(A["page_title"]), a["intro"], cur, [a["city"]]), self.faq_schema(faqs)]
         self.pages[cur] = self.page(cur, f(A["page_title"]), f(A["page_meta"]), body, sch, trail)
+
+    def search_page(self, x):
+        """Listing-search page (search.pages[]): holds the IDX / MLS search embed (x.embed_html) from the IDX vendor.
+        Until the embed is set, a clear placeholder shows instead and --check reports a launch blocker."""
+        SR = self.search; cur = x["slug"]; trail = self.trail((x["nav"], cur)); b = self.b
+        if x.get("embed_html", "").strip():
+            tool = f'<div class="idx-embed">{x["embed_html"]}</div>'
+        else:
+            msg = SR.get("preview_note", "Preview: the live MLS search loads here once the IDX feed is connected.") if self.preview else SR.get("fallback_text", "Our listing search is being connected.")
+            tool = (f'<!-- TODO before launch: paste the IDX vendor\'s embed code into search.pages[].embed_html -->'
+                    f'<div class="idx-placeholder">{icon(x.get("icon","search"))}<h2 class="h3">{esc(x.get("placeholder_title", x["nav"]))}</h2><p>{esc(msg)}</p>'
+                    f'<p><a class="btn btn-gold" href="tel:{b["tel"]}">{esc(self.L["phone_prefix"])} {b["phone"]}</a></p></div>')
+        quick = "".join(f'<a class="chip" href="{u}">{esc(l)}</a>' for l, u in x.get("quick_links", []))
+        quick = f'<div class="chips" style="margin-top:18px">{quick}</div>' if quick else ""
+        badge = f'<p class="search-badge">{icon("check")}{esc(SR["badge"])}</p>' if SR.get("badge") else ""
+        tips = "".join(f"<li>{esc(t)}</li>" for t in x.get("tips", []))
+        others = "".join(f'<li><a href="{self.href(cur,o["slug"])}">{esc(o["nav"])}</a></li>' for o in SR["pages"] if o is not x)
+        disc = f'<p class="idx-disclaimer">{SR["disclaimer_html"]}</p>' if SR.get("disclaimer_html") else ""
+        body = self.page_hero(cur, trail, x["h1"], esc(x["lead"])) + f'''
+<section><div class="wrap">{badge}{tool}{quick}{disc}</div></section>
+<section class="bg-sand"><div class="wrap layout-side"><div class="prose">{f'<h2>{esc(x["tips_title"])}</h2><ul class="checklist">{tips}</ul>' if tips else ""}
+{self.rel_links(cur, x.get("body_html", ""))}{f'<h2>{esc(x.get("faq_title","Questions"))}</h2>' + self.faq_block(x["faqs"]) if x.get("faqs") else ""}</div>
+<aside class="aside"><h3>{esc(x.get("aside_title", self.L["aside_title"]))}</h3><p>{esc(x.get("aside_text", self.L["aside_text"]))}</p><a class="phone" href="tel:{b["tel"]}">{b["phone"]}</a>
+<a class="btn btn-gold" href="{self.href(cur,self.cta)}">{esc(self.L["cta"])}</a>{f'<p style="margin:14px 0 6px;font-weight:700;color:#fff">Also search</p><ul class="city-links" style="grid-template-columns:1fr">{others}</ul>' if others else ""}</aside></div></section>{self.cta_band(cur)}'''
+        self.pages[cur] = self.page(cur, x["title"], x["meta"], body, [self.faq_schema(x["faqs"])] if x.get("faqs") else None, trail)
 
     def resource_page(self):
         R = self.resource; cur = R["slug"]; trail = self.trail((R["nav_label"], cur))
@@ -892,6 +945,11 @@ class Site:
                         B.append(f"Blog post not migrated (old URL will 404): /{self.blog['post_prefix']}/{p['slug']}/ (posts/{f})")
                     elif p["draft"]:
                         W.append(f"Draft post not published: posts/{f}")
+        if self.search:
+            for x in self.search["pages"]:
+                if not x.get("embed_html", "").strip():
+                    B.append(f"Listing search /{x['slug']}/ has no IDX embed yet (search.pages[].embed_html): visitors would see a placeholder instead of the MLS search.")
+            if self.search.get("verify"): W.append(self.search["verify"])
         og = self.c.get("og_image", "og-image.jpg")
         if not os.path.exists(os.path.join(self.client_assets, og)):
             W.append(f"No assets/{og} committed: social share image will be missing on Cloudflare builds.")
@@ -911,6 +969,8 @@ class Site:
             self.areas_hub()
             for a in self.areas["pages"]: self.area_page(a)
         if self.resource: self.resource_page()
+        if self.search:
+            for x in self.search["pages"]: self.search_page(x)
         if self.blog:
             self.blog_index(); self.category_pages()
             for p in self.posts: self.post_page(p)

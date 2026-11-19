@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">
+  <!-- Original illustration for Harvest Moon Realty: a harvest moon rising over Midlands fields, drawn from the logo's moon-and-furrows motif and brand colors. -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b1d1b"/>
+      <stop offset=".45" stop-color="#8a3f2c"/>
+      <stop offset=".72" stop-color="#e8743f"/>
+      <stop offset="1" stop-color="#ffb25b"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="900" cy="130" r="380" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fdda24" stop-opacity=".75"/>
+      <stop offset=".35" stop-color="#ffb25b" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#ffb25b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="f1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c8742f"/><stop offset="1" stop-color="#8f4a22"/></linearGradient>
+    <linearGradient id="f2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a3542a"/><stop offset="1" stop-color="#683431"/></linearGradient>
+    <linearGradient id="f3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6e3a2a"/><stop offset="1" stop-color="#3b1d1b"/></linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <circle cx="900" cy="130" r="380" fill="url(#glow)"/>
+  <circle cx="900" cy="130" r="96" fill="#fdda24"/>
+  <circle cx="900" cy="130" r="96" fill="none" stroke="#fff3b0" stroke-opacity=".5" stroke-width="3"/>
+  <!-- far treeline -->
+  <path d="M0 560 C40 548 60 552 90 540 C120 528 140 545 170 536 C200 527 230 540 260 530 C300 518 330 538 370 528 C410 518 440 536 480 526 C520 516 560 534 600 524 C640 514 690 532 730 522 C780 510 820 530 860 522 C900 514 940 528 980 520 C1030 510 1070 528 1110 522 C1160 514 1200 530 1250 522 C1300 512 1340 530 1390 520 C1440 510 1490 528 1540 518 C1570 512 1590 520 1600 516 L1600 600 L0 600 Z" fill="#4a2321" opacity=".85"/>
+  <!-- rolling fields -->
+  <path d="M0 600 C300 545 620 560 900 590 C1150 616 1390 590 1600 560 L1600 900 L0 900 Z" fill="url(#f1)"/>
+  <path d="M0 690 C260 630 560 640 820 680 C1080 720 1350 690 1600 650 L1600 900 L0 900 Z" fill="url(#f2)"/>
+  <path d="M0 790 C320 730 640 750 900 790 C1150 828 1400 800 1600 770 L1600 900 L0 900 Z" fill="url(#f3)"/>
+  <!-- furrow lines -->
+  <g fill="none" stroke="#ffb25b" stroke-opacity=".35" stroke-width="3" stroke-linecap="round">
+    <path d="M0 625 C300 575 620 588 900 615 C1150 640 1390 615 1600 588"/>
+    <path d="M0 655 C300 608 620 618 900 645 C1150 668 1390 645 1600 620"/>
+    <path d="M0 720 C260 665 560 675 820 712 C1080 750 1350 722 1600 685"/>
+    <path d="M0 752 C260 700 560 708 820 744 C1080 780 1350 754 1600 718"/>
+  </g>
+  <g fill="none" stroke="#fdda24" stroke-opacity=".18" stroke-width="2.5" stroke-linecap="round">
+    <path d="M0 820 C320 765 640 782 900 820 C1150 856 1400 830 1600 800"/>
+    <path d="M0 852 C320 800 640 815 900 852 C1150 886 1400 862 1600 834"/>
+  </g>
+  <!-- lone oak on the ridge -->
+  <g fill="#3b1d1b" opacity=".9">
+    <rect x="356" y="548" width="7" height="44" rx="2"/>
+    <path d="M318 556 C300 540 318 518 336 522 C338 500 368 496 378 512 C396 500 420 516 412 534 C430 540 424 562 404 562 C392 574 370 568 362 562 C350 570 326 570 318 556 Z"/>
+  </g>
+  <!-- farmhouse -->
+  <g fill="#3b1d1b" opacity=".85">
+    <path d="M1380 548 L1406 530 L1432 548 L1432 572 L1380 572 Z"/>
+    <rect x="1432" y="552" width="30" height="20"/>
+  </g>
+</svg>
