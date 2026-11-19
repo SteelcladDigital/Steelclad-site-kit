@@ -170,6 +170,8 @@ python3 build.py palmetto-pool --check
 - Send a real test lead and confirm it lands in GHL and the owner gets notified
 - GTM, the Google reviews link, the share image, and a text placeholder logo
 
+Until `"launched": True`, every page carries `noindex, nofollow`, so a `pages.dev` preview shared with the client can never compete with their current site in Google. Setting `launched` switches indexing on.
+
 Set `"launched": True` in the client's `site.py` when the domain points to Cloudflare. From then on, any blocker **stops the Cloudflare build**, so the live site keeps serving its last good version instead of shipping a broken form or a 404.
 
 ## Deploying (Cloudflare Pages, free)

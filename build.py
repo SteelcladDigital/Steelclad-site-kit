@@ -321,7 +321,7 @@ class Site:
 <html lang="en-US"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)}</title><meta name="description" content="{esc(meta)}">
-<link rel="canonical" href="{self.canon(cur)}"><meta name="robots" content="{'noindex' if noindex else 'index, follow, max-image-preview:large'}">
+<link rel="canonical" href="{self.canon(cur)}"><meta name="robots" content="{'noindex' if noindex else ('index, follow, max-image-preview:large' if self.c.get("launched") else 'noindex, nofollow')}">
 <meta property="og:type" content="{og_type}"><meta property="og:site_name" content="{esc(brand)}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(meta)}">
 <meta property="og:url" content="{self.canon(cur)}"><meta property="og:image" content="{self.D}/assets/{og}"><meta name="twitter:card" content="summary_large_image">
 <meta name="geo.region" content="US-{self.b["address"]["region"]}"><meta name="geo.placename" content="{esc(self.b["address"]["locality"])}">
