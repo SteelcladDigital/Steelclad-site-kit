@@ -593,5 +593,5 @@ CONFIG = {
   "reviews": [],     # no on-site reviews yet (see NOTES.md); never add placeholder or invented reviews
   "faqs": GENERAL_FAQS,
   "legal_pages": [("privacy-page", "Privacy Policy"), ("terms-of-service", "Terms of Service")],
-  "redirects": [("/blog/b", "/blog/"), ("/blog/c", "/blog/"), ("/privacy", "/privacy-page/"), ("/privacy-policy", "/privacy-page/"), ("/terms", "/terms-of-service/")],
+  "redirects": [("/post/:slug", "/blog/b/:slug/"), ("/post/:slug/", "/blog/b/:slug/"), ("/post", "/blog/"), ("/blog/b", "/blog/"), ("/blog/c", "/blog/"), ("/privacy", "/privacy-page/"), ("/privacy-policy", "/privacy-page/"), ("/terms", "/terms-of-service/")],
 }
