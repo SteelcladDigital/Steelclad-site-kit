@@ -89,9 +89,11 @@
         .then(function(sent){
           if(!sent)throw new Error('not sent');
           window.dataLayer=window.dataLayer||[];
-          window.dataLayer.push({event:'generate_lead',form_name:data.form||'',lead_source:data.utm_source||data.referrer||''});
-          var to=f.getAttribute('data-thanks');
-          if(to){setTimeout(function(){location.href=to},400);return;}
+          var to=f.getAttribute('data-thanks'),gone=false;
+          var go=function(){if(to&&!gone){gone=true;location.href=to}};
+          // eventCallback runs once GTM has fired the lead tags, so the redirect never cuts them off; the timeout covers blocked GTM.
+          window.dataLayer.push({event:'generate_lead',form_name:data.form||'',lead_source:data.utm_source||data.referrer||'',eventCallback:go,eventTimeout:2000});
+          if(to){setTimeout(go,2200);return;}
           if(ok)ok.classList.add('show'); f.reset();
           if(btn){btn.textContent=btn.dataset.label;}
         })

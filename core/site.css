@@ -33,7 +33,7 @@ p{margin:0 0 1em}
 .topbar a{color:#fff;text-decoration:none;font-weight:600}
 .topbar .promise{display:flex;align-items:center;gap:8px}
 .dot{width:8px;height:8px;border-radius:50%;background:#3ddc84;box-shadow:0 0 0 3px rgba(61,220,132,.25)}
-.site-header{background:var(--c-primary);position:sticky;top:0;z-index:50;box-shadow:0 2px 0 rgba(0,0,0,.08)}
+.site-header{background:var(--c-header,var(--c-primary));position:sticky;top:0;z-index:50;box-shadow:0 2px 0 rgba(0,0,0,.08)}
 .site-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-top:14px;padding-bottom:14px}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff}
 .logo svg{width:auto;height:58px}
@@ -383,3 +383,32 @@ a.chip{text-decoration:none;color:var(--c-secondary-deep)}a.chip:hover{backgroun
   .dd-all{display:block}
   .dd-all a{font-weight:700}
 }
+
+/* theme.header_bg + theme.header_ink: a colored header with dark (or any) nav text */
+.hdr-ink .nav a.nl,.hdr-ink .nav button.nl{color:var(--c-header-ink)}
+.hdr-ink .nav a.nl:hover,.hdr-ink .nav button.nl:hover,.hdr-ink .nav a.nl[aria-current]{background:rgba(255,255,255,.3);color:var(--c-header-ink)}
+.hdr-ink .menu-toggle{color:var(--c-header-ink)}
+@media (max-width:1020px){
+  .hdr-ink .nav{background:#fff;box-shadow:0 12px 24px rgba(0,0,0,.1)}
+  .hdr-ink .nav a.nl,.hdr-ink .nav button.nl{color:var(--c-primary)}
+  .hdr-ink .dropdown a{color:var(--c-ink)}.hdr-ink .dropdown a:hover{background:var(--c-secondary-wash)}
+  .hdr-ink .dropdown .sep{color:var(--c-muted)}
+}
+/* theme.logo_plate: white plate behind a full-color logo so its colors read on a colored header and the dark footer */
+.logo-plate .site-header .logo,.logo-plate .site-footer .logo{background:#fff;border-radius:calc(var(--radius) * .8);padding:6px 12px;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.logo-plate .site-footer .logo{display:inline-flex}
+.logo-plate .site-header .logo img{height:66px}
+@media (max-width:560px){.logo-plate .site-header .logo img{height:44px}.logo-plate .site-header .logo{padding:4px 9px}}
+/* custom_pages cards with links; service-page intro */
+.card .card-links{margin:auto 0 0;font-weight:600;font-size:.94rem}
+.card .card-links a{text-decoration:none}
+.svc-intro{margin-bottom:8px}
+.svc-intro p:first-child{font-size:1.1rem}
+/* photo_grid pairs: before/after tiles side by side */
+.photo-grid.pairs{grid-template-columns:repeat(4,1fr)}
+.photo-grid.pairs img{aspect-ratio:1/1}
+@media (max-width:900px){.photo-grid.pairs{grid-template-columns:repeat(2,1fr);gap:12px}}
+.prose .photo-grid.pairs{grid-template-columns:repeat(2,1fr)}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+@media (max-width:1020px){.grid-4{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.grid-4{grid-template-columns:1fr}}

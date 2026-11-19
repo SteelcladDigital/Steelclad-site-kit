@@ -132,6 +132,16 @@ Launch check in this mode: the demo form and a missing `gtm_id` are blockers; th
 - `business.legal_entity`, `founder`, `slogan`: extra organization structured data. `theme.colors.texture`: hero texture line color.
 - Pages built with `noindex` (thank-you, 404) are left out of `sitemap.xml`.
 
+## More layout options (added for Bright Janitorial, Nov 2026)
+
+- `theme.header_bg` + `theme.header_ink`: a colored header (e.g. the client's brand teal) with any nav text color, for when white text fails contrast. `theme.logo_plate: True` puts a white plate behind a full-color logo in the header and footer.
+- `custom_pages`: free-form pages built from sections (`cards` with icons and links, `list`, `html`), with FAQs, Service markup and an optional top-nav link (`nav_label`). Example: Bright's `/facilities-we-serve/`.
+- Service pages: optional `intro_html`, `sections` [(h2, html)], `why_title` + `why`, `faq_title`, `related_title` + `related` [(slug, one-liner)], `cta_title` / `cta_text`, `photos_pairs`. `signs` items can be (bold lead-in, text) tuples.
+- `services_hub`: optional `body_html`, `faqs`, `schema_service`.
+- Galleries: `home.gallery.pairs` / `about.photos_pairs` lay before/after photos side by side.
+- `areas.pages[].zips` is optional. Lead pages show `business.address.street` when set.
+- Web3Forms `generate_lead` now waits for GTM (`eventCallback`, 2 s timeout) before redirecting to the thank-you page.
+
 ## GoHighLevel integration
 
 GHL stays the lead inbox, automation engine, chat, reviews and Social Planner. The website just feeds it. Everything lives in `integrations` in the client's `site.py`.
