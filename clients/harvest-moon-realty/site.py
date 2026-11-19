@@ -498,7 +498,7 @@ CONFIG = {
     "story_html": "<p>I started investing in South Carolina real estate in 1989 and became a licensed agent in 2003. I've seen a lot of markets and a lot of houses, and I know the things to look for.</p>"
                   "<p>My two favorite kinds of clients are first-time home buyers and land buyers. I love to hold a first-time buyer's hand from start to finish and help them understand a process that can be overwhelming. And I love land deals because I get to see God's wonderful creation while I'm working.</p>"
                   "<p>At this point in my career, I rely heavily on repeat business and referrals. That only happens when people feel taken care of, so that's how I work: low-pressure, honest, and on your side. <strong>I'm going to stick up for you, but I'm going to do it while being professional and respectful to everyone involved.</strong></p>",
-    "photo": {"file": "photos/barry-keith-and-wife.webp", "alt": "Barry Keith of Harvest Moon Realty with his wife", "caption": "Barry Keith and his wife", "w": 480, "h": 480},
+    "photo": {"file": "photos/barry-keith-and-wife.webp", "alt": "Barry Keith of Harvest Moon Realty with his wife, Beth", "caption": "Barry Keith and his wife, Beth", "w": 480, "h": 480},
     "list_title": "How I work",
     "list": ["Low-pressure, always", "I'll point out the pitfalls and the advantages I see", "Your best interest first, start to finish", "Homes in Lexington & Richland counties, land statewide", "Member of the Consolidated MLS (Midlands MLS)", "SC real estate license #43236 · Harvest Moon Realty"]},
   "contact": {"title": "Contact Barry Keith | Harvest Moon Realty, Lexington SC",
