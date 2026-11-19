@@ -35,6 +35,7 @@
     });
   });
 
+  /*GHL-NATIVE-START*/
   // native form captured by the GoHighLevel External Tracking script.
   // The tracking script listens for the submit event; we wait a moment so it can send, then confirm.
   // Spam bots that fill the hidden "website" field are dropped. If the tracking script never loaded
@@ -55,6 +56,8 @@
       },1200);
     });
   });
+
+  /*GHL-NATIVE-END*/
 
   // first-touch attribution: remember how the visitor first arrived (UTMs, click IDs, referrer, landing page)
   // so a lead that converts three pages later still carries its source. Storage can be blocked: never fatal.

@@ -7,7 +7,7 @@ description: Weird noises from your pool pump? Weak circulation? The 5 warning s
 category: Pool Equipment
 author: Palmetto Pool Solutions
 services: pool-pump-filter-repair, pool-equipment-upgrades
-areas: pool-service-lexington-sc, pool-service-irmo-sc, pool-service-cayce-sc, pool-service-chapin-sc, pool-service-west-columbia-sc
+areas: pool-service-lexington-sc, pool-service-irmo-sc, pool-service-cayce-sc, pool-service-chapin-sc, pool-service-west-columbia-sc, pool-service-batesburg-leesville-sc
 migrated_from: https://palmettopoolsolutions.com/post/pool-pump-repair-signs-lexington-sc
 ---
 

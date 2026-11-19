@@ -7,7 +7,7 @@ description: South Carolina's August heat is brutal on pool chemistry. What's re
 category: Pool Maintenance Tips
 author: Palmetto Pool Solutions
 services: weekly-pool-maintenance, green-to-clean-pool-recovery
-areas: pool-service-lexington-sc, pool-service-columbia-sc, pool-service-irmo-sc
+areas: pool-service-lexington-sc, pool-service-columbia-sc, pool-service-irmo-sc, pool-service-batesburg-leesville-sc
 migrated_from: https://palmettopoolsolutions.com/post/august-pool-care-lexington-sc
 ---
 

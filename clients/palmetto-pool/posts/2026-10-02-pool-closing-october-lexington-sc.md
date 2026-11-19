@@ -7,7 +7,7 @@ description: October in Lexington means pools are closing, but timing matters. H
 category: Seasonal Pool Care
 author: Palmetto Pool Solutions
 services: weekly-pool-maintenance, specialized-pool-cleaning, green-to-clean-pool-recovery
-areas: pool-service-lexington-sc, pool-service-west-columbia-sc, pool-service-irmo-sc, pool-service-chapin-sc
+areas: pool-service-lexington-sc, pool-service-west-columbia-sc, pool-service-irmo-sc, pool-service-chapin-sc, pool-service-gilbert-sc
 migrated_from: https://palmettopoolsolutions.com/post/pool-closing-october-lexington-sc
 ---
 

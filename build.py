@@ -212,6 +212,7 @@ class Site:
         if b.get("knows_about"): s["knowsAbout"] = b["knows_about"]
         served = [{"@type": "AdministrativeArea", "name": x} for x in b.get("counties", [])]
         if self.areas: served += [{"@type": "City", "name": f'{a["city"]}, {b["address"]["region"]}'} for a in self.areas["pages"]]
+        if self.areas: served += [{"@type": "City", "name": f'{t}, {b["address"]["region"]}'} for g in self.areas["groups"] for t in g.get("also", [])]
         if served: s["areaServed"] = served
         if self.tiers:
             s["hasOfferCatalog"] = {"@type": "OfferCatalog", "name": self.tiers["nav_label"], "itemListElement": [
@@ -376,7 +377,8 @@ class Site:
     def reviews_block(self):
         cards = "".join(f'<figure class="review"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>“{esc(t)}”</blockquote><figcaption><cite>{esc(n)}<span>{esc(c)}</span></cite></figcaption></figure>' for n, c, t in self.c["reviews"])
         url = self.c.get("integrations", {}).get("google_reviews_url")
-        more = f'<p style="text-align:center;margin-top:28px"><a class="btn btn-outline" href="{url}">Read more reviews on Google</a></p>' if url else ""
+        label = self.c.get("integrations", {}).get("google_reviews_label") or "Read more reviews on Google"   # e.g. "Read or leave a review on Google" for a g.page/.../review link
+        more = f'<p style="text-align:center;margin-top:28px"><a class="btn btn-outline" href="{url}" rel="noopener">{esc(label)}</a></p>' if url else ""
         return f'<div class="reviews">{cards}</div>{more}'
 
     @staticmethod
@@ -399,7 +401,8 @@ class Site:
         A = self.areas; cols = ""
         for g in A["groups"]:
             links = "".join(f'<li><a href="{self.href(cur,a["slug"])}">{esc(a["city"])}</a></li>' for a in A["pages"] if a["slug"] in g["slugs"])
-            cols += f'<div class="county"><h3>{esc(g["name"])} <small>{esc(g.get("note",""))}</small></h3><ul class="city-links">{links}</ul></div>'
+            also = (f'<p class="also-served">{esc(g.get("also_label", "Also serving"))} {esc(", ".join(g["also"]))}{esc(g.get("also_tail", ""))}</p>') if g.get("also") else ""   # groups[].also: towns served without their own page
+            cols += f'<div class="county"><h3>{esc(g["name"])} <small>{esc(g.get("note",""))}</small></h3><ul class="city-links">{links}</ul>{also}</div>'
         return f'<div class="grid-2">{cols}</div><p style="text-align:center;margin-top:24px;color:var(--c-muted)">{esc(A["outside_note"])} <a href="tel:{self.b["tel"]}">{self.b["phone"]}</a></p>'
 
     def hero_visual(self, cur):
@@ -524,7 +527,7 @@ class Site:
 
     def photo_grid(self, cur, photos):
         """Real job photos: [{"file": "photos/x.webp", "alt": "...", "caption": "...", "w": 1200, "h": 900}] from clients/<client>/assets/."""
-        figs = "".join(f'<figure><img src="{self.asset(cur, ph["file"])}" alt="{esc(ph["alt"])}" width="{ph.get("w",1200)}" height="{ph.get("h",900)}" loading="lazy" decoding="async">'
+        figs = "".join(f'<figure{" class=contain" if ph.get("contain") else ""}><img src="{self.asset(cur, ph["file"])}" alt="{esc(ph["alt"])}" width="{ph.get("w",1200)}" height="{ph.get("h",900)}" loading="lazy" decoding="async">'
                        f'{"<figcaption>" + esc(ph["caption"]) + "</figcaption>" if ph.get("caption") else ""}</figure>' for ph in photos)
         return f'<div class="photo-grid">{figs}</div>'
     def service_page(self, s):
@@ -893,6 +896,10 @@ class Site:
             open(os.path.join(d, "index.html"), "w").write(h)
         A = os.path.join(self.out, "assets"); os.makedirs(os.path.join(A, "fonts"))
         for f in ("site.css", "site.js"): shutil.copy(os.path.join(ROOT, "core", f), A)
+        if self.c.get("integrations", {}).get("form_mode") != "native":   # GHL native-form handler only ships to sites that use it
+            js = os.path.join(A, "site.js")
+            src = open(js).read()   # read before reopening for write (opening with "w" truncates)
+            open(js, "w").write(re.sub(r"[ \t]*/\*GHL-NATIVE-START\*/.*?/\*GHL-NATIVE-END\*/\n*", "", src, flags=re.S))
         for f in {self.c["theme"]["fonts"]["display"], self.c["theme"]["fonts"]["body"]}: shutil.copy(os.path.join(ROOT, "core", "fonts", f + ".woff2"), os.path.join(A, "fonts"))
         open(os.path.join(A, "theme.css"), "w").write(self.theme_css())
         if self.c["logo"]["type"] == "svg":

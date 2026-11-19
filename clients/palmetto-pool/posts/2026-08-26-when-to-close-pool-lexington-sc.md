@@ -7,7 +7,7 @@ description: Most Lexington, SC homeowners close their pool too early. Exactly w
 category: Lexington, SC Pool Care
 author: Mike Brazell, owner
 services: weekly-pool-maintenance, green-to-clean-pool-recovery, pool-pump-filter-repair
-areas: pool-service-lexington-sc, pool-service-chapin-sc, pool-service-irmo-sc
+areas: pool-service-lexington-sc, pool-service-chapin-sc, pool-service-irmo-sc, pool-service-gilbert-sc
 migrated_from: https://palmettopoolsolutions.com/post/when-to-close-pool-lexington-sc
 ---
 

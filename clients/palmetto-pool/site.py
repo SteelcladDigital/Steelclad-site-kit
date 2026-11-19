@@ -68,8 +68,12 @@ SERVICES = [
             ("Skim & empty baskets", "Leaves, pollen and bugs off the surface; skimmer and pump baskets emptied."),
             ("Brush & vacuum", "Walls, steps and tile line brushed so algae can't get a foothold; floor vacuumed."),
             ("Equipment check", "Pump pressure, filter, heater and salt system looked over so small issues get caught early."),
-            ("Visit report", "A door hanger with readings and work completed, so you never have to wonder if we came."),
+            ("Deck & water level", "Deck blown off and water level checked. If your pool needs water, the door hanger tells you how many inches to add."),
+            ("Door hanger", "Every service checked off on our door hanger, with service comments and the date of your next service, so you never have to wonder if we came."),
         ],
+        "photos_title": "The door hanger you'll find after every visit",
+        "photos": [{"file": "photos/palmetto-pool-door-hanger.jpg", "alt": "Palmetto Pool Solutions door hanger. Front: checklist of services performed, from water tested and baskets cleaned to pool brushed, vacuumed and chemically balanced. Back: service comments, water to add, date and time, and date of next service.",
+                    "w": 896, "h": 1200, "contain": True, "caption": "Our actual door hanger: services checked off on the front, comments and your next service date on the back."}],
         "signs_title": "Weekly service is a good fit if…",
         "signs": [
             "You'd rather spend weekends in the pool than working on it",
@@ -262,6 +266,32 @@ AREAS = [
         ],
     },
     {
+        "slug": "pool-service-gilbert-sc", "city": "Gilbert", "county": "Lexington County",
+        "zips": "29054", "existing": False,
+        "intro": "Gilbert is peach country, home of the Lexington County Peach Festival every Fourth of July, and a short drive west of Lexington. Plenty of Gilbert pools sit on bigger, wooded or rural lots, and they're on our weekly Lexington County routes just like pools in town.",
+        "local": [
+            ("Bigger lots, more debris", "Wooded and rural lots mean pine straw, leaves and heavy spring pollen. Weekly skimming, basket cleaning and brushing keep it from feeding algae."),
+            ("Topping off from a well?", "Well water can carry iron and other metals that stain plaster and tint the water. Tell us at your evaluation and we'll test for it before it becomes a stain."),
+            ("Same service as in town", "Gilbert customers get the same route day, flat monthly rate and door hanger after every visit as our Lexington customers."),
+        ],
+        "faqs": [
+            ("Do you offer pool service in Gilbert, SC?", "Yes. Gilbert (29054) is part of our Lexington County service area, with weekly routes, green-to-clean recovery and pump and filter repair."),
+        ],
+    },
+    {
+        "slug": "pool-service-batesburg-leesville-sc", "city": "Batesburg-Leesville", "county": "Lexington County",
+        "zips": "29006, 29070", "existing": False,
+        "intro": "Batesburg-Leesville sits at the western edge of Lexington County, a long way from most pool companies' routes. It isn't too far for us: we're a Lexington County family business, and the whole county is our service area.",
+        "local": [
+            ("Weekly service out west", "The same weekly checklist, flat monthly rate and door hanger our customers in Lexington get, without having to beg someone to drive out."),
+            ("Well water and older equipment", "Many homes here fill from a well, and many pools have seen a lot of seasons. We test for metals and keep an eye on aging pumps and filters on every visit."),
+            ("Green pool? No draining", "Pools that sat unused come back with our Green to Clean recovery, usually without draining a drop."),
+        ],
+        "faqs": [
+            ("Do you service pools in Batesburg-Leesville?", "Yes. Batesburg-Leesville (29006 and 29070) is part of our Lexington County service area. Call or text (803) 394-0765 to get on a route."),
+        ],
+    },
+    {
         "slug": "pool-service-columbia-sc", "city": "Columbia", "county": "Richland County",
         "zips": "29201–29229", "existing": True,
         "intro": "Columbia didn't get the nickname \"Famously Hot\" by accident. Long, steamy summers burn through chlorine fast, and many pools in established neighborhoods like Shandon, Rosewood and Northeast Columbia run on equipment that's seen a lot of seasons.",
@@ -365,7 +395,7 @@ REVIEWS = [
 GENERAL_FAQS = [
     ("How much does pool service cost?", "Every pool is different: size, type, tree cover and equipment all matter. After a free evaluation we give you one flat monthly rate. No teaser pricing, no surprise fees."),
     ("What's the difference between the plans?", "Balance covers water chemistry only, for people who like to clean their own pool. Full Service adds skimming, brushing, vacuuming and equipment checks. Full Service Plus adds scheduled salt cell and cartridge filter cleaning plus discounted openings and closings."),
-    ("Do I need to be home on service day?", "No. We just need gate access and pets secured. You'll find a door hanger with your readings and the work completed."),
+    ("Do I need to be home on service day?", "No. We just need gate access and pets secured. You'll find a door hanger checking off everything we did, with any comments and your next service date."),
     ("Are you certified and insured?", "Yes. We're CPO certified (Certified Pool Operator), licensed and fully insured."),
     ("What if I call and you don't answer?", "We answer our phone. If you do hit voicemail, expect a callback within the hour during business hours."),
     ("Do you service above-ground and saltwater pools?", "Yes. In-ground, above-ground, saltwater and chlorine pools are all on our routes."),
@@ -423,7 +453,8 @@ CONFIG = {
     "web3forms_from_name": "Palmetto Pool Solutions website",
     "thank_you_slug": "thank-you",
     "gtm_id": "GTM-K3752MP5",          # Mike's OWN Tag Manager account; GA4 + generate_lead tags live inside it
-    "google_reviews_url": "",           # TODO: GBP "read reviews" link once confirmed
+    "google_reviews_url": "https://g.page/r/CSSJuhDXidrPEBM/review",   # Mike's GBP review link (opens his Google reviews with the write-a-review box)
+    "google_reviews_label": "Read or leave a review on Google",
   },
   "launched": False,                 # set True only after Mike approves and --check is clean; launch blockers then STOP the build
   "labels": {
@@ -447,10 +478,10 @@ CONFIG = {
     "proof": ["Serving Lexington & Richland counties", "Above-ground & in-ground", "Salt & chlorine pools"],
     "hero_owner": {"photo": "photos/mike-brazell-avatar.jpg", "alt": "Mike Brazell, owner of Palmetto Pool Solutions",
                    "name": "Mike Brazell, owner", "text": "CPO certified · Lifelong Lexington County resident"},
-    "hero_card": {"label": "Visit report", "title": "Your pool was serviced today", "sub": "Left on your door after every visit", "badge": "Example", "hanger": True,
-                  "stats": [("3.0", "Chlorine"), ("7.5", "pH"), ("90", "Alkalinity")],
-                  "checks": ["Skimmed", "Brushed", "Vacuumed", "Baskets emptied", "Filter checked", "Pump checked"],
-                  "note": "Notes from your tech go here, like \"Pine pollen heavy this week; filter pressure up 6 PSI, will clean next visit.\""},
+    # Mirrors Mike's real door hanger (assets/photos/palmetto-pool-door-hanger.jpg): checklist front, comments + next service on the back.
+    "hero_card": {"label": "Door hanger", "title": "We performed the following services on your pool", "sub": "Left on your door after every visit", "badge": "Example", "hanger": True,
+                  "checks": ["Water tested", "Water level", "Baskets cleaned", "Deck blown off", "Equipment checked", "Filter cleaned", "Brushed & vacuumed", "Water balanced"],
+                  "note": "Service comments: \"Pine pollen heavy this week, cleaned the filter.\" Date of next service: next Tuesday."},
     "trust": [("home", "Family-Owned", "Lexington County, SC"), ("badge", "CPO Certified", "Certified Pool Operator"),
               ("shield", "Licensed & Insured", "Fully covered, every visit"), ("phone", "We Answer", "Callback within the hour")],
     # Mike's own words, from the current /about page.
@@ -464,7 +495,7 @@ CONFIG = {
             "quote_html": "No-shows. Vague pricing. Wondering if anyone actually came by. <em>That's not how pool service should work.</em>",
             "body": "You're not asking for much. You want a pool that's clean, safe and ready whenever you are. So we built our whole service around the things other pool companies skip.",
             "items": [("phone", "We answer our phone.", "Call or text and we pick up. Hit voicemail? Expect a callback within the hour."),
-                      ("doc", "We document every visit.", "A door hanger with your readings and the work done, every single time."),
+                      ("doc", "We document every visit.", "A door hanger checking off every service we performed, with comments and your next service date. Every single time."),
                       ("calendar", "We show up on schedule.", "Same route day each week, with standardized checklists and random quality checks."),
                       ("home", "We're your neighbor, not a franchise.", "No 1-800 number and no call center. You talk to people who live here and know Midlands pools season by season.")]},
     "cards": {"eyebrow": "Built for Midlands pools", "title": "What your pool is up against in Lexington & Columbia",
@@ -515,12 +546,13 @@ CONFIG = {
   "services": SERVICES,
   "areas": {
     "enabled": True, "hub_slug": "service-areas", "nav_label": "Service Areas", "link_prefix": "Pool Service",
-    "hub_title": "Pool Service Areas: Lexington & Richland County", "hub_meta": "Weekly pool service in Lexington, Columbia, Irmo, Chapin, West Columbia, Cayce, Forest Acres and Blythewood, SC.",
-    "hub_h1": "Pool Service Areas in Lexington &amp; Richland County", "hub_lead": "Family-owned in Lexington County, with weekly routes across both counties: from Chapin and Lake Murray to Columbia, Forest Acres and Blythewood.",
+    "hub_title": "Pool Service Areas: Lexington & Richland County", "hub_meta": "Weekly pool service across Lexington County (Lexington, Chapin, Irmo, Gilbert, Batesburg-Leesville and more) plus Columbia, Forest Acres and Blythewood.",
+    "hub_h1": "Pool Service Areas in Lexington &amp; Richland County", "hub_lead": "Family-owned in Lexington County, with weekly routes across both counties: from Batesburg-Leesville, Gilbert and Chapin to Columbia, Forest Acres and Blythewood.",
     "home_title": "Proudly serving Lexington & Richland counties",
-    "groups": [{"name": "Lexington County", "note": "Home base", "slugs": ["pool-service-lexington-sc", "pool-service-chapin-sc", "pool-service-west-columbia-sc", "pool-service-cayce-sc", "pool-service-irmo-sc"]},
+    "groups": [{"name": "Lexington County", "note": "Home base", "slugs": ["pool-service-lexington-sc", "pool-service-chapin-sc", "pool-service-west-columbia-sc", "pool-service-cayce-sc", "pool-service-irmo-sc", "pool-service-gilbert-sc", "pool-service-batesburg-leesville-sc"],
+                "also": ["Swansea", "Pelion", "Gaston", "Pine Ridge", "South Congaree", "Springdale", "Summit", "Red Bank", "Oak Grove", "Seven Oaks"], "also_tail": " and every other community in Lexington County."},
                {"name": "Richland County", "note": "Weekly routes", "slugs": ["pool-service-columbia-sc", "pool-service-forest-acres-sc", "pool-service-blythewood-sc", "pool-service-irmo-sc"]}],
-    "outside_note": "Near a county line or not listed? Call or text. Our routes may run right past you.",
+    "outside_note": "Anywhere in Lexington County is in our service area. In Richland County or near a county line? Call or text; our routes may run right past you.",
     "service_where_text": "We serve homeowners throughout Lexington and Richland counties, including",
     "page_title": "Pool Service & Maintenance Plans in {city}, {region}",
     "page_meta": "Weekly pool cleaning & maintenance plans in {city}, {region}. CPO-certified, family-owned, flat monthly rate. Call or text (803) 394-0765.",

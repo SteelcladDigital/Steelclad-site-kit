@@ -7,7 +7,7 @@ description: A five-step pool opening checklist for Lexington, SC homeowners: co
 category: Lexington, SC Pool Care
 author: Mike Brazell, owner
 services: weekly-pool-maintenance, pool-pump-filter-repair
-areas: pool-service-lexington-sc, pool-service-west-columbia-sc, pool-service-irmo-sc, pool-service-chapin-sc
+areas: pool-service-lexington-sc, pool-service-west-columbia-sc, pool-service-irmo-sc, pool-service-chapin-sc, pool-service-gilbert-sc
 migrated_from: https://palmettopoolsolutions.com/post/pool-opening-checklist-lexington-sc
 ---
 

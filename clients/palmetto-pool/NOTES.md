@@ -25,19 +25,32 @@ Status (Nov 19, 2026): **refreshed to the current process, not launched.** Branc
 - **Real logo** (white knockout cut from his JPG) on a header in his exact logo navy, `#1b227d`. The SVG redraw is gone.
 - **Real photo of Mike** (parade float) in the hero chip, the homepage owner story, the About page and the share image (`og-image.jpg`).
 
-## Before launch: confirm with Mike
+## Decisions from Steelclad (Nov 19, 2026)
 
-1. **Family and crew, by name, with photos.** The site says "family-owned" and reviews mention "Mike and his crew", but no names are confirmed. `about.team` is ready (name, role, short bio, photo). Wanted: crew/family names, Mike or the crew on a pool, the truck(s), and before/after green pools. Until then, Mike is the only person named.
-2. **His phone number vs. GHL.** His SMS terms say "text STOP to (803) 394-0765". **If that number is a GHL/LeadConnector number, port it out before GHL is cancelled.** Otherwise the number printed on his banner, truck and every page dies with the account.
-3. **Reviews from other towns.** All three real reviews are from Lexington. Ask 3–5 customers in Columbia, Irmo and Chapin for Google reviews, then add them to `REVIEWS` with their town. Add the GBP "read reviews" link (`integrations.google_reviews_url`).
-4. **Plan names and inclusions** (Balance / Full Service / Full Service Plus) are still a *proposal*. Confirm them, and whether chemicals are included.
-5. **Publish "starting at" prices?** Every strong national and top independent site shows plans with a starting price or a clear price range. Even "from $X/mo" would beat Poolman360 and All Clear, which show none.
-6. **A real guarantee?** National brands lead with one (no-contract satisfaction, an algae-free promise). Mike's promises today are "we answer our phone", "callback within the hour" and the door hanger. If he'll stand behind something more (for example, "pool not clear after a visit, we come back free"), it belongs in the hero proof line. Not added without his OK.
-7. **Gilbert.** Several posts list Gilbert as served, but there's no Gilbert page or area entry. Confirm, then add it to the posts' sign-offs or remove it.
-8. **One factual check in a migrated post:** the October closing post says cracked return lines are "a five-to-six figure surprise". That's likely high; Mike may want "four-figure".
-9. **City facts:** he should sanity-check the neighborhood mentions on the 8 city pages (unchanged from the first build).
-10. **GTM setup** (per the GTM + GA4 doc): GA4 tag, a `generate_lead` GA4 event tag on the Custom Event trigger, phone-click tag, Preview test, publish. Then mark `generate_lead` and `phone_click` as key events.
-11. **Web3Forms:** Mike confirms the key's email, sends one test from the `pages.dev` preview, and marks the Web3Forms sender as safe. Leave the domain restriction off until launch.
+- **No GHL anywhere.** Each page's HTML has no GHL scripts, forms, chat, comments or links. The built site.js no longer ships the GHL native-form handler (kit now strips it unless `form_mode` is `native`). The only outside hosts in the HTML are Web3Forms, Google Tag Manager, Mike's Google review link, Facebook, Instagram and schema.org. Every old GHL-era URL is kept or 301-redirected, so nothing breaks.
+- **(803) 394-0765 is Mike's own number.** Nothing needs porting.
+- **Google reviews link:** https://g.page/r/CSSJuhDXidrPEBM/review. The button reads "Read or leave a review on Google", because that link opens his reviews with the write-a-review box.
+- **Plans stay, with no prices.** Mike does not want prices on the website. Watch his reaction to having the plans themselves on the site; they can be removed.
+- **Meet the team: spring 2027.** `about.team` is ready when names and photos come in.
+- **Service area = all of Lexington County, plus Richland routes.**
+  - New city pages for Gilbert (29054) and Batesburg-Leesville (29006, 29070), each with its own local copy.
+  - The Lexington County box also lists Swansea, Pelion, Gaston, Pine Ridge, South Congaree, Springdale, Summit, Red Bank, Oak Grove and Seven Oaks, "and every other community in Lexington County". These are in the schema areaServed too, but they have no pages, to avoid thin doorway pages.
+  - Add a page for any of them later if Mike has real work or local detail there.
+- **Door hanger:** now matches Mike's real hanger.
+  - The hero card mirrors its checklist, service comments and "date of next service". The old example "readings" (chlorine/pH numbers) were removed, since the real hanger doesn't record them.
+  - Every "your readings" claim on the site was corrected.
+  - The real hanger image is on the Weekly Pool Maintenance page.
+
+## Before launch: still open
+
+1. **Reviews from other towns:** all three real reviews are from Lexington. Ask Columbia, Irmo, Chapin and Gilbert customers for Google reviews (his review link makes it easy), then add them to `REVIEWS` with their town.
+2. **Plan names and inclusions** (Balance / Full Service / Full Service Plus) are still a proposal for Mike to react to.
+3. **A formal guarantee?** Only if Mike wants one. Today the site uses his real promises only.
+4. **One factual check in a migrated post:** the October closing post says cracked return lines are "a five-to-six figure surprise". That's likely high.
+5. **City facts:** Mike should sanity-check the neighborhood and local mentions on the 10 city pages, especially the new Gilbert (Peach Festival, well water) and Batesburg-Leesville pages.
+6. **Legal pages:** Mike reads Privacy, Terms and Accessibility.
+7. **GTM setup** (per the GTM + GA4 doc): GA4 tag, a `generate_lead` GA4 event tag, phone-click tag, Preview test on pages.dev, publish. Mark `generate_lead` and `phone_click` as key events.
+8. **Web3Forms:** one test lead from the pages.dev preview, and mark the sender as safe in his Gmail. (The claude.ai preview can't send forms; its host blocks outside requests.)
 
 ## Design brief: national polish, local heart (Nov 19, 2026)
 
@@ -69,7 +82,10 @@ Status (Nov 19, 2026): **refreshed to the current process, not launched.** Branc
 - `home.owner`: an owner-story section on the home page (photo with caption, story, signature, two buttons). Add `"owner"` to `home.order`.
 - `home.cards`: an icon-card row, each card optionally linking to a page. Add `"cards"` to `home.order`.
 - `about.team`: "Meet the team" cards (photo or initials, name, role, bio).
-- Web3Forms mode emits no GHL comments or hooks.
+- Web3Forms mode emits no GHL comments or hooks, and the GHL native-form JS is stripped from site.js unless `form_mode` is `native`.
+- `areas.groups[].also`: towns served without their own page (shown in the county box and added to areaServed).
+- `integrations.google_reviews_label`: button text for the Google reviews link.
+- `photos[].contain`: a photo shown whole, not cropped (documents, tall images).
 - The `generate_lead` push uses GTM's `eventCallback` before going to the thank-you page.
 
 ## Old site vs. new site
@@ -77,11 +93,11 @@ Status (Nov 19, 2026): **refreshed to the current process, not launched.** Branc
 | | Current GHL site | New build |
 |---|---|---|
 | Structured data | Meta tag only; no JSON-LD | JSON-LD on every page: LocalBusiness (with founder), Service, FAQPage, BreadcrumbList, OfferCatalog, BlogPosting, CollectionPage |
-| H1 | Duplicated on the homepage | One keyword-targeted H1 per page, with a clean H1 → H2 → H3 hierarchy (script-checked on all 41 pages) |
+| H1 | Duplicated on the homepage | One keyword-targeted H1 per page, with a clean H1 → H2 → H3 hierarchy (script-checked on all 43 pages) |
 | Forms | GHL form + chat widget | Web3Forms to Mike's Gmail, a thank-you page, `generate_lead` to his own GTM, first-touch UTM/gclid on every lead |
 | Owner / people | Owner story on /about only | Mike's photo and story on the home page (hero chip + owner section) and the About page |
 | Maintenance plans | "Custom pricing," no plan page | `/pool-maintenance-plans/`: 3 plans, comparison table, plan finder, pricing explainer, FAQ |
-| City pages | 5 | 8, each with unique local copy and FAQ |
+| City pages | 5 | 10 (added Cayce, Forest Acres, Blythewood, Gilbert, Batesburg-Leesville), each with unique local copy and FAQ; 10 more Lexington County towns listed |
 | Blog | 8 posts, internal links to 404s | 8 posts migrated at the same URLs, cross-linked with service and city pages, category pages kept, RSS |
 | URLs | — | All existing URLs kept (pages, `/post/`, `/posts/category/`, legal). `/contact-page`, `/posts`, `/terms`, `/home`, `/sitemap`, author and tag pages, the broken `-sc2` URL and the old in-post link targets all 301 |
 | Speed | GHL builder JS + chat widget | Static HTML, self-hosted fonts, no render-blocking third parties (GTM loads async) |
