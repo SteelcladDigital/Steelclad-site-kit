@@ -159,7 +159,7 @@ CONFIG = {
     "thank_you_slug": "thank-you",
     "gtm_id": "GTM-TP8G6H5L",          # client's OWN Tag Manager account (GA4 G-JQ13XPG8GG lives inside GTM, not here)
     "google_reviews_url": "https://g.page/r/CWpeyki_epxREBM/review",   # from Vasyl's GBP dashboard (opens the write-a-review box)
-    "google_reviews_label": "Leave us a Google review",
+    "google_reviews_label": "★★★★★ Leave us a 5-star Google review",
   },
   # "launched": leave off until Vasyl approves the preview and --check is clean.
   "labels": {

@@ -414,3 +414,4 @@ a.chip{text-decoration:none;color:var(--c-secondary-deep)}a.chip:hover{backgroun
 @media (max-width:560px){.grid-4{grid-template-columns:1fr}}
 .logo-plate-footer .site-footer .logo img{height:64px}
 @media (max-width:560px){.logo img{height:min(var(--logo-h,58px),56px)}.hero.layout-centered .eyebrow::before{display:none}}
+.btn-stars{color:var(--c-accent);letter-spacing:1px;margin-right:4px}
