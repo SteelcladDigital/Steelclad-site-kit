@@ -569,7 +569,7 @@ class Site:
         inc = "".join(f'<div class="inc"><h3>{esc(t)}</h3><p>{esc(d)}</p></div>' for t, d in s["included"])
         # signs: plain strings, or (bold lead-in, rest) tuples
         signs = "".join(f"<li><strong>{esc(x[0])}</strong> {esc(x[1])}</li>" if isinstance(x, tuple) else f"<li>{esc(x)}</li>" for x in s.get("signs", []))
-        faq_html = f'<h2>{esc(s.get("faq_title") or "Questions about " + s["name"].lower())}</h2>{self.faq_block(s["faqs"])}' if s.get("faqs") else ""
+        faq_html = f'<h2>{esc(s.get("faq_title") or "Questions about " + (s.get("offer_name") or s["name"].lower()))}</h2>{self.faq_block(s["faqs"])}' if s.get("faqs") else ""
         # optional richer service pages: intro_html (prose above "included"), sections [(h2, html)], why_title + why [(h3, text)],
         # related_title + related [(slug, text)] (hand-picked "other services" with your own one-liners), cta_title / cta_text
         intro = f'<div class="svc-intro">{self.rel_links(cur, s["intro_html"])}</div>' if s.get("intro_html") else ""
@@ -578,7 +578,7 @@ class Site:
         where = ""
         if self.areas:
             near = " · ".join(f'<a href="{self.href(cur,a["slug"])}">{esc(a["city"])}</a>' for a in self.areas["pages"])
-            where = f'<h2>Where we offer {esc(s["name"].lower())}</h2><p>{esc(self.areas["service_where_text"])} {near}.</p>'
+            where = f'<h2>Where we offer {esc(s.get("offer_name") or s["name"].lower())}</h2><p>{esc(self.areas["service_where_text"])} {near}.</p>'
         alt = f'<a class="btn btn-ghost" href="{self.href(cur,self.tiers["slug"])}">Compare {esc(self.tiers["nav_label"].lower())}</a>' if self.tiers else ""
         body = self.page_hero(cur, trail, esc(s["h1"]), esc(s["lead"])) + f'''
 <section><div class="wrap layout-side"><div class="prose">{intro}<h2>{esc(s["included_title"])}</h2><div class="included">{inc}</div>

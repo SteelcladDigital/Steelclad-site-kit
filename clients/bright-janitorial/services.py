@@ -61,7 +61,7 @@ SERVICES = [
   },
   # ------------------------------------------------------------------ COMMERCIAL & RETAIL (written from the current page)
   {
-    "slug": "commercial-retail-cleaning", "name": "Commercial & Retail Spaces", "icon": "star",
+    "slug": "commercial-retail-cleaning", "offer_name": "commercial & retail cleaning", "name": "Commercial & Retail Spaces", "icon": "star",
     "short": "Storefronts, sales floors, showrooms and back-of-house cleaned before you open or after you close.",
     "title": "Commercial & Retail Cleaning in Columbia, SC",
     "meta": "Retail and commercial cleaning in Columbia, SC: storefront glass, sales floors, restrooms and back-of-house cleaned before you open. Bonded & insured.",
@@ -104,7 +104,7 @@ SERVICES = [
   },
   # ------------------------------------------------------------------ MEDICAL (written from the current page)
   {
-    "slug": "medical-healthcare", "name": "Medical & Healthcare Facilities", "icon": "heart",
+    "slug": "medical-healthcare", "offer_name": "medical & healthcare cleaning", "name": "Medical & Healthcare Facilities", "icon": "heart",
     "short": "Clinical-area cleaning with Diversey infection-prevention chemistry for medical offices, dental practices and clinics.",
     "title": "Medical Office Cleaning in Columbia, SC",
     "meta": "Medical and healthcare facility cleaning in Columbia, SC with Diversey infection-prevention chemistry and documented protocols. Bonded & insured.",
