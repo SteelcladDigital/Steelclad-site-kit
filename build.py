@@ -378,7 +378,7 @@ class Site:
         url = ig.get("google_reviews_url")            # link that SHOWS the reviews (Maps / search)
         write = ig.get("google_review_write_url")     # GBP "ask for reviews" link (g.page/r/.../review) that OPENS the write-a-review box
         btns = (f'<a class="btn btn-outline" href="{url}" rel="noopener" target="_blank">Read more reviews on Google</a>' if url else "") + \
-               (f'<a class="btn btn-outline" href="{write}" rel="noopener" target="_blank">★ Leave us a Google review</a>' if write else "")
+               (f'<a class="btn btn-outline" href="{write}" rel="noopener" target="_blank"><span class="rv-stars" aria-hidden="true">★★★★★</span> Leave us a Google review</a>' if write else "")
         more = f'<p class="btn-row" style="justify-content:center;margin-top:28px">{btns}</p>' if btns else ""
         return f'<div class="reviews">{cards}</div>{more}'
 

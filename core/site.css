@@ -383,3 +383,6 @@ a.chip{text-decoration:none;color:var(--c-secondary-deep)}a.chip:hover{backgroun
   .dd-all{display:block}
   .dd-all a{font-weight:700}
 }
+
+/* review-request button: gold 5-star row */
+.rv-stars{color:#f5b301;letter-spacing:1px;margin-right:6px}
