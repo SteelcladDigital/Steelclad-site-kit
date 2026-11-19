@@ -279,6 +279,8 @@ class Site:
         if self.blog: company.insert(1, (self.blog["index_slug"], self.blog["nav_label"]))
         if self.areas: company.append((self.areas["hub_slug"], "All Service Areas"))
         comp = "".join(f'<li><a href="{self.href(cur,p)}">{esc(n)}</a></li>' for p, n in company)
+        wr = self.c.get("integrations", {}).get("google_review_write_url")
+        if wr: comp += f'<li><a href="{wr}" rel="noopener" target="_blank">Leave a Google Review</a></li>'
         legal = " · ".join(f'<a href="{self.href(cur,s)}">{esc(n)}</a>' for s, n in self.c.get("legal_pages", []))
         return f'''<footer class="site-footer"><div class="wrap"><div class="cols">
 <div><a class="logo" href="{self.href(cur,"")}">{self.logo(cur, "footer")}</a><p style="margin-top:16px">{esc(L["footer_blurb"])}</p>
@@ -372,8 +374,12 @@ class Site:
 
     def reviews_block(self):
         cards = "".join(f'<figure class="review"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>“{esc(t)}”</blockquote><figcaption><cite>{esc(n)}<span>{esc(c)}</span></cite></figcaption></figure>' for n, c, t in self.c["reviews"])
-        url = self.c.get("integrations", {}).get("google_reviews_url")
-        more = f'<p style="text-align:center;margin-top:28px"><a class="btn btn-outline" href="{url}">Read more reviews on Google</a></p>' if url else ""
+        ig = self.c.get("integrations", {})
+        url = ig.get("google_reviews_url")            # link that SHOWS the reviews (Maps / search)
+        write = ig.get("google_review_write_url")     # GBP "ask for reviews" link (g.page/r/.../review) that OPENS the write-a-review box
+        btns = (f'<a class="btn btn-outline" href="{url}" rel="noopener" target="_blank">Read more reviews on Google</a>' if url else "") + \
+               (f'<a class="btn btn-outline" href="{write}" rel="noopener" target="_blank">★ Leave us a Google review</a>' if write else "")
+        more = f'<p class="btn-row" style="justify-content:center;margin-top:28px">{btns}</p>' if btns else ""
         return f'<div class="reviews">{cards}</div>{more}'
 
     @staticmethod

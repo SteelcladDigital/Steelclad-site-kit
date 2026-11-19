@@ -596,7 +596,8 @@ CONFIG = {
     "web3forms_from_name": "Teal Outdoor Services website",
     "thank_you_slug": "thank-you",
     "gtm_id": "GTM-W3KKNTH5",          # client's OWN Tag Manager account
-    "google_reviews_url": "",           # TODO: GBP "read reviews" link once confirmed
+    "google_reviews_url": "",           # optional: a link that SHOWS his reviews (Maps listing)
+    "google_review_write_url": "https://g.page/r/CYWyp9A3-aNQEBM/review",   # GBP "ask for reviews" link from Billy, Nov 19 2026
   },
   "launched": True,                    # approved by Billy Nov 17, 2026: any launch blocker now stops the Cloudflare build
   "labels": {

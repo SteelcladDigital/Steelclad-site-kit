@@ -144,6 +144,7 @@ GHL stays the lead inbox, automation engine, chat, reviews and Social Planner. T
 | `ghl_chat_widget_id` | Sites → Chat Widget | Chat bubble on every page |
 | `gtm_id` | Google Tag Manager | GA4 and conversion tags |
 | `google_reviews_url` | Google Business Profile | "Read more reviews on Google" button |
+| `google_review_write_url` | GBP → "Ask for reviews" link (`g.page/r/…/review`) | "★ Leave us a Google review" button under the reviews + "Leave a Google Review" footer link |
 
 Without a form ID or native mode, the contact page shows a **demo form** that clearly says it's a preview. The launch check blocks it.
 
