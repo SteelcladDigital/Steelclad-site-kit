@@ -88,10 +88,13 @@
         .then(function(r){return r.json().catch(function(){return {}}).then(function(j){return r.ok&&j.success!==false})})
         .then(function(sent){
           if(!sent)throw new Error('not sent');
+          // generate_lead fires only after Web3Forms confirms the send. Before leaving for the thank-you page,
+          // wait for GTM to finish its tags (eventCallback), with a 1.5s cap so a blocked GTM never strands the visitor.
+          var to=f.getAttribute('data-thanks'),gone=false,go=function(){if(!gone){gone=true;location.href=to}};
           window.dataLayer=window.dataLayer||[];
-          window.dataLayer.push({event:'generate_lead',form_name:data.form||'',lead_source:data.utm_source||data.referrer||''});
-          var to=f.getAttribute('data-thanks');
-          if(to){setTimeout(function(){location.href=to},400);return;}
+          window.dataLayer.push({event:'generate_lead',form_name:data.form||'',lead_source:data.utm_source||data.referrer||'',
+            eventCallback:to?go:undefined,eventTimeout:1500});
+          if(to){setTimeout(go,1500);return;}
           if(ok)ok.classList.add('show'); f.reset();
           if(btn){btn.textContent=btn.dataset.label;}
         })

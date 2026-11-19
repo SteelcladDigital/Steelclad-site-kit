@@ -354,10 +354,12 @@ AREAS = [
     },
 ]
 
+# Real reviews from the current site (palmettopoolsolutions.com home and /about), full text.
+# All three are Lexington customers. Add Columbia / Irmo / Chapin reviews as Mike collects them (never invent).
 REVIEWS = [
-    ("Jenn S.", "Lexington, SC", "This has to be the friendliest and best pool service out there. I called several places that wouldn't even service my above ground pool. When I called Mike, he said no problem. My pool has been crystal clear and clean all summer long."),
-    ("Sherri O.", "Lexington, SC", "Great service and transparency! Mike gave me a quote, showed up on time and communicated with me through the process of replacing our pool pump. Folks that serve with integrity are hard to find sometimes. I will use Mike and Palmetto Pool Solutions again!"),
-    ("Traci W.", "Lexington, SC", "Mike is wonderful!! I called him about our pool and even though he was swamped he found a way to fit us in. His communication was amazing and he made sure to follow up to make sure all was good."),
+    ("Jenn S.", "Lexington, SC", "This has to be the friendliest and best pool service out there. I called several places that wouldn't even service my above ground pool. When I called Mike, he said no problem. My pool has been crystal clear and clean all summer long. In this day and age you can't be too careful who you trust to do service at your house. Mike and his crew have gone above and beyond as far as kind, impeccable quality service. As long as I own my pool, Palmetto Pool Solutions are the only people I will use for my pool!"),
+    ("Sherri O.", "Lexington, SC", "Great service and transparency! Mike gave me a quote, showed up on time and communicated with me through the process of replacing our pool pump! Great experience and great guy. Folks that serve with integrity are hard to find sometimes. I will use Mike and Palmetto Pool Solutions again!"),
+    ("Traci W.", "Lexington, SC", "OMG Mike is wonderful!! I called him about our pool and even though he was swamped he found a way to fit us in. His communication was amazing and he made sure to follow up to make sure all was good. I strongly recommend him for any pool concerns you might have!!"),
 ]
 
 GENERAL_FAQS = [
@@ -379,9 +381,8 @@ CALENDAR = [
 ]
 
 
-LOGO_SVG = """<svg viewBox="0 0 196 92" role="img" aria-label="Palmetto Pool Solutions"><g fill="#fff" font-family="Oswald, 'Arial Narrow', sans-serif" font-weight="600" font-size="25" letter-spacing=".5"><text x="0" y="26">PALMETTO</text><text x="0" y="56">POOL</text><text x="0" y="86">SOLUTIONS</text></g>
-<g stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"><path d="M160 88c1-14 1-30-1-46" stroke-width="4"/><path d="M159 42c-6-6-15-7-22-3M159 42c-4-9-12-13-19-13M159 42c-1-9-5-16-11-20M159 42c3-9 8-14 15-16M159 42c6-7 14-9 21-6M159 42c7-2 14 1 19 7M159 42c-7-1-15 3-19 9M159 42c3 4 4 9 3 14M159 42c-3 4-5 9-4 14"/></g>
-<path d="M176 5a10 10 0 1 0 6 18 8 8 0 1 1-6-18z" fill="#fff"/></svg>"""
+# Logo: the real logo (assets/logo.png is a white knockout cut from Mike's JPG, so it sits on any navy).
+
 
 PLANS_FAQS = GENERAL_FAQS[:3] + [
     ("Are chemicals included in the monthly rate?", "Your evaluation quote spells out exactly what's included, so there are no surprise chemical charges on your bill."),
@@ -393,68 +394,91 @@ CONFIG = {
   "business": {
     "name": "Palmetto Pool Solutions", "legal_name": "Palmetto Pool Solutions, LLC",
     "domain": "https://palmettopoolsolutions.com",
-    "phone": "(803) 394-0765", "tel": "+18033940765",
+    "phone": "(803) 394-0765", "tel": "+18033940765", "email": "palmettopoolsolutions@gmail.com",
     "schema_type": ["LocalBusiness", "HomeAndConstructionBusiness"],
-    "description": "CPO-certified, family-owned pool maintenance and repair serving Lexington and Richland County, SC. Weekly pool service plans, green pool recovery, pump and filter repair and equipment upgrades.",
-    "address": {"locality": "Lexington", "region": "SC"},   # service-area business: no street
+    "description": "Family-owned in Lexington County, SC. CPO-certified weekly pool service, green pool recovery, pump and filter repair and equipment upgrades for homeowners in Lexington and Richland counties.",
+    "address": {"locality": "Lexington", "region": "SC"},   # service-area business: no street (the street is only in the Terms contact block)
     "geo": (33.9815, -81.2362),
     "hours": [(["Monday","Tuesday","Wednesday","Thursday","Friday"], "08:00", "17:00")],
     "hours_text": "Mon–Fri 8:00 AM – 5:00 PM",
     "counties": ["Lexington County, SC", "Richland County, SC"],
+    "founder": "Mike Brazell",
     "knows_about": ["Pool maintenance", "Pool water chemistry", "Salt chlorine generators", "Green pool recovery", "Variable-speed pool pumps"],
     "social": {"facebook": "https://www.facebook.com/palmettopoolsolutionsllc", "instagram": "https://www.instagram.com/palmettopoolsolutions/"},
   },
   "theme": {
-    "colors": {"primary": "#1d2b4d", "primary_deep": "#121c35", "secondary": "#27b3c2", "secondary_deep": "#118896",
-               "secondary_wash": "#e3f6f8", "accent": "#f3b53f", "accent_text": "#121c35", "surface": "#f7f2e9"},
-    "fonts": {"display": "oswald", "body": "inter"},
+    # primary = the navy sampled from Mike's own logo (#1b227d), so the header and logo read as one piece.
+    "colors": {"primary": "#1b227d", "primary_deep": "#11165a", "secondary": "#27b3c2", "secondary_deep": "#0f7f8c",
+               "secondary_wash": "#e3f6f8", "accent": "#f3b53f", "accent_text": "#11165a", "surface": "#f7f2e9"},
+    "fonts": {"display": "oswald", "body": "inter"},   # Oswald echoes the condensed capitals of his logo
     "radius": "soft", "heading_case": "none", "divider": "wave", "texture": "ripples", "hero_layout": "card",
   },
-  "logo": {"type": "svg", "svg": LOGO_SVG},
-  "favicon_svg": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#1d2b4d"/><path d="M16 29c.5-6 .5-11-.3-16" stroke="#fff" stroke-width="2.4" fill="none"/><path d="M15.7 13c-3-3-7-3-10-1M15.7 13c-1-4-4-6-7-6M15.7 13c2-4 5-6 9-6M15.7 13c3-2 7-2 10 1" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M24 3a4.5 4.5 0 1 0 3 8 3.6 3.6 0 1 1-3-8z" fill="#27b3c2"/></svg>',
+  "logo": {"type": "image", "file": "logo.png", "width": 114, "height": 60, "schema_file": "logo-schema.jpg"},
+  "favicon_svg": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#1b227d"/><path d="M16 29c.5-6 .5-11-.3-16" stroke="#fff" stroke-width="2.4" fill="none"/><path d="M15.7 13c-3-3-7-3-10-1M15.7 13c-1-4-4-6-7-6M15.7 13c2-4 5-6 9-6M15.7 13c3-2 7-2 10 1" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M24 3a4.5 4.5 0 1 0 3 8 3.6 3.6 0 1 1-3-8z" fill="#fff"/></svg>',
+  "og_image": "og-image.jpg",        # real photo of Mike with the company banner, 1200x630
   "integrations": {
-    "form_mode": "ghl_embed",        # "ghl_embed" (GHL form iframe) or "native" (site's own form, captured by the tracking script)
-    "ghl_form_id": "",               # GHL > Sites > Forms > Integrate
-    "ghl_tracking_snippet": "",      # GHL > Settings > External Tracking > Copy Script (paste the whole <script ...></script>)
-    "ghl_chat_widget_id": "", "gtm_id": "", "google_reviews_url": ""},
-  "launched": False,                 # set True when the domain points here; launch blockers then STOP the build
+    "form_mode": "web3forms",
+    "web3forms_access_key": "e088f1a2-f364-4726-a392-3e348ce9e112",   # created with palmettopoolsolutions@gmail.com (public by design)
+    "web3forms_subject": "New pool evaluation request from palmettopoolsolutions.com",
+    "web3forms_from_name": "Palmetto Pool Solutions website",
+    "thank_you_slug": "thank-you",
+    "gtm_id": "GTM-K3752MP5",          # Mike's OWN Tag Manager account; GA4 + generate_lead tags live inside it
+    "google_reviews_url": "",           # TODO: GBP "read reviews" link once confirmed
+  },
+  "launched": False,                 # set True only after Mike approves and --check is clean; launch blockers then STOP the build
   "labels": {
     "cta": "Free Pool Evaluation", "cta_short": "Free Evaluation", "cta_long": "Get a Free Pool Evaluation",
-    "phone_prefix": "Call or text", "topbar_promise": "We answer our phone. Missed us? Callback within the hour.",
-    "footer_blurb": "Family-owned, CPO-certified pool care for Lexington & Richland County homeowners. Licensed and fully insured.",
+    "phone_prefix": "Call or text", "topbar_promise": "Family-owned in Lexington County. We answer our phone, and missed calls get a callback within the hour.",
+    "footer_blurb": "Family-owned in Lexington County, SC. CPO-certified pool care for homeowners across Lexington & Richland counties. Licensed and fully insured.",
     "footer_services_title": "Plans & Services",
-    "reviews_title": "What Lexington homeowners are saying",
+    "reviews_title": "What our Lexington County neighbors are saying",
     "cta_band_title": "Ready to stop thinking about your pool?",
-    "cta_band_text": "Call or text, and we'll set up a free pool evaluation. You'll get an honest look at your pool and one flat monthly number.",
+    "cta_band_text": "Call or text Mike's team, and we'll set up a free pool evaluation. You'll get an honest look at your pool and one flat monthly number.",
     "aside_title": "Get a free pool evaluation", "aside_text": "We answer our phone. If we miss you, we call back within the hour.",
-    "aside_badges": "✓ CPO Certified · ✓ Licensed & insured · ✓ Family-owned",
+    "aside_badges": "✓ Family-owned in Lexington County · ✓ CPO certified · ✓ Licensed & insured",
   },
   "home": {
     "title": "Weekly Pool Service & Maintenance Plans in Lexington, SC",
-    "meta": "Weekly pool maintenance plans in Lexington & Richland County, SC. CPO-certified, family-owned, flat monthly rate, visit report every week. (803) 394-0765",
-    "eyebrow": "Lexington & Richland County, SC",
-    "h1": "Pool maintenance plans for Lexington homeowners who are <em>done</em> chasing their pool company",
-    "lead": "Weekly pool service from a CPO-certified, family-owned local team. One flat monthly rate, the same route day every week, and a visit report on your door after every service.",
+    "meta": "Family-owned weekly pool service in Lexington & Richland counties, SC. CPO certified, flat monthly rate, visit report every week. (803) 394-0765",
+    "eyebrow": "Family-owned in Lexington County, SC",
+    "h1": "Weekly pool service for Lexington homeowners who are <em>done</em> chasing their pool company",
+    "lead": "Lifelong Lexington County locals caring for pools across Lexington and Richland counties. One flat monthly rate, the same route day every week, and a visit report on your door after every service.",
     "secondary_cta": ("Compare Plans", "pool-maintenance-plans"),
-    "proof": ["Above-ground & in-ground", "Salt & chlorine pools", "No teaser rates"],
+    "proof": ["Serving Lexington & Richland counties", "Above-ground & in-ground", "Salt & chlorine pools"],
+    "hero_owner": {"photo": "photos/mike-brazell-avatar.jpg", "alt": "Mike Brazell, owner of Palmetto Pool Solutions",
+                   "name": "Mike Brazell, owner", "text": "CPO certified · Lifelong Lexington County resident"},
     "hero_card": {"label": "Visit report", "title": "Your pool was serviced today", "sub": "Left on your door after every visit", "badge": "Example", "hanger": True,
                   "stats": [("3.0", "Chlorine"), ("7.5", "pH"), ("90", "Alkalinity")],
                   "checks": ["Skimmed", "Brushed", "Vacuumed", "Baskets emptied", "Filter checked", "Pump checked"],
-                  "note": "Notes from your tech go here, like \"Pollen heavy this week; filter pressure up 6 PSI, will clean next visit.\""},
-    "trust": [("badge", "CPO Certified", "Certified Pool Operator"), ("shield", "Licensed & Insured", "Fully covered, every visit"),
-              ("home", "Family-Owned", "Lifelong Lexington County locals"), ("phone", "We Answer", "Callback within the hour")],
+                  "note": "Notes from your tech go here, like \"Pine pollen heavy this week; filter pressure up 6 PSI, will clean next visit.\""},
+    "trust": [("home", "Family-Owned", "Lexington County, SC"), ("badge", "CPO Certified", "Certified Pool Operator"),
+              ("shield", "Licensed & Insured", "Fully covered, every visit"), ("phone", "We Answer", "Callback within the hour")],
+    # Mike's own words, from the current /about page.
+    "owner": {"eyebrow": "Meet the owner", "title": "Hi, I'm Mike Brazell.",
+              "photo": {"file": "photos/mike-brazell-owner-lexington-parade.jpg", "alt": "Mike Brazell, owner of Palmetto Pool Solutions, standing beside the company's parade float and banner",
+                        "w": 600, "h": 760, "caption": "Mike with the Palmetto Pool Solutions float"},
+              "story_html": "<p>I'm the owner of Palmetto Pool Solutions and a lifelong Lexington County resident.</p><p>I started this company because I kept hearing the same story from homeowners across Lexington and Richland counties: they'd hire a pool company, pay on time, and then wonder if anyone was actually coming. No callbacks. No documentation. No accountability.</p><p>So I made one simple commitment: every pool we service gets treated like it's our own. Like our kids are swimming in it. That means showing up on the same day every week, leaving a door hanger after every visit, and answering the phone. If we miss your call, we call you right back.</p>",
+              "signature": "Mike Brazell", "signature_role": "Owner · Certified Pool Operator (CPO)",
+              "links": [("Get a free pool evaluation", "contact"), ("Read our story", "about")]},
     "why": {"eyebrow": "Why we exist",
             "quote_html": "No-shows. Vague pricing. Wondering if anyone actually came by. <em>That's not how pool service should work.</em>",
             "body": "You're not asking for much. You want a pool that's clean, safe and ready whenever you are. So we built our whole service around the things other pool companies skip.",
             "items": [("phone", "We answer our phone.", "Call or text and we pick up. Hit voicemail? Expect a callback within the hour."),
                       ("doc", "We document every visit.", "A door hanger with your readings and the work done, every single time."),
                       ("calendar", "We show up on schedule.", "Same route day each week, with standardized checklists and random quality checks."),
-                      ("home", "We're your neighbor, not a franchise.", "Lifelong Lexington County locals who know Midlands pools season by season.")]},
+                      ("home", "We're your neighbor, not a franchise.", "No 1-800 number and no call center. You talk to people who live here and know Midlands pools season by season.")]},
+    "cards": {"eyebrow": "Built for Midlands pools", "title": "What your pool is up against in Lexington & Columbia",
+              "lead": "Pools here fight the same four things every year. Our weekly routes are planned around them.",
+              "items": [("leaf", "Spring pine pollen", "Yellow pollen coats pools every March and April, clogs filters and feeds early algae. We brush and clean filters more often in pollen season.", ("Midlands pool care calendar", "pool-care-calendar")),
+                        ("drop", "Summer thunderstorms", "An afternoon storm can drop inches of rain in an hour and dilute your chlorine. We rebalance after heavy rain so a storm doesn't turn into a green pool.", ("Why storms cloud your pool", "post/why-is-my-pool-water-cloudy-lexington-sc")),
+                        ("thermo", "\"Famously Hot\" August", "Water in the upper 80s burns through chlorine. Weekly testing keeps you ahead of the algae that loves warm water.", ("August pool care", "post/august-pool-care-lexington-sc")),
+                        ("calendar", "A long swim season", "Midlands pools often stay swimmable into October, so closing too early is a common mistake. We'll help you pick the right week.", ("When to close your pool", "post/when-to-close-pool-lexington-sc"))]},
     "steps": {"eyebrow": "Getting started", "title": "From first call to swimming in about 10 minutes of your time",
               "items": [("Call or text", "(803) 394-0765. We answer, or call back within the hour."),
                         ("Free pool evaluation", "We inspect your pool and equipment and tell you exactly what we see. No pressure, no jargon."),
                         ("Pick your plan", "One flat monthly number based on your actual pool. No surprise fees."),
                         ("Enjoy your pool", "We handle the rest. You'll find the visit report on your door.")]},
+    "order": ["trust", "owner", "tiers", "why", "reviews", "cards", "steps", "services", "areas", "quiz", "blog", "faq", "cta"],
   },
   "tiers": {
     "enabled": True, "slug": "pool-maintenance-plans", "nav_label": "Maintenance Plans",
@@ -487,12 +511,12 @@ CONFIG = {
     "meta": "Pool cleaning, weekly maintenance, green pool recovery, pump & filter repair and equipment upgrades in Lexington & Richland County, SC.",
     "h1": "Pool Services in Lexington &amp; Richland County",
     "lead": "Weekly maintenance, green pool recovery, pump and filter repair, salt cell care and equipment upgrades, all from one CPO-certified local team.",
-    "home_title": "Full-service residential pool care", "home_lead": "From routine weekly maintenance to emergency green pool recovery, we've got your pool covered all year."},
+    "home_count": 6, "home_title": "Full-service residential pool care", "home_lead": "From routine weekly maintenance to emergency green pool recovery, we've got your pool covered all year."},
   "services": SERVICES,
   "areas": {
     "enabled": True, "hub_slug": "service-areas", "nav_label": "Service Areas", "link_prefix": "Pool Service",
     "hub_title": "Pool Service Areas: Lexington & Richland County", "hub_meta": "Weekly pool service in Lexington, Columbia, Irmo, Chapin, West Columbia, Cayce, Forest Acres and Blythewood, SC.",
-    "hub_h1": "Pool Service Areas in Lexington &amp; Richland County", "hub_lead": "Weekly routes across the Midlands, from Chapin and Lake Murray to Columbia, Forest Acres and Blythewood.",
+    "hub_h1": "Pool Service Areas in Lexington &amp; Richland County", "hub_lead": "Family-owned in Lexington County, with weekly routes across both counties: from Chapin and Lake Murray to Columbia, Forest Acres and Blythewood.",
     "home_title": "Proudly serving Lexington & Richland counties",
     "groups": [{"name": "Lexington County", "note": "Home base", "slugs": ["pool-service-lexington-sc", "pool-service-chapin-sc", "pool-service-west-columbia-sc", "pool-service-cayce-sc", "pool-service-irmo-sc"]},
                {"name": "Richland County", "note": "Weekly routes", "slugs": ["pool-service-columbia-sc", "pool-service-forest-acres-sc", "pool-service-blythewood-sc", "pool-service-irmo-sc"]}],
@@ -518,31 +542,52 @@ CONFIG = {
     "cta_title": "Rather not keep track of all this?", "cta_text": "Every item on this calendar is built into our maintenance plans. We'll handle the season, and you just swim.",
   },
   "blog": {
-    "enabled": True, "index_slug": "blog", "post_prefix": "post",   # keeps the old GHL URLs: /blog and /post/<slug>
+    "enabled": True, "index_slug": "blog", "post_prefix": "post",   # keeps the old site's URLs: /blog and /post/<slug>
+    "category_prefix": "posts/category",                           # keeps /posts/category/<slug> archive URLs as real pages
+    "categories": {
+        "Pool Maintenance Tips": {"slug": "pool-maintenance-tips", "h1": "Pool Maintenance Tips for Lexington, SC", "lead": "Weekly, monthly and seasonal pool care advice from a CPO-certified, family-owned Lexington County team."},
+        "Lexington, SC Pool Care": {"slug": "lexington-sc-pool-care", "h1": "Lexington, SC Pool Care", "lead": "Pool care written for Lexington and the Midlands: our pollen, our storms, our long swim season."},
+        "Pool Problems & Fixes": {"slug": "pool-problems-fixes", "h1": "Pool Problems & Fixes", "lead": "Cloudy water, green water and other common pool problems, and how to fix them."},
+        "Seasonal Pool Care": {"slug": "seasonal-pool-care", "h1": "Seasonal Pool Care in the Midlands", "lead": "Opening, closing and everything in between, timed for South Carolina seasons."},
+        "Pool Equipment": {"slug": "pool-equipment", "h1": "Pool Equipment Advice", "lead": "Pumps, filters and salt systems: warning signs, repair-or-replace and how to make equipment last."},
+    },
     "nav_label": "Blog", "title": "Pool Care Tips for Lexington, SC Homeowners",
-    "meta": "Pool care tips and advice for Lexington & Richland County, SC homeowners from CPO-certified Palmetto Pool Solutions.",
+    "meta": "Pool care tips for Lexington & Richland County, SC homeowners from Mike Brazell and the family-owned, CPO-certified Palmetto Pool Solutions team.",
     "h1": "Pool care tips &amp; advice for Lexington, SC homeowners",
-    "lead": "From weekly maintenance to green-to-clean recovery, practical advice from a CPO-certified local pool team.",
+    "lead": "Practical advice for Midlands pools, from pollen season to closing time, written by a family-owned Lexington County pool team.",
     "default_author": "Palmetto Pool Solutions", "home_title": "Pool care tips from our team",
     "area_related_title": "Pool care tips for {city} homeowners",
   },
-  "about": {"title": "About Us: Family-Owned Pool Service in Lexington, SC",
-    "meta": "Family-owned, CPO-certified pool service founded by lifelong Lexington County locals. We answer our phone, show up and document every visit.",
-    "h1": "About Palmetto Pool Solutions", "lead": "A family-owned Lexington County pool company built on a simple idea: answer the phone, show up, and do what we said we'd do. Every time.",
-    "story_title": "Lifelong locals, not a franchise",
-    "story_html": "<p>We've lived in Lexington County our whole lives. We know the Midlands climate, the neighborhoods, and what pools here need season by season: spring pollen, summer storms, long hot swim seasons and mild winters.</p><p>Palmetto Pool Solutions started because too many homeowners told the same story: pool companies that didn't show up, didn't call back and left them guessing. We set out to be the opposite.</p><p><strong>Our goal is simple:</strong> take the hassle and headache out of owning a pool, so you have more time to enjoy it.</p>",
+  "about": {"title": "About Mike Brazell & Palmetto Pool Solutions, Lexington SC",
+    "meta": "Meet Mike Brazell, lifelong Lexington County resident and owner of family-owned, CPO-certified Palmetto Pool Solutions. We answer our phone.",
+    "h1": "Family-Owned Pool Service in Lexington County, SC", "lead": "Palmetto Pool Solutions is owned by Mike Brazell, a lifelong Lexington County resident. It's built on a simple idea: answer the phone, show up, and do what we said we'd do. Every time.",
+    "story_title": "Hi, I'm Mike Brazell",
+    # Mike's own words from the current /about page.
+    "story_html": "<p>I'm the owner of Palmetto Pool Solutions and a lifelong Lexington County resident.</p><p>I started this company because I kept hearing the same story from homeowners across Lexington and Richland counties: they'd hire a pool company, pay on time, and then wonder if anyone was actually coming. No callbacks. No documentation. No accountability. Just a pool that may or may not be safe.</p><p>I knew there was a better way, and that's exactly what Palmetto Pool Solutions was built to be.</p><h3>The Palmetto Pool difference</h3><p>I've lived in Lexington County my whole life. I know the neighborhoods, the summers, and the kind of Southern hospitality that means you actually do what you say you're going to do.</p><p>When I started Palmetto Pool Solutions, I made one simple commitment: every pool we service gets treated like it's our own. Like our kids are swimming in it. Like we're hosting the cookout.</p><p>That means showing up consistently. Documenting every visit. Answering the phone, and if we happen to miss your call, calling you right back before you've even had time to wonder.</p><p><strong>Our goal is simple:</strong> the only question you should ever have about your pool is \"Am I swimming today?\" Not \"Did they come?\" or \"Is the water safe?\"</p><p>We're your neighbors. There's no 1-800 number or corporate script here. When something comes up, you talk to someone who actually cares about your pool, because it reflects directly on our family name.</p>",
+    "photo": {"file": "photos/mike-brazell-owner-lexington-parade.jpg", "alt": "Mike Brazell, owner of Palmetto Pool Solutions, beside the company's parade float and banner", "w": 600, "h": 760, "caption": "Mike Brazell, owner and Certified Pool Operator"},
+    # "team": [{"name": ..., "role": ..., "bio": ..., "photo": "photos/..."}],   # add Mike's family/crew once names + photos are confirmed
     "list_title": "Our quality assurance system",
-    "list": ["Door-hanger visit report after every service", "Standardized technician checklists on every pool", "Random weekly quality checks on our routes", "Callback within the hour if we miss your call", "CPO-certified water chemistry", "Licensed and fully insured"]},
+    "list": ["Door-hanger visit report after every service", "Standardized technician checklists on every pool", "Random weekly quality checks on our routes", "Callback within the hour if we miss your call", "Mike is a Certified Pool Operator (CPO)", "Licensed and fully insured"]},
   "contact": {"title": "Free Pool Evaluation in Lexington, SC",
-    "meta": "Schedule a free pool evaluation in Lexington or Richland County, SC. Call or text (803) 394-0765. We answer our phone.",
+    "meta": "Schedule a free pool evaluation with family-owned Palmetto Pool Solutions in Lexington or Richland County, SC. Call or text (803) 394-0765.",
     "h1": "Schedule Your Free Pool Evaluation", "lead": "Tell us a little about your pool and we'll reach out to set up a time. Prefer to talk? Call or text, because we answer our phone.",
     "selects": [("Pool type", ["In-ground, chlorine", "In-ground, saltwater", "Above-ground", "Not sure"])],
+    "select_names": {"Pool type": "pool_type"},
     "message_label": "Anything we should know? (green water, equipment issues, gate code notes)",
+    "consent_text": "Yes, Palmetto Pool Solutions may text me about this request and my service. Message & data rates may apply. Reply STOP to opt out. Consent is not a condition of service.",
     "submit": "Request my free evaluation", "note": "We'll call or text to schedule. No pressure, no obligation.",
+    "success": "Thanks! We got your request and will call or text you shortly.",
     "next_steps": ["We call or text to pick a time", "We inspect your pool & equipment", "You get one flat monthly number"]},
+  "thank_you": {"title": "Thank you", "h1": "Thanks, we got your request.",
+    "lead": "Mike's team will call or text you shortly to set up your free pool evaluation.",
+    "text": "Need us sooner? We answer our phone."},
   "reviews": REVIEWS,
   "faqs": GENERAL_FAQS,
   "legal_pages": [("privacypolicy", "Privacy Policy"), ("termsandconditions", "Terms of Service"), ("accessibility", "Accessibility Statement")],
   "redirects": [("/contact-page", "/contact/"), ("/pool-service-columbia-sc2", "/pool-service-columbia-sc/"), ("/home", "/"),
-                ("/posts", "/blog/"), ("/terms", "/termsandconditions/"), ("/sitemap", "/sitemap.xml")],
+                ("/posts", "/blog/"), ("/terms", "/termsandconditions/"), ("/sitemap", "/sitemap.xml"),
+                ("/posts/author/*", "/about/"), ("/posts/tag/*", "/blog/"),
+                # links inside the old blog posts pointed at these (they 404 on the old site too)
+                ("/weekly-pool-maintenance", "/services/weekly-pool-maintenance/"), ("/pump-filter-services", "/services/pool-pump-filter-repair/"),
+                ("/green-to-clean", "/services/green-to-clean-pool-recovery/")],
 }

@@ -303,6 +303,9 @@ class Site:
         if ig.get("chat_snippet") and not self.preview: chat = "\n" + ig["chat_snippet"].strip()   # any other chat widget (e.g. tawk.to), live build only
         snip = ig.get("ghl_tracking_snippet", "").strip()
         track = ("\n" + snip) if snip and not self.preview else "<!-- GHL external tracking: set integrations.ghl_tracking_snippet -->"
+        if ig.get("form_mode") == "web3forms":   # no GoHighLevel on this site: leave no GHL hooks or hints in the HTML
+            track = ""
+            if not ig.get("ghl_chat_widget_id") and not ig.get("chat_snippet"): chat = ""
         fonts = sorted({self.c["theme"]["fonts"]["display"], self.c["theme"]["fonts"]["body"]})
         pre = "".join(f'<link rel="preload" href="{self.asset(cur,"fonts/"+f+".woff2")}" as="font" type="font/woff2" crossorigin>' for f in fonts)
         og = og_override or self.c.get("og_image", "og-image.jpg")
@@ -421,11 +424,34 @@ class Site:
         if not vis: lay = "centered"
         proof = "".join(f"<span>{icon('check')}{esc(x)}</span>" for x in h.get("proof", []))
         sec2 = f'<a class="btn btn-ghost" href="{self.href(cur,h["secondary_cta"][1])}">{esc(h["secondary_cta"][0])}</a>' if h.get("secondary_cta") else ""
+        ho = h.get("hero_owner")   # home.hero_owner: a small "who you'll deal with" chip under the hero (owner photo, name, one line)
+        owner_chip = (f'<div class="owner-chip"><img src="{self.asset(cur, ho["photo"])}" alt="{esc(ho.get("alt", ho["name"]))}" width="56" height="56">'
+                      f'<p><b>{esc(ho["name"])}</b><span>{esc(ho.get("text",""))}</span></p></div>') if ho else ""
         hero = f'''<section class="hero on-dark layout-{lay}">{self.texture()}<div class="wrap"><div>
 <span class="eyebrow">{esc(h["eyebrow"])}</span><h1>{h["h1"]}</h1><p class="lead">{esc(h["lead"])}</p>
 <div class="btn-row" style="margin-top:26px"><a class="btn btn-gold" href="{self.href(cur,self.cta)}">{esc(L["cta_long"])}</a>{sec2}</div>
-<div class="hero-proof">{proof}</div></div>{vis}</div>{self.divider()}</section>'''
+<div class="hero-proof">{proof}</div>{owner_chip}</div>{vis}</div>{self.divider()}</section>'''
         S = {}
+        o = h.get("owner")   # home.owner: owner's story on the home page (photo, story, signature, links) -> "owner" in home.order
+        if o:
+            ph = o.get("photo")
+            fig = (f'<figure class="owner-photo"><img src="{self.asset(cur, ph["file"])}" alt="{esc(ph["alt"])}" width="{ph.get("w",600)}" height="{ph.get("h",760)}" loading="lazy">'
+                   + (f'<figcaption>{esc(ph["caption"])}</figcaption>' if ph.get("caption") else "") + '</figure>') if ph else ""
+            links = "".join(f'<a class="btn {"btn-navy" if i == 0 else "btn-outline"}" href="{self.href(cur, s)}">{esc(t)}</a>' for i, (t, s) in enumerate(o.get("links", [])))
+            S["owner"] = (f'<section class="owner-sec"><div class="wrap owner-grid">{fig}<div class="prose"><span class="eyebrow">{esc(o.get("eyebrow","Meet the owner"))}</span>'
+                          f'<h2>{esc(o["title"])}</h2>{o["story_html"]}'
+                          + (f'<p class="signature">{esc(o["signature"])}<small>{esc(o.get("signature_role",""))}</small></p>' if o.get("signature") else "")
+                          + (f'<div class="btn-row" style="margin-top:22px">{links}</div>' if links else "") + '</div></div></section>')
+        cd = h.get("cards")   # home.cards: a row of icon cards (e.g. local conditions), each optionally linking to a page -> "cards" in home.order
+        if cd:
+            items = ""
+            for it in cd["items"]:   # (icon, title, text[, (link_label, slug)])
+                lk = it[3] if len(it) > 3 else None
+                inner = f'<span class="card-icon">{icon(it[0])}</span><h3>{esc(it[1])}</h3><p>{esc(it[2])}</p>'
+                items += (f'<a class="card local-card" href="{self.href(cur, lk[1])}">{inner}<span class="more">{esc(lk[0])} →</span></a>' if lk
+                          else f'<div class="card local-card">{inner}</div>')
+            S["cards"] = (f'<section class="{cd.get("bg","")}"><div class="wrap"><div class="section-head"><span class="eyebrow">{esc(cd.get("eyebrow",""))}</span><h2>{esc(cd["title"])}</h2>'
+                          + (f'<p class="lead">{esc(cd["lead"])}</p>' if cd.get("lead") else "") + f'</div><div class="grid-4">{items}</div></div></section>')
         S["trust"] = '<section class="trust"><div class="wrap">' + "".join(f'<div>{icon(i)}<span>{esc(t)}<small>{esc(s)}</small></span></div>' for i, t, s in h["trust"]) + "</div></section>"
         if self.tiers:
             T = self.tiers
@@ -675,6 +701,14 @@ class Site:
                       + (f'<figcaption>{esc(ph["caption"])}</figcaption>' if ph.get("caption") else "") + '</figure>') if ph else ""
         gallery = (f'<section class="bg-sand"><div class="wrap"><div class="section-head"><h2>{esc(A.get("photos_title", "Our work"))}</h2></div>'
                    + self.photo_grid(cur, A["photos"]) + '</div></section>') if A.get("photos") else ""
+        tm = A.get("team")   # about.team: [{name, role, bio, photo?, alt?}] -> "Meet the team" cards (initials when no photo)
+        if tm:
+            def person(p):
+                pic = (f'<img src="{self.asset(cur, p["photo"])}" alt="{esc(p.get("alt", p["name"]))}" width="160" height="160" loading="lazy">' if p.get("photo")
+                       else f'<span class="initials" aria-hidden="true">{esc("".join(w[0] for w in p["name"].split()[:2]))}</span>')
+                return f'<div class="person">{pic}<h3>{esc(p["name"])}</h3><p class="role">{esc(p.get("role",""))}</p><p>{esc(p.get("bio",""))}</p></div>'
+            gallery = (f'<section><div class="wrap"><div class="section-head center"><span class="eyebrow">{esc(A.get("team_eyebrow","The people"))}</span><h2>{esc(A.get("team_title","Meet the team"))}</h2></div>'
+                       f'<div class="team">{"".join(person(p) for p in tm)}</div></div></section>') + gallery
         body = self.page_hero(cur, trail, A["h1"], esc(A["lead"])) + f'''<section><div class="wrap grid-2"><div class="prose"><span class="eyebrow">Our story</span><h2>{esc(A["story_title"])}</h2>{A["story_html"]}</div>
 <div>{photo_html}<h3>{esc(A["list_title"])}</h3><ul class="checklist">{"".join("<li>"+esc(x)+"</li>" for x in A["list"])}</ul></div></div></section>
 {gallery}{f'<section class="bg-sand"><div class="wrap"><div class="section-head center"><span class="eyebrow">Reviews</span><h2>What our customers say</h2></div>{self.reviews_block()}</div></section>' if self.c["reviews"] else ""}{self.cta_band(cur)}'''
