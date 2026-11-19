@@ -62,7 +62,8 @@ Sites reviewed: the **GHL preview** Barry likes (warm sunset farmland hero, crea
 ## Photo shot list (ask Barry)
 
 People hire people. The site has no photos of Barry yet; the About page and hero card are ready for them.
-- [ ] Clear, smiling headshot (vertical, good light) → About page and hero card
+- [x] Photo of Barry with his wife (Nov 19): on the About page. It's only 480×480, so ask for the full-size original, and his wife's name if he'd like it in the caption
+- [ ] Clear, smiling headshot of Barry alone (vertical, good light) → hero card / contact page
 - [ ] Barry out on a property or walking land (tract, pasture or timber)
 - [ ] Barry at the office sign / 411 N Lake Dr
 - [ ] Local shots: Lake Murray, downtown Lexington, farmland and timber he's sold
