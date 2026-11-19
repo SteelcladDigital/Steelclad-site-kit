@@ -421,7 +421,7 @@ class Site:
             checks = "".join(f"<li>{esc(x)}</li>" for x in k.get("checks", []))
             return f'''<aside class="hanger{'' if k.get("hanger") else ' plain'}" aria-label="{esc(k["title"])}">{f'<span class="sample">{esc(k["badge"])}</span>' if k.get("badge") else ""}
 <div class="tag">{esc(k["label"])}</div><p class="hanger-title">{esc(k["title"])}</p><div class="date">{esc(k.get("sub",""))}</div>
-{f'<div class="readings">{stats}</div>' if stats else ""}{f'<ul class="checks">{checks}</ul>' if checks else ""}{f'<p class="note">{esc(k["note"])}</p>' if k.get("note") else ""}</aside>'''
+{f'<div class="readings">{stats}</div>' if stats else ""}{f'<ul class="checks">{checks}</ul>' if checks else ""}{f'<p class="note">{esc(k["note"])}</p>' if k.get("note") else ""}{f'<a class="hanger-link" href="{self.href(cur, k["link"][1])}{k["link"][2] if len(k["link"]) > 2 else ""}">{esc(k["link"][0])} →</a>' if k.get("link") else ""}</aside>'''
         return ""
 
     def trail(self, *parts): return [("Home", "")] + list(parts)
@@ -548,7 +548,7 @@ class Site:
         alt = f'<a class="btn btn-ghost" href="{self.href(cur,self.tiers["slug"])}">Compare {esc(self.tiers["nav_label"].lower())}</a>' if self.tiers else ""
         body = self.page_hero(cur, trail, esc(s["h1"]), esc(s["lead"])) + f'''
 <section><div class="wrap layout-side"><div class="prose"><h2>{esc(s["included_title"])}</h2><div class="included">{inc}</div>
-{f'<h2>{esc(s.get("photos_title","Recent work"))}</h2>' + self.photo_grid(cur, s["photos"]) if s.get("photos") else ""}
+{f'<h2 id="photos">{esc(s.get("photos_title","Recent work"))}</h2>' + self.photo_grid(cur, s["photos"]) if s.get("photos") else ""}
 {f'<h2>{esc(s["signs_title"])}</h2><ul class="checklist">{signs}</ul>' if signs else ""}{faq_html}{where}</div>
 <aside class="aside"><h3>{esc(self.L["aside_title"])}</h3><p>{esc(self.L["aside_text"])}</p><a class="phone" href="tel:{self.b["tel"]}">{self.b["phone"]}</a>
 <a class="btn btn-gold" href="{self.href(cur,self.cta)}">{esc(self.L["cta"])}</a>{alt}<p style="margin:12px 0 0;font-size:.85rem">{esc(self.L["aside_badges"])}</p></aside></div></section>

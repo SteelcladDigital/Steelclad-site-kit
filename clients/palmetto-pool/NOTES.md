@@ -43,6 +43,7 @@ Status (Nov 19, 2026): **refreshed to the current process, not launched.** Branc
 
 ## Before launch: still open
 
+0. **Photo wanted from Mike:** a phone photo of a real, filled-out door hanger on a customer's door or gate, with handwritten comments and checked boxes. It would replace the example card as the home hero picture (real proof no chain can fake). Until then, the card links to the real hanger on the Weekly page.
 1. **Reviews from other towns:** all three real reviews are from Lexington. Ask Columbia, Irmo, Chapin and Gilbert customers for Google reviews (his review link makes it easy), then add them to `REVIEWS` with their town.
 2. **Plan names and inclusions** (Balance / Full Service / Full Service Plus) are still a proposal for Mike to react to.
 3. **A formal guarantee?** Only if Mike wants one. Today the site uses his real promises only.

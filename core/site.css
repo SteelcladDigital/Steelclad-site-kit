@@ -415,3 +415,5 @@ a.chip{text-decoration:none;color:var(--c-secondary-deep)}a.chip:hover{backgroun
 .also-served{margin:14px 2px 0;font-size:.92rem;color:var(--c-muted)}
 .photo-grid figure.contain{grid-column:1/-1;max-width:560px;background:#fff}
 .photo-grid figure.contain img{aspect-ratio:auto;object-fit:contain;max-height:720px}
+.hanger-link{display:inline-block;margin-top:12px;font-size:.88rem;font-weight:700;color:var(--c-secondary-deep);text-decoration:none}
+.hanger-link:hover{text-decoration:underline}

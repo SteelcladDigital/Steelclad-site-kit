@@ -481,7 +481,8 @@ CONFIG = {
     # Mirrors Mike's real door hanger (assets/photos/palmetto-pool-door-hanger.jpg): checklist front, comments + next service on the back.
     "hero_card": {"label": "Door hanger", "title": "We performed the following services on your pool", "sub": "Left on your door after every visit", "badge": "Example", "hanger": True,
                   "checks": ["Water tested", "Water level", "Baskets cleaned", "Deck blown off", "Equipment checked", "Filter cleaned", "Brushed & vacuumed", "Water balanced"],
-                  "note": "Service comments: \"Pine pollen heavy this week, cleaned the filter.\" Date of next service: next Tuesday."},
+                  "note": "Service comments: \"Pine pollen heavy this week, cleaned the filter.\" Date of next service: next Tuesday.",
+                  "link": ("See our actual door hanger", "services/weekly-pool-maintenance", "#photos")},   # hero_card.link: (label, slug, optional #anchor)
     "trust": [("home", "Family-Owned", "Lexington County, SC"), ("badge", "CPO Certified", "Certified Pool Operator"),
               ("shield", "Licensed & Insured", "Fully covered, every visit"), ("phone", "We Answer", "Callback within the hour")],
     # Mike's own words, from the current /about page.
