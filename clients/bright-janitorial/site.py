@@ -221,6 +221,7 @@ CONFIG = {
   "custom_pages": [FACILITIES],
   "areas": {
     "enabled": True, "hub_slug": "service-area", "nav_label": "Service Area", "link_prefix": "Commercial Cleaning", "services_listed": 8,
+    "footer": "short", "footer_limit": 8, "footer_title": "Midlands Service Areas",   # plain city names, Midlands first; the rest via the hub
     "hub_title": "Service Area: Commercial Cleaning Across South Carolina",
     "hub_meta": "Bright Janitorial Services provides commercial cleaning from Columbia across the Midlands, Upstate, York County, the Pee Dee and the Lowcountry.",
     "hub_h1": "Commercial Cleaning Across Columbia, the Midlands &amp; South Carolina",
