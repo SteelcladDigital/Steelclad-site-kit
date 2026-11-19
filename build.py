@@ -384,7 +384,8 @@ class Site:
         cards = "".join(f'<figure class="review"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>“{esc(t)}”</blockquote><figcaption><cite>{esc(n)}<span>{esc(c)}</span></cite></figcaption></figure>' for n, c, t in self.c["reviews"])
         url = self.c.get("integrations", {}).get("google_reviews_url")
         label = self.c.get("integrations", {}).get("google_reviews_label") or "Read more reviews on Google"   # e.g. "Read or leave a review on Google" for a g.page/.../review link
-        more = f'<p style="text-align:center;margin-top:28px"><a class="btn btn-outline" href="{url}" rel="noopener">{esc(label)}</a></p>' if url else ""
+        stars = '<span class="btn-stars" aria-hidden="true">★★★★★</span>' if self.c.get("integrations", {}).get("google_reviews_stars", True) else ""   # 5 gold stars on the button (default on; False to hide)
+        more = f'<p style="text-align:center;margin-top:28px"><a class="btn btn-outline btn-review" href="{url}" rel="noopener">{stars}{esc(label)}</a></p>' if url else ""
         return f'<div class="reviews">{cards}</div>{more}'
 
     @staticmethod
