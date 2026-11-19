@@ -396,7 +396,7 @@ CONFIG = {
     "hero_bg_overlay_mobile": "linear-gradient(180deg,rgba(43,20,18,.78),rgba(43,20,18,.55))",
     "hero_bg_overlay": "linear-gradient(90deg,rgba(43,20,18,.8) 0%,rgba(43,20,18,.45) 40%,rgba(43,20,18,.08) 62%,rgba(43,20,18,0) 100%)",
   },
-  "logo": {"type": "image", "file": "logo.webp", "footer_file": "logo-footer.webp", "schema_file": "logo-light-bg.png", "width": 260, "height": 64},
+  "logo": {"type": "image", "file": "logo.webp", "footer_file": "logo-footer.webp", "schema_file": "logo-light-bg.png", "width": 260, "height": 64, "footer_height": 80},   # footer: full-color logo on a cream badge
   "favicon_svg": FAVICON_SVG,
   "integrations": {
     "form_mode": "ghl_embed",
