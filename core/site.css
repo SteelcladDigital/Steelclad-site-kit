@@ -291,7 +291,7 @@ a.card:hover{border-color:var(--c-secondary);transform:translateY(-3px);box-shad
 
 .menu-toggle svg{width:30px;height:30px}
 @media (max-width:560px){.topbar .promise{display:none}.topbar .wrap{justify-content:center}.logo svg,.logo img{height:48px}.hero .wrap{padding-top:36px}}
-.logo img{height:58px;width:auto}
+.logo img{height:var(--logo-h,58px);width:auto}
 .logo-text{font-family:var(--display);font-weight:600;line-height:1.02;color:#fff;font-size:1.25rem;text-transform:uppercase;letter-spacing:.5px}
 /* hero layout variants */
 .hero.layout-centered .wrap{grid-template-columns:1fr;text-align:center;justify-items:center}
@@ -395,8 +395,8 @@ a.chip{text-decoration:none;color:var(--c-secondary-deep)}a.chip:hover{backgroun
   .hdr-ink .dropdown .sep{color:var(--c-muted)}
 }
 /* theme.logo_plate: white plate behind a full-color logo so its colors read on a colored header and the dark footer */
-.logo-plate .site-header .logo,.logo-plate .site-footer .logo{background:#fff;border-radius:calc(var(--radius) * .8);padding:6px 12px;box-shadow:0 4px 14px rgba(0,0,0,.12)}
-.logo-plate .site-footer .logo{display:inline-flex}
+.logo-plate .site-header .logo,.logo-plate .site-footer .logo,.logo-plate-footer .site-footer .logo{background:var(--c-logo-plate,#fff);border-radius:calc(var(--radius) * .8);padding:6px 12px;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.logo-plate .site-footer .logo,.logo-plate-footer .site-footer .logo{display:inline-flex}
 .logo-plate .site-header .logo img{height:66px}
 @media (max-width:560px){.logo-plate .site-header .logo img{height:44px}.logo-plate .site-header .logo{padding:4px 9px}}
 /* custom_pages cards with links; service-page intro */
@@ -412,3 +412,5 @@ a.chip{text-decoration:none;color:var(--c-secondary-deep)}a.chip:hover{backgroun
 .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
 @media (max-width:1020px){.grid-4{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:560px){.grid-4{grid-template-columns:1fr}}
+.logo-plate-footer .site-footer .logo img{height:64px}
+@media (max-width:560px){.logo img{height:min(var(--logo-h,58px),56px)}.hero.layout-centered .eyebrow::before{display:none}}

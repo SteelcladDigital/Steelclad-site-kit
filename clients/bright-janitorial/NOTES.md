@@ -5,16 +5,16 @@ Build: `python3 build.py bright-janitorial` → `dist/bright-janitorial`. Config
 Forms: Web3Forms key `dab4b782-…431b` (vasylb@brightjs.net). Tracking: GTM `GTM-TP8G6H5L` (client's own account; GA4 `G-JQ13XPG8GG` lives inside GTM only). No GHL.
 
 ## Confirm with Vasyl before launch
-1. **City pages (19).** Each has local facts (corridors, institutions, nearby employers like Scout Motors, BMW, Boeing, Volvo). Confirm he really takes recurring work in the Upstate, York County, Pee Dee and Lowcountry, and sanity-check each page. Remove any city he doesn't want calls from.
-2. **Columbia has no city page on purpose** (the home page targets Columbia). Mount Pleasant appeared on the old site but isn't on his list, so it was left out. Add it back if he wants it.
+1. **City pages (20, Mount Pleasant added Nov 19).** Each has local facts (corridors, institutions, nearby employers like Scout Motors, BMW, Boeing, Volvo). Confirm he really takes recurring work in the Upstate, York County, Pee Dee and Lowcountry, and sanity-check each page. Remove any city he doesn't want calls from.
+2. **Columbia has no city page on purpose** (the home page targets Columbia).
 3. **Hot-water carpet extraction** was added to the Floor Care page (the old site lists it; the approved .md didn't). Same for epoxy rejuvenation: not used. Confirm.
 4. **Daycare & Education and Auto Dealerships** tiles were added to Facilities We Serve (from the current home page). The old "non-toxic, eco-safe sanitization **certified**" claim was softened, since no certifying body is named. Add the certification if there is one.
 5. **Medical page:** written from the current page only. No OSHA/bloodborne-pathogen or HIPAA training claims were made. Add them if his team is trained.
-6. **Hours / 24/7 emergency response / office address** (1931 Assembly St., 2nd Floor) carried over. Confirm the address matches the Google Business Profile exactly.
-7. **Hero card** is a labeled *Example* of a written cleaning plan. Confirm he does put scope in writing after a walk-through (the old "custom documented plan" language suggests yes).
+6. **Hours confirmed** (Mon–Sun 9–9, 24/7 emergency). Confirm the office address (1931 Assembly St., 2nd Floor) matches the Google Business Profile exactly.
+7. **Hero card removed** (Nov 19, at your request); the home hero is centered with no texture lines.
 8. **Owner name and photo:** none published. A photo of Vasyl or the team would be the strongest trust upgrade available.
 9. **Photos:** the six before/after photos are small (320–640px). Higher-resolution originals, and any jobsite/team photos, would help.
-10. **Testimonials:** the three on the old site, kept with names and titles. Add the Google reviews link (`google_reviews_url`).
+10. **Testimonials:** the three on the old site, kept with names and titles. GBP review link added (https://g.page/r/CWpeyki_epxREBM/review) as a "Leave us a Google review" button. That link opens the write-a-review box; for a prospect-facing "Read our reviews" button, swap in the Maps listing link later.
 11. **Privacy policy:** rewritten for the new stack (Web3Forms, GTM, Cloudflare, SMS consent). It replaces the GHL-era policy at the same URL.
 12. **Post-construction .md** linked to `/services/window-cleaning`, which doesn't exist. Swapped for Day Porter. Build a window cleaning page later if he wants that keyword.
 13. The .md files' JSON-LD blocks are **not pasted**; the kit generates equivalent LocalBusiness + Service + FAQPage + BreadcrumbList on every page.
@@ -37,9 +37,9 @@ Patterns the leaders share, and how this site applies them:
 6. **Named QA/process** (MRI's walkthroughs) → a four-step "How we work" (listen, written plan, same team, accountability).
 7. **FAQs on every page** → FAQPage markup throughout.
 
-Where local competitors are weak (the gap): franchise pages with generic copy, stock photos (ServiceMaster's Columbia page uses an image labeled "Lakeland"), no named testimonials, no visible process, few or no city pages, broken text. Bright now has **real before/after photos, named commercial testimonials, named products and equipment (Diversey, Kärcher, Pro-Team HEPA), 19 city pages, a link-worthy cleaning checklist, and full schema**.
+Where local competitors are weak (the gap): franchise pages with generic copy, stock photos (ServiceMaster's Columbia page uses an image labeled "Lakeland"), no named testimonials, no visible process, few or no city pages, broken text. Bright now has **real before/after photos, named commercial testimonials, named products and equipment (Diversey, Kärcher, Pro-Team HEPA), 20 city pages, a link-worthy cleaning checklist, and full schema**.
 
-**Brand:** the client's teal `#4d9db5` header is kept. White nav text on that teal fails contrast, so the nav uses deep navy text, and the logo sits on a white plate so its royal blue `#0700b2` and sun yellow `#fed91b` read at full strength (the issue from the GHL build). Dark sections use a deep royal navy drawn from the logo; buttons use the logo yellow with navy text. Fonts: Outfit + Inter.
+**Brand:** the client's teal `#4d9db5` header is kept. The logo is a transparent cutout sitting directly on the teal header (no white box), and in the dark footer it sits on a matching teal plate, so it looks the same everywhere. Logo colors `#0A0AAA` (blue) and `#FFD420` (yellow) drive the palette: hero and dark sections are the logo blue, buttons the logo yellow with navy text. Nav text on the teal is deep navy (`#06065e`), because white or the logo blue on that teal fails text contrast. No hero texture lines. Fonts: Outfit + Inter.
 
 **Later upgrade ideas:** a team/owner photo hero (`hero_layout: image`) once there's a good photo; an inspection/QA report sample; case-study pages per facility type; a blog targeting question keywords (e.g., "how much does office cleaning cost in Columbia SC").
 
@@ -49,8 +49,8 @@ Where local competitors are weak (the gap): franchise pages with generic copy, s
 | Structured data | `meta-schema:type` tag only, no JSON-LD | JSON-LD on every page: LocalBusiness/ProfessionalService, Service, FAQPage, BreadcrumbList, ContactPage, Article |
 | H1s | Duplicates (home had 2; About, Retail, Medical each had a second "Office Cleaning" H1) | Exactly one keyword H1 per page; clean H1→H2→H3 |
 | Titles/metas | Medical page's title was about office cleaning; metas over length | Unique title ≤60 and meta ≤155 on all 36 pages |
-| Pages | 12 | 36: same 12 + contact, thank-you, service-area hub, 19 city pages, cleaning checklist |
-| City pages | 0 | 19 |
+| Pages | 12 | 37: same 12 + contact, thank-you, service-area hub, 20 city pages, cleaning checklist |
+| City pages | 0 | 20 |
 | Forms | GHL form | Web3Forms → vasylb@brightjs.net, with spam trap, error fallback, attribution and `generate_lead` |
 | Tracking | GHL | Client's own GTM |
 | URLs | — | All 12 kept; misspelled `/services/commecial-retail-spaces` 301'd; plus `/home`, `/index`, `/contact-us`, `/quote` |

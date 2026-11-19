@@ -21,7 +21,7 @@ REVIEWS = [
     ("Kandi Mills", "General Manager, Classic Ford Lincoln Columbia", "We were all saying how great it looks this morning when we walked in!!"),
 ]
 
-CITY_LIST = "Columbia, Lexington, Irmo, Chapin, Blythewood, Newberry, Sumter, Orangeburg, Aiken, Greenville, Spartanburg, Greer, Anderson, Rock Hill, Fort Mill, Florence, Charleston, North Charleston, Summerville and Ridgeville"
+CITY_LIST = "Columbia, Lexington, Irmo, Chapin, Blythewood, Newberry, Sumter, Orangeburg, Aiken, Greenville, Spartanburg, Greer, Anderson, Rock Hill, Fort Mill, Florence, Charleston, North Charleston, Summerville, Mount Pleasant and Ridgeville"
 
 GENERAL_FAQS = [
     ("What areas do you serve?", f"We're based in Columbia, SC and serve the Midlands and communities across South Carolina, including {CITY_LIST}. Not sure if we cover your location? Call or text {PHONE} and we'll confirm."),
@@ -138,17 +138,18 @@ CONFIG = {
     "social": {},
   },
   "theme": {
-    # Logo colors: royal blue #0700b2 and sun yellow #fed91b. Header: the client's teal #4d9db5 (kept from the current site).
-    # Teal + white text fails contrast, so the header uses deep-navy nav text and the logo sits on a white plate, keeping its
-    # blue and yellow fully visible. Hero and dark sections use a deep royal navy drawn from the logo; buttons use the logo yellow.
-    "colors": {"primary": "#121a7a", "primary_deep": "#0b104f", "secondary": "#8fd3e6", "secondary_deep": "#1f6f88",
-               "secondary_wash": "#eaf5f9", "accent": "#fed91b", "accent_text": "#0b104f", "surface": "#f3f8fa",
-               "ink": "#151b45", "muted": "#4a5270", "texture": "#4d9db5", "highlight": "#fed91b"},
+    # Logo colors: royal blue #0A0AAA and sun yellow #FFD420. Header: the client's teal #4d9db5 (kept from the current site).
+    # The logo is a transparent cutout sitting straight on the teal header; in the dark footer it sits on a teal plate so it
+    # looks the same. Teal + white text fails contrast, so header nav text is deep navy. Hero/dark sections use the logo blue;
+    # buttons use the logo yellow with navy text.
+    "colors": {"primary": "#0a0aaa", "primary_deep": "#06065e", "secondary": "#8fd3e6", "secondary_deep": "#1f6f88",
+               "secondary_wash": "#eaf5f9", "accent": "#ffd420", "accent_text": "#06065e", "surface": "#f3f8fa",
+               "ink": "#151b45", "muted": "#4a5270", "texture": "#4d9db5", "highlight": "#ffd420"},
     "fonts": {"display": "outfit", "body": "inter"},
-    "radius": "soft", "heading_case": "none", "divider": "angle", "texture": "lines", "hero_layout": "card",
-    "header_bg": "#4d9db5", "header_ink": "#0b104f", "logo_plate": True,
+    "radius": "soft", "heading_case": "none", "divider": "angle", "texture": "none", "hero_layout": "centered",
+    "header_bg": "#4d9db5", "header_ink": "#06065e", "logo_plate": "footer", "logo_plate_bg": "#4d9db5",
   },
-  "logo": {"type": "image", "file": "logo.webp", "schema_file": "logo-light-bg.png", "width": 219, "height": 160},
+  "logo": {"type": "image", "file": "logo.webp", "schema_file": "logo-light-bg.png", "width": 221, "height": 160, "display_height": 76},
   "favicon_svg": FAVICON_SVG,
   "integrations": {
     "form_mode": "web3forms",
@@ -157,7 +158,8 @@ CONFIG = {
     "web3forms_from_name": "Bright Janitorial website",
     "thank_you_slug": "thank-you",
     "gtm_id": "GTM-TP8G6H5L",          # client's OWN Tag Manager account (GA4 G-JQ13XPG8GG lives inside GTM, not here)
-    "google_reviews_url": "",           # TODO: GBP "read reviews" link
+    "google_reviews_url": "https://g.page/r/CWpeyki_epxREBM/review",   # from Vasyl's GBP dashboard (opens the write-a-review box)
+    "google_reviews_label": "Leave us a Google review",
   },
   # "launched": leave off until Vasyl approves the preview and --check is clean.
   "labels": {
@@ -179,9 +181,6 @@ CONFIG = {
     "lead": "Bright Janitorial Services brings 18 years of professional-grade janitorial experience to offices, medical facilities, warehouses and commercial properties across Columbia, the Midlands and South Carolina.",
     "secondary_cta": ("See Our Services", "services"),
     "proof": ["Bonded & insured", "18 years in commercial cleaning", "90% of new clients come from referrals"],
-    "hero_card": {"label": "Your cleaning plan", "title": "3-floor office · 5 nights a week", "sub": "What we put in writing after the walk-through", "badge": "Example", "hanger": False,
-                  "checks": ["Restrooms cleaned, disinfected & restocked", "Trash emptied & relined", "Desks & high-touch surfaces sanitized", "HEPA vacuuming; hard floors mopped", "Break room & kitchen reset", "Same trained team every visit"],
-                  "note": "Products & equipment: Diversey disinfectants · Pro-Team HEPA vacuums · Kärcher floor machines."},
     "trust": [("shield", "Bonded & insured", "Documentation on request"), ("badge", "18 years", "Commercial cleaning experience"),
               ("users", "90% referrals", "Of new clients come from referrals"), ("clock", "7 days a week", "9 AM–9 PM · 24/7 emergency response")],
     "why": {"eyebrow": "What sets us apart",

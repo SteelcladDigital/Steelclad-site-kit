@@ -134,7 +134,7 @@ Launch check in this mode: the demo form and a missing `gtm_id` are blockers; th
 
 ## More layout options (added for Bright Janitorial, Nov 2026)
 
-- `theme.header_bg` + `theme.header_ink`: a colored header (e.g. the client's brand teal) with any nav text color, for when white text fails contrast. `theme.logo_plate: True` puts a white plate behind a full-color logo in the header and footer.
+- `theme.header_bg` + `theme.header_ink`: a colored header (e.g. the client's brand teal) with any nav text color, for when white text fails contrast. `theme.logo_plate` puts a plate behind the logo (`True`: header + footer, `"footer"`: footer only), colored by `theme.logo_plate_bg` (default white). `logo.display_height` sets the header logo height in px. `integrations.google_reviews_label` renames the Google reviews button.
 - `custom_pages`: free-form pages built from sections (`cards` with icons and links, `list`, `html`), with FAQs, Service markup and an optional top-nav link (`nav_label`). Example: Bright's `/facilities-we-serve/`.
 - Service pages: optional `intro_html`, `sections` [(h2, html)], `why_title` + `why`, `faq_title`, `related_title` + `related` [(slug, one-liner)], `cta_title` / `cta_text`, `photos_pairs`. `signs` items can be (bold lead-in, text) tuples.
 - `services_hub`: optional `body_html`, `faqs`, `schema_service`.

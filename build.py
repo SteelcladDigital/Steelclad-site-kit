@@ -174,7 +174,7 @@ class Site:
         return faces + f''':root{{
 --c-primary:{col["primary"]};--c-primary-deep:{col["primary_deep"]};--c-secondary:{col["secondary"]};--c-secondary-deep:{col["secondary_deep"]};
 --c-secondary-wash:{col["secondary_wash"]};--c-accent:{col["accent"]};--c-highlight:{col.get("highlight", col["accent"])};--c-accent-text:{col.get("accent_text","#121c35")};
---c-header:{t.get("header_bg", col["primary"])};--c-header-ink:{t.get("header_ink", "#fff")};
+--logo-h:{self.c["logo"].get("display_height", 58)}px;--c-header:{t.get("header_bg", col["primary"])};--c-logo-plate:{t.get("logo_plate_bg", "#fff")};--c-header-ink:{t.get("header_ink", "#fff")};
 --c-surface:{col["surface"]};--c-ink:{col.get("ink","#16213a")};--c-muted:{col.get("muted","#4a5674")};--c-line:#dfe3ea;--c-white:#fff;
 --radius:{radius[0]};--btn-radius:{radius[1]};--shadow:0 10px 30px rgba(18,28,53,.12);
 --display:"{FONT_FAMILY[disp]}",system-ui,sans-serif;--body:"{FONT_FAMILY[body]}",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -239,11 +239,13 @@ class Site:
     # ---------- chrome
     def body_class(self):
         """theme.header "light" = white header; theme.header_ink = custom nav text color on a theme.header_bg header;
-        theme.logo_plate = white rounded plate behind the logo (full-color logos on a colored header/footer)."""
+        theme.logo_plate = rounded plate behind the logo (True: header + footer, "footer": footer only);
+        theme.logo_plate_bg = the plate's color (default white; e.g. the header color, so a transparent logo looks the same in the footer)."""
         t = self.c["theme"]; cls = []
         if t.get("header") == "light": cls.append("hdr-light")
         elif t.get("header_ink"): cls.append("hdr-ink")
-        if t.get("logo_plate"): cls.append("logo-plate")
+        if t.get("logo_plate") == "footer": cls.append("logo-plate-footer")   # plate only behind the footer logo
+        elif t.get("logo_plate"): cls.append("logo-plate")
         return f' class="{" ".join(cls)}"' if cls else ""
 
     def header(self, cur):
@@ -385,7 +387,8 @@ class Site:
     def reviews_block(self):
         cards = "".join(f'<figure class="review"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>“{esc(t)}”</blockquote><figcaption><cite>{esc(n)}<span>{esc(c)}</span></cite></figcaption></figure>' for n, c, t in self.c["reviews"])
         url = self.c.get("integrations", {}).get("google_reviews_url")
-        more = f'<p style="text-align:center;margin-top:28px"><a class="btn btn-outline" href="{url}">Read more reviews on Google</a></p>' if url else ""
+        label = self.c.get("integrations", {}).get("google_reviews_label", "Read more reviews on Google")   # e.g. "Leave us a Google review" for a g.page/r/.../review link
+        more = f'<p style="text-align:center;margin-top:28px"><a class="btn btn-outline" href="{url}">{esc(label)}</a></p>' if url else ""
         return f'<div class="reviews">{cards}</div>{more}'
 
     @staticmethod
