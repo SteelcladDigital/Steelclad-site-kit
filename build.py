@@ -314,7 +314,10 @@ class Site:
         if self.tiers: svc = f'<li><a href="{self.href(cur,self.tiers["slug"])}">{esc(self.tiers["nav_label"])}</a></li>' + svc
         col3 = ""
         if self.areas:
-            if self.areas.get("footer") == "compact":   # areas.footer "compact": town names as one wrapping line (still linked), not one long link per row
+            if L.get("footer_areas_compact"):   # labels.footer_areas_compact: city names grouped by county, two columns, instead of one long "X in City, ST" list
+                grp = "".join(f'<p class="fa-group">{esc(g["name"])}</p><ul class="fa-list">' + "".join(f'<li><a href="{self.href(cur,a["slug"])}">{esc(a["city"])}</a></li>' for a in self.areas["pages"] if a["slug"] in g["slugs"]) + "</ul>" for g in self.areas["groups"])
+                col3 = f'<div><h4>{esc(L.get("footer_areas_title", "Service Areas"))}</h4>{grp}<p class="fa-all"><a href="{self.href(cur,self.areas["hub_slug"])}">{esc(L.get("footer_areas_all", "All Service Areas"))} →</a></p></div>'
+            elif self.areas.get("footer") == "compact":   # areas.footer "compact": town names as one wrapping line (still linked), not one long link per row
                 pgs = self.areas["pages"]   # each town keeps its trailing dot on the same line, so no line starts with "·"
                 towns = " ".join(f'<span class="fa-item"><a href="{self.href(cur,a["slug"])}">{esc(a["city"])}</a>{"<span aria-hidden=" + chr(34) + "true" + chr(34) + "> ·</span>" if i < len(pgs) - 1 else ""}</span>' for i, a in enumerate(pgs))
                 col3 = (f'<div><h4>Service Areas</h4><p class="footer-areas-lead">{esc(self.areas.get("footer_lead", self.areas["link_prefix"] + " in:"))}</p>'
@@ -329,7 +332,7 @@ class Site:
         if self.resource: company.insert(1, (self.resource["slug"], self.resource["nav_label"]))
         if self.c.get("gallery_page"): company.insert(1, (self.c["gallery_page"]["slug"], self.c["gallery_page"]["nav_label"]))
         if self.blog: company.insert(1, (self.blog["index_slug"], self.blog["nav_label"]))
-        if self.areas and self.areas.get("footer") != "compact": company.append((self.areas["hub_slug"], L.get("footer_areas_all", "All Service Areas")))
+        if self.areas and self.areas.get("footer") != "compact" and not L.get("footer_areas_compact"): company.append((self.areas["hub_slug"], L.get("footer_areas_all", "All Service Areas")))
         comp = "".join(f'<li><a href="{self.href(cur,p)}">{esc(n)}</a></li>' for p, n in company)
         wr = self.c.get("integrations", {}).get("google_review_write_url")
         if wr: comp += f'<li><a href="{wr}" rel="noopener" target="_blank">Leave a Google Review</a></li>'

@@ -403,3 +403,11 @@ a.chip{text-decoration:none;color:var(--c-secondary-deep)}a.chip:hover{backgroun
 .idx-placeholder p{max-width:560px;margin:10px auto;color:var(--c-muted)}
 .idx-disclaimer{font-size:.8rem;color:var(--c-muted);margin-top:18px}
 .site-footer .footer-note{margin:36px 0 0;font-size:.8rem;line-height:1.55;color:rgba(255,255,255,.62)}
+
+/* footer: compact communities (labels.footer_areas_compact) */
+.site-footer .fa-group{margin:14px 0 6px;font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--c-secondary)}
+.site-footer .fa-group:first-of-type{margin-top:0}
+.site-footer ul.fa-list{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px}
+.site-footer .fa-all{margin-top:14px;font-size:.9rem}
+.site-footer .fa-all a{color:var(--c-secondary)}
+.site-footer .fa-list li{margin-bottom:4px}
