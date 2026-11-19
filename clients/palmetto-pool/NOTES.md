@@ -86,7 +86,7 @@ Status (Nov 19, 2026): **refreshed to the current process, not launched.** Branc
 - `areas.groups[].also`: towns served without their own page (shown in the county box and added to areaServed).
 - `integrations.google_reviews_label`: button text for the Google reviews link.
 - `photos[].contain`: a photo shown whole, not cropped (documents, tall images).
-- `areas.footer_slugs` + `areas.footer_note`: a compact footer (a few plain town names + "All service areas") instead of a "Pool Service <City>, SC" link for every city page. Palmetto uses it to avoid a keyword-stuffed footer.
+- **Compact footer is now the kit default for every client:** a few plain town names, "All service areas" and an optional `areas.footer_note`. `areas.footer_slugs` picks the towns. There's no more "Pool Service <City>, SC" link for every city page.
 - The `generate_lead` push uses GTM's `eventCallback` before going to the thank-you page.
 
 ## Old site vs. new site
