@@ -402,3 +402,4 @@ a.chip{text-decoration:none;color:var(--c-secondary-deep)}a.chip:hover{backgroun
 .site-footer .fa-all{margin-top:14px;font-size:.9rem}
 .site-footer .fa-all a{color:var(--c-secondary)}
 .site-footer .fa-list li{margin-bottom:4px}
+.btn .btn-stars{color:var(--c-accent);letter-spacing:1px;margin-right:2px;text-shadow:0 0 1px rgba(0,0,0,.35)}

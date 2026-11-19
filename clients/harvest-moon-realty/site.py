@@ -416,6 +416,7 @@ CONFIG = {
     "footer_areas_title": "Communities", "footer_areas_all": "All Communities", "footer_areas_compact": True,
     "footer_note_html": "Barry Keith, SC real estate license #43236 · Harvest Moon Realty, 411 N Lake Dr, Lexington, SC 29072 · (803) 309-9521. Equal Housing Opportunity. Real estate advertising is subject to the federal Fair Housing Act. Listing information is deemed reliable but not guaranteed.",
     "reviews_title": "What clients say about working with Barry",
+    "review_button": "★★★★★ Leave us a Google review",   # neutral wording on purpose: never "leave a 5-star review" (Google review policy)
     "cta_band_title": "Let's talk, no pressure",
     "cta_band_text": "Whether you're buying your first home, looking for land or just thinking about selling, call or text. You'll get honest, local answers and nothing pushy.",
     "aside_title": "Talk with Barry", "aside_text": "Call or text and you'll talk with me directly. No call center, no pressure.",
