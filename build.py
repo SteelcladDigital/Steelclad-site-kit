@@ -269,7 +269,13 @@ class Site:
         if self.tiers: svc = f'<li><a href="{self.href(cur,self.tiers["slug"])}">{esc(self.tiers["nav_label"])}</a></li>' + svc
         col3 = ""
         if self.areas:
-            col3 = '<div><h4>Service Areas</h4><ul>' + "".join(f'<li><a href="{self.href(cur,a["slug"])}">{esc(self.areas["link_prefix"])} {esc(a["city"])}, {b["address"]["region"]}</a></li>' for a in self.areas["pages"]) + "</ul></div>"
+            if self.areas.get("footer") == "compact":   # areas.footer "compact": town names as one wrapping line (still linked), not one long link per row
+                pgs = self.areas["pages"]   # each town keeps its trailing dot on the same line, so no line starts with "·"
+                towns = " ".join(f'<span class="fa-item"><a href="{self.href(cur,a["slug"])}">{esc(a["city"])}</a>{"<span aria-hidden=" + chr(34) + "true" + chr(34) + "> ·</span>" if i < len(pgs) - 1 else ""}</span>' for i, a in enumerate(pgs))
+                col3 = (f'<div><h4>Service Areas</h4><p class="footer-areas-lead">{esc(self.areas.get("footer_lead", self.areas["link_prefix"] + " in:"))}</p>'
+                        f'<p class="footer-areas">{towns}</p><p><a class="footer-areas-all" href="{self.href(cur,self.areas["hub_slug"])}">All service areas →</a></p></div>')
+            else:
+                col3 = '<div><h4>Service Areas</h4><ul>' + "".join(f'<li><a href="{self.href(cur,a["slug"])}">{esc(self.areas["link_prefix"])} {esc(a["city"])}, {b["address"]["region"]}</a></li>' for a in self.areas["pages"]) + "</ul></div>"
         else:
             addr = b["address"]; street = f'{esc(addr["street"])}<br>' if addr.get("street") else ""
             col3 = f'<div><h4>Visit</h4><p>{street}{esc(addr["locality"])}, {addr["region"]} {addr.get("zip","")}</p><p>{esc(b["hours_text"])}</p></div>'
@@ -277,7 +283,7 @@ class Site:
         company = [("about", "About Us"), (self.cta, L["cta"])]
         if self.resource: company.insert(1, (self.resource["slug"], self.resource["nav_label"]))
         if self.blog: company.insert(1, (self.blog["index_slug"], self.blog["nav_label"]))
-        if self.areas: company.append((self.areas["hub_slug"], "All Service Areas"))
+        if self.areas and self.areas.get("footer") != "compact": company.append((self.areas["hub_slug"], "All Service Areas"))
         comp = "".join(f'<li><a href="{self.href(cur,p)}">{esc(n)}</a></li>' for p, n in company)
         wr = self.c.get("integrations", {}).get("google_review_write_url")
         if wr: comp += f'<li><a href="{wr}" rel="noopener" target="_blank">Leave a Google Review</a></li>'

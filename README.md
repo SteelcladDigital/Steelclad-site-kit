@@ -46,7 +46,7 @@ Everything about a site's look and structure lives in that client's `site.py`.
 
 **Optional sections**
 - `tiers`: plans, packages, memberships or subscriptions, with an optional comparison table and plan-finder quiz
-- `areas`: city and service-area pages, for service-area businesses
+- `areas`: city and service-area pages, for service-area businesses. Set `areas.footer: "compact"` (optional `footer_lead`) to list the towns as one wrapping line in the footer instead of one long link per row; use it once there are more than about 8 areas.
 - `resource`: a guide or calendar page that earns links
 - Storefronts: add `address.street` and `hours_table` to get a "Visit us" block with directions instead of area pages
 

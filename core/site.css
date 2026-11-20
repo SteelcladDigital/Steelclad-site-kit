@@ -386,3 +386,9 @@ a.chip{text-decoration:none;color:var(--c-secondary-deep)}a.chip:hover{backgroun
 
 /* review-request button: gold 5-star row */
 .rv-stars{color:#f5b301;letter-spacing:1px;margin-right:6px}
+
+/* areas.footer: "compact" */
+.footer-areas-lead{margin:0 0 6px;opacity:.8;font-size:.92rem}
+.footer-areas{line-height:1.9;margin:0 0 10px}
+.footer-areas .fa-item{white-space:nowrap}
+.footer-areas-all{font-weight:700}

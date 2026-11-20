@@ -654,6 +654,7 @@ CONFIG = {
   "services": SERVICES,
   "areas": {
     "enabled": True, "hub_slug": "service-area", "nav_label": "Service Area", "link_prefix": "Property Maintenance",
+    "footer": "compact", "footer_lead": "Property maintenance & lawn care in:",
     "hub_title": "Service Area: Lexington County & the Midlands, SC",
     "hub_meta": "Teal Outdoor Services serves Lexington County, Columbia, Irmo, Chapin, Batesburg-Leesville, Swansea, Newberry, Prosperity and Aiken County, SC.",
     "hub_h1": "Local Service for Lexington County &amp; the Midlands",
