@@ -264,7 +264,7 @@ CONFIG = {
     "fonts": {"display": "fraunces", "body": "nunito-sans"},
     "radius": "round", "heading_case": "none", "divider": "wave", "texture": "none", "hero_layout": "image",
   },
-  "logo": {"type": "image", "file": "logo.png", "width": 155, "height": 72},   # client's Canva logo, lettering lifted off the background (works on dark and white)
+  "logo": {"type": "image", "file": "logo.svg", "schema_file": "logo.png", "width": 152, "height": 72},   # client's Canva logo: vector lettering from her business card SVG (photo + decorations removed)
   "favicon_svg": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#0e5966"/><text x="16" y="22" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="17" fill="#ffc9de">S&amp;</text></svg>',
   "integrations": {
     "form_mode": "ghl_embed",
