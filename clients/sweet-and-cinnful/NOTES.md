@@ -43,7 +43,7 @@ Benchmarked: **Magnolia Bakery**, **Levain Bakery**, **Ista Bake Studio** (custo
 4. **Visible ordering process** (Magnolia's "order now / plan ahead" flow): a 4-step "How ordering works" section.
 5. **Maker story** (Levain's founders, Ista's family business): the "Meet the baker" band and About page, built on her own tagline.
 6. **Occasion framing** (Levain's "for every occasion"): event batches, holiday trays, party favors.
-7. **Brand refresh:** the old logo was an image on a stock-photo background. The new wordmark is in Fraunces with her teal + pink kept from the old logo. Bolder idea for later: a custom illustrated logo mark.
+7. **Brand:** uses the client's own Canva logo (lettering lifted off the stock-photo background into a transparent PNG; the full Canva graphic is the social share image), with her teal + pink palette and Fraunces headings. If she can export a transparent PNG or SVG from Canva, swap it in at `assets/logo.png` for the sharpest edges.
 
 ## Old vs new
 

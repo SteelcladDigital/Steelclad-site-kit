@@ -238,7 +238,6 @@ GUIDE_BODY = """<h2>Keeping buttercream happy in South Carolina heat</h2>
 </ul>
 <p>Not sure how much to order? Put your headcount in the order and Cinnamon will recommend a size. You can see every starting price on the <a href="/menu-pricing-page/">menu &amp; prices</a> page.</p>"""
 
-LOGO_SVG = """<svg viewBox="0 0 196 64" role="img" aria-label="Sweet &amp; Cinnful"><g font-family="Fraunces, Georgia, serif" font-weight="700"><text x="0" y="34" font-size="36" fill="#fff">Sweet</text><text x="40" y="60" font-size="24" fill="#ffc9de">&amp; Cinnful</text></g><path d="M118 10c3-4 8-4 10 0" stroke="#ffc9de" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="135" cy="14" r="2.2" fill="#9be0ef"/><circle cx="143" cy="8" r="1.6" fill="#ffc9de"/></svg>"""
 
 CONFIG = {
   "business": {
@@ -265,7 +264,7 @@ CONFIG = {
     "fonts": {"display": "fraunces", "body": "nunito-sans"},
     "radius": "round", "heading_case": "none", "divider": "wave", "texture": "none", "hero_layout": "image",
   },
-  "logo": {"type": "svg", "svg": LOGO_SVG},
+  "logo": {"type": "image", "file": "logo.png", "width": 155, "height": 72},   # client's Canva logo, lettering lifted off the background (works on dark and white)
   "favicon_svg": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#0e5966"/><text x="16" y="22" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="17" fill="#ffc9de">S&amp;</text></svg>',
   "integrations": {
     "form_mode": "ghl_embed",
