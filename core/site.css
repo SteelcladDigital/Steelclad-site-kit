@@ -233,6 +233,7 @@ a.card:hover{border-color:var(--c-secondary);transform:translateY(-3px);box-shad
 .aside p{color:rgba(255,255,255,.72);font-size:.95rem}
 .aside .phone{font-family:var(--display);font-size:1.8rem;color:#fff;text-decoration:none;display:block;margin:6px 0 16px}
 .aside .btn{width:100%;margin-bottom:10px}
+.aside .phone.is-email{font-family:var(--body);font-size:1.05rem;font-weight:700;overflow-wrap:anywhere}
 .layout-side{display:grid;grid-template-columns:1fr 340px;gap:48px;align-items:start}
 @media (max-width:960px){.layout-side{grid-template-columns:1fr}.aside{position:static}}
 .prose h2{margin-top:1.4em}.prose h2:first-child{margin-top:0}
