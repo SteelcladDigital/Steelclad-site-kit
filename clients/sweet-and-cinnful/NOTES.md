@@ -3,7 +3,7 @@
 **Client:** Cinnamon Larkin, Founder & CBO · Lexington, SC home bakery · cinnamonrlarkin@gmail.com
 **Old site:** GoHighLevel funnel at sweetandcinnful.com (4 pages, 3 legal pages)
 **Build:** `python3 build.py sweet-and-cinnful [--preview | --check]`
-**Status:** preview built. Not launched (`launched` is off). One blocker: the GHL tracking script.
+**Status:** preview built, launch check READY. Not launched (`launched` is off). Off GHL: forms via Web3Forms.
 
 ## Confirm with Cinnamon before launch
 
@@ -18,12 +18,18 @@
 9. **Legal pages** were migrated word-for-word from the old site. The template blanks (company name, email, governing state) were filled with Sweet & Cinnful / her email / South Carolina, and "appointment" wording in the SMS terms was lightly adapted to orders. Have her review them.
 10. **Photos** are her 8 gallery photos, cropped to remove a child and a person in the background. Brand names in the old alt text (a snack-cake brand) were removed from captions.
 
-## Launch setup
+## Launch setup (moving off GHL, Nov 21, 2026)
 
-- `integrations.ghl_tracking_snippet`: paste from GHL > Settings > External Tracking. **This is the only launch blocker.**
-- The order form embed uses the existing GHL form `iOW0QPcEwExTKLMCqQi5` (Custom Bakery Order Form: date, order details, flavor, pickup/delivery, dietary, inspiration uploads). Height is set to 1950px. Check it on mobile after launch and adjust `contact.ghl_height` if it scrolls inside.
-- Optional: GTM ID, `google_reviews_url` / `google_review_write_url` from her Google Business Profile. Her old site doesn't link to one. If she doesn't have one, **set it up as a service-area business**, since it's the biggest local-search lever for a home bakery.
-- `og-image.jpg` is committed (generated).
+- **Forms: Web3Forms** (no GHL). Access key `1ac41c96-b674-41a5-a6e0-f6f73dae78c6`, created with cinnamonrlarkin@gmail.com (free plan, 250 submissions/mo). Form name "Sweet & Cinnful – Order Request". Requests arrive in her Gmail; replying goes to the customer. After sending, customers land on `/thank-you/` (noindex).
+  - Fields: name, phone, email (required), pickup/event date (required), occasion, servings, budget, flavor, theme, inspiration link, town, pickup or delivery (required), dietary needs, what they're ordering, design ideas, allergies, how they heard.
+  - No photo uploads (needs Web3Forms Pro, ~$12/mo): customers paste an inspiration link or attach photos when they reply to her email. The site copy says so.
+  - **Test:** once on `<project>.pages.dev`, send one test request and confirm it reaches her Gmail (check spam the first time; have her mark the Web3Forms sender as "not spam"). The claude.ai preview can't send forms.
+- **No Tag Manager / GA4** (client decision): `integrations.no_analytics: True`. Count leads from her Web3Forms emails or the Web3Forms dashboard.
+- **No Google Business Profile** (client decision). The reviews button stays hidden (no `google_reviews_url`).
+- **Domain:** registered at Namecheap, DNS on Namecheap (`dns1/dns2.registrar-servers.com`). To launch: add sweetandcinnful.com to Cloudflare (free plan), switch the Namecheap nameservers to Cloudflare's two, create the Pages project, then add the custom domain (root + www).
+- **Search Console** is still recommended (free, no tracking code; verify by DNS TXT in Cloudflare, submit `sitemap.xml`).
+- **GHL:** follow `claude/ghl-sub-account-offboarding.md` after launch (domain disconnect, check for a GHL phone number, export contacts/form submissions, then delete the sub-account).
+- **Legal pages:** the privacy policy and terms still describe an SMS program from the GHL template. With no GHL texting, consider trimming the SMS sections (client to approve).
 
 ## Kit changes made for this client (generic, all clients benefit)
 

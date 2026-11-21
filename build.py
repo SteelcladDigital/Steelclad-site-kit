@@ -869,7 +869,11 @@ class Site:
         if want == "web3forms":
             W.append("Web3Forms: send one real test submission from the live domain and confirm the email arrives (check spam the first time) with the page and UTM fields filled in.")
             if ig.get("web3forms_cc"): W.append("Web3Forms ccemail needs a paid Web3Forms plan; on the free plan, set a forwarding rule in the owner's inbox instead.")
-            if not ig.get("gtm_id"): B.append("Web3Forms mode has no CRM tracking script, so integrations.gtm_id (GA4 + lead conversions) is required to measure leads.")
+            if not ig.get("gtm_id"):
+                if ig.get("no_analytics"):   # integrations.no_analytics: client opted out of GTM/GA4; leads are counted from the Web3Forms inbox
+                    W.append("No analytics by choice (integrations.no_analytics): count leads from the Web3Forms emails / dashboard.")
+                else:
+                    B.append("Web3Forms mode has no CRM tracking script, so integrations.gtm_id (GA4 + lead conversions) is required to measure leads. (Set integrations.no_analytics: True if the client opts out.)")
         if mode == "native":
             W.append("Native form mode: send one real test submission after launch and confirm it appears in GHL > Contacts and fires the owner-notification workflow.")
         if mode == "ghl_embed":

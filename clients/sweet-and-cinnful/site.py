@@ -268,11 +268,11 @@ CONFIG = {
   "favicon_svg": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#0e5966"/><text x="16" y="22" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="17" fill="#ffc9de">S&amp;</text></svg>',
   "integrations": {
     "form_mode": "web3forms",                # no GHL: the order form posts to Web3Forms, which emails each request
-    "web3forms_access_key": "",              # create at web3forms.com with cinnamonrlarkin@gmail.com (launch blocker)
+    "web3forms_access_key": "1ac41c96-b674-41a5-a6e0-f6f73dae78c6",   # created with cinnamonrlarkin@gmail.com (public by design)
     "web3forms_subject": "New order request from sweetandcinnful.com",
     "web3forms_from_name": "Sweet & Cinnful website",
     "thank_you_slug": "thank-you",
-    "gtm_id": "",                            # GTM-XXXXXXX: GA4 + generate_lead tracking (launch blocker in web3forms mode)
+    "gtm_id": "", "no_analytics": True,      # client decision (Nov 21, 2026): no Tag Manager / GA4
     "google_reviews_url": ""},
   "thank_you": {"title": "Thank you | Sweet & Cinnful", "h1": "Thanks! Your order request is in.",
     "lead": "Cinnamon reviews every request herself and will email you to confirm availability, price and details.",
