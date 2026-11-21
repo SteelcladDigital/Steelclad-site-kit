@@ -333,6 +333,9 @@ class Site:
         if ig.get("chat_snippet") and not self.preview: chat = "\n" + ig["chat_snippet"].strip()   # any other chat widget (e.g. tawk.to), live build only
         snip = ig.get("ghl_tracking_snippet", "").strip()
         track = ("\n" + snip) if snip and not self.preview else "<!-- GHL external tracking: set integrations.ghl_tracking_snippet -->"
+        if ig.get("form_mode") == "web3forms":   # GHL-free site: no GHL placeholders in the HTML
+            if not ig.get("ghl_chat_widget_id") and not ig.get("chat_snippet"): chat = ""
+            if not snip: track = ""
         fonts = sorted({self.c["theme"]["fonts"]["display"], self.c["theme"]["fonts"]["body"]})
         pre = "".join(f'<link rel="preload" href="{self.asset(cur,"fonts/"+f+".woff2")}" as="font" type="font/woff2" crossorigin>' for f in fonts)
         og = og_override or self.c.get("og_image", "og-image.jpg")
@@ -739,13 +742,23 @@ class Site:
                         + "".join(f'<option value="">{esc(C.get("select_placeholder", "Choose one"))}</option>' if o == "" else f"<option>{esc(o)}</option>" for o in opts) + "</select></div>")
         if self.areas and C.get("city_select", True):
             selects = (f'<div class="full"><label for="{fid}-city">{esc(C.get("city_label", "City"))}</label><select id="{fid}-city" name="city">'
+                       + (f'<option value="">{esc(C["city_placeholder"])}</option>' if C.get("city_placeholder") else "")   # contact.city_placeholder / city_first: e.g. home town first
+                       + "".join(f"<option>{esc(x)}</option>" for x in C.get("city_first", []))
                        + "".join(f"<option>{esc(a['city'])}</option>" for a in self.areas["pages"]) + "<option>Other / not sure</option></select></div>" + selects)
         if self.tiers and C.get("plan_select", True):
-            selects += (f'<div class="full"><label for="{fid}-plan">Interested in</label><select id="{fid}-plan" class="plan-select" name="plan"><option value="">Not sure yet</option>'
-                        + "".join(f'<option value="{t["slug"]}">{esc(t["name"])}</option>' for t in self.tiers["items"]) + "</select></div>")
-        # extra_inputs: (name, label, autocomplete, required, full_width)
-        extra_inputs = "".join(f'<div{" class=full" if full else ""}><label for="{fid}-{n}">{esc(lbl)}</label><input id="{fid}-{n}" name="{n}" autocomplete="{ac}"{" required" if req else ""}></div>'
-                               for n, lbl, ac, req, full in C.get("extra_inputs", []))
+            # contact.plan_label / plan_placeholder / plan_extra_options: relabel the tier select and add non-tier choices
+            selects += (f'<div class="full"><label for="{fid}-plan">{esc(C.get("plan_label", "Interested in"))}</label><select id="{fid}-plan" class="plan-select" name="plan"><option value="">{esc(C.get("plan_placeholder", "Not sure yet"))}</option>'
+                        + "".join(f'<option value="{t["slug"]}">{esc(t["name"])}</option>' for t in self.tiers["items"])
+                        + "".join(f"<option>{esc(o)}</option>" for o in C.get("plan_extra_options", [])) + "</select></div>")
+        # extra_inputs: (name, label, autocomplete, required, full_width[, input_type[, placeholder]]), e.g. type "date", "url", "number"
+        def _inp(n, lbl, ac, req, full, typ="text", ph=""):
+            return (f'<div{" class=full" if full else ""}><label for="{fid}-{n}">{esc(lbl)}</label><input id="{fid}-{n}" name="{n}" type="{typ}" autocomplete="{ac}"'
+                    + (f' placeholder="{esc(ph)}"' if ph else "") + (" required" if req else "") + "></div>")
+        extra_inputs = "".join(_inp(*x) for x in C.get("extra_inputs", []))
+        # extra_textareas: (name, label, placeholder) shown after the main message box
+        extra_tas = "".join(f'<div class="full"><label for="{fid}-{n}">{esc(lbl)}</label><textarea id="{fid}-{n}" name="{n}" rows="3"' + (f' placeholder="{esc(ph)}"' if ph else "") + "></textarea></div>"
+                            for n, lbl, ph in C.get("extra_textareas", []))
+        after_inputs = "".join(_inp(*x) for x in C.get("after_inputs", []))   # inputs placed after the message, e.g. "How did you hear about us?"
         consent = (f'<div class="full consent"><label><input type="checkbox" name="sms_consent" value="yes"> <span>{esc(C["consent_text"])}</span></label></div>'
                    if C.get("consent_text") else "")
         ok = (f'<div class="form-msg" role="status">{esc(C.get("success", "Thanks! We got your request and will reach out shortly."))} '
@@ -780,7 +793,7 @@ class Site:
                 f'<div class="form-grid"><div><label for="{fid}-name">Name</label><input id="{fid}-name" name="name" autocomplete="name" required></div>\n'
                 f'<div><label for="{fid}-phone">{esc(C.get("phone_label", "Mobile phone"))}</label><input id="{fid}-phone" name="phone" type="tel" autocomplete="tel" required></div>\n'
                 f'<div class="full"><label for="{fid}-email">Email</label><input id="{fid}-email" name="email" type="email" autocomplete="email"{email_req}></div>{extra_inputs}{selects}\n'
-                f'<div class="full"><label for="{fid}-msg">{esc(C["message_label"])}</label><textarea id="{fid}-msg" name="message" rows="4"></textarea></div>{consent}</div>\n'
+                f'<div class="full"><label for="{fid}-msg">{esc(C["message_label"])}</label><textarea id="{fid}-msg" name="message" rows="4"></textarea></div>{extra_tas}{after_inputs}{consent}</div>\n'
                 f'<button class="btn btn-gold" type="submit" style="width:100%;margin-top:16px">{esc(C["submit"])}</button><p class="form-note">{esc(C["note"])}</p>\n'
                 f'{msg}</form>')
 

@@ -84,7 +84,7 @@ SERVICES = [
             ("How much does a custom cake cost in Lexington, SC?", "Custom cakes from Sweet & Cinnful start at $55. The size, number of servings and decoration set the final price, which Cinnamon confirms after she reviews your request."),
             ("How far ahead should I order a birthday cake?", "As early as you can. Every cake is made by one baker, so popular dates fill up. Send your request with the date and Cinnamon will confirm whether it's available."),
             ("Can you make a gluten-free cake?", "Gluten-free requests are welcome. Choose your dietary needs on the order form and add any allergy notes, and Cinnamon will tell you what she can do for your order."),
-            ("Can I send a picture of the cake I want?", "Yes. The order form has an upload for inspiration photos. Send as many as you like, along with your theme and colors."),
+            ("Can I send a picture of the cake I want?", "Yes. Paste a link to your inspiration (Pinterest, Instagram or anywhere online) on the order form, and attach photos when you reply to Cinnamon's email. Include your theme and colors too."),
         ],
     },
     {
@@ -232,7 +232,7 @@ GUIDE_BODY = """<h2>Keeping buttercream happy in South Carolina heat</h2>
 <li>Your pickup or event date, and whether you need pickup or delivery</li>
 <li>What you'd like (cake, cupcakes, cookies or a mix) and roughly how many guests</li>
 <li>Your occasion, theme and color palette</li>
-<li>Inspiration photos (the form takes uploads)</li>
+<li>Inspiration: a Pinterest or Instagram link, or photos you can attach when Cinnamon emails you back</li>
 <li>Flavor preference, dietary needs and every allergy</li>
 <li>A budget, if you have one in mind</li>
 </ul>
@@ -267,10 +267,16 @@ CONFIG = {
   "logo": {"type": "image", "file": "logo.svg", "schema_file": "logo.png", "width": 152, "height": 72},   # client's Canva logo: vector lettering from her business card SVG (photo + decorations removed)
   "favicon_svg": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#0e5966"/><text x="16" y="22" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="17" fill="#ffc9de">S&amp;</text></svg>',
   "integrations": {
-    "form_mode": "ghl_embed",
-    "ghl_form_id": "iOW0QPcEwExTKLMCqQi5",   # existing "Custom Bakery Order Form" in the client's GHL sub-account
-    "ghl_tracking_snippet": "",              # GHL > Settings > External Tracking > Copy Script (launch blocker)
-    "ghl_chat_widget_id": "", "gtm_id": "", "google_reviews_url": ""},
+    "form_mode": "web3forms",                # no GHL: the order form posts to Web3Forms, which emails each request
+    "web3forms_access_key": "",              # create at web3forms.com with cinnamonrlarkin@gmail.com (launch blocker)
+    "web3forms_subject": "New order request from sweetandcinnful.com",
+    "web3forms_from_name": "Sweet & Cinnful website",
+    "thank_you_slug": "thank-you",
+    "gtm_id": "",                            # GTM-XXXXXXX: GA4 + generate_lead tracking (launch blocker in web3forms mode)
+    "google_reviews_url": ""},
+  "thank_you": {"title": "Thank you | Sweet & Cinnful", "h1": "Thanks! Your order request is in.",
+    "lead": "Cinnamon reviews every request herself and will email you to confirm availability, price and details.",
+    "text": "Have inspiration photos? Attach them when you reply to her email. Questions in the meantime?"},
   "launched": False,
   "labels": {
     "cta": "Place an Order", "cta_short": "Order", "cta_long": "Start Your Custom Order",
@@ -382,7 +388,7 @@ CONFIG = {
     "meta": "Photos of recent custom birthday cakes, cupcakes and cookies from Sweet & Cinnful, a home bakery in Lexington, SC.",
     "h1": "Favorite Projects", "lead": "A few favorite cakes, cupcakes and cookies from recent orders. See something you love? Send it as inspiration with your order.",
     "photos": ALL_PHOTOS,
-    "cta_title": "Want something like this?", "cta_text": "Upload your inspiration photos on the order form and Cinnamon will design around them."},
+    "cta_title": "Want something like this?", "cta_text": "Mention it on the order form or send the photo when Cinnamon replies, and she'll design around it."},
   "blog": {"enabled": False},
   "about": {"title": "Meet Cinnamon Larkin | Sweet & Cinnful Bakery",
     "meta": "Meet Cinnamon Larkin, the founder and Chief Baking Officer of Sweet & Cinnful, a one-baker home bakery in Lexington, SC.",
@@ -397,8 +403,29 @@ CONFIG = {
   "contact": {"slug": "place-custom-order", "title": "Place a Custom Order | Lexington, SC Bakery",
     "meta": "Order a custom cake, cupcakes or cookies from Sweet & Cinnful in Lexington, SC. Share your date, theme and inspiration photos online.",
     "h1": "Place a Custom Order",
-    "lead": "Tell Cinnamon about your date, your treats and your theme. Upload inspiration photos if you have them. She'll review your request and reply to confirm availability, pricing and next steps.",
-    "ghl_height": 1950, "page_type": "ContactPage",
+    "lead": "Tell Cinnamon about your date, your treats and your theme. Add an inspiration link if you have one. She'll review your request and reply to confirm availability, pricing and next steps.",
+    "page_type": "ContactPage", "form_name": "Order request",
+    "email_required": True, "phone_label": "Mobile phone",
+    "plan_label": "What are you ordering?", "plan_placeholder": "Choose one (or a mix, tell her below)",
+    "plan_extra_options": ["Cake pops", "Brownies", "Cookie cake", "Bundt cake", "Cheesecake or mini cheesecakes", "A mix of treats"],
+    "city_label": "Your town", "city_placeholder": "Choose your town", "city_first": ["Lexington"],
+    "extra_inputs": [("event_date", "Pickup / event date", "off", True, False, "date"),
+                     ("occasion", "Occasion", "off", False, False, "text", "Birthday, shower, holiday\u2026"),
+                     ("servings", "Quantity / servings", "off", False, False, "text", "e.g. 2 dozen, or about 25 guests"),
+                     ("budget", "Estimated budget", "off", False, False, "text", "Optional"),
+                     ("flavor", "Flavor preference", "off", False, False),
+                     ("theme", "Theme / color palette", "off", False, False),
+                     ("inspiration_link", "Inspiration link", "url", False, True, "url", "Pinterest, Instagram or any photo link (optional)")],
+    "selects": [("Pickup or delivery?", ["", "Pickup in Lexington", "Delivery (Cinnamon will confirm)"]),
+                ("Dietary needs", ["None", "Gluten-free", "Dairy-free", "Nut-free", "Other (explain below)"])],
+    "select_names": {"Pickup or delivery?": "pickup_or_delivery", "Dietary needs": "dietary_needs"},
+    "required_selects": ["Pickup or delivery?"],
+    "message_label": "Design ideas & special requests",
+    "extra_textareas": [("allergies", "Allergies or ingredient notes", "List every allergy or ingredient restriction")],
+    "after_inputs": [("heard_about", "How did you hear about me?", "off", False, True)],
+    "submit": "Send My Order Request",
+    "note": "This is a request, not a confirmed order. Cinnamon will email you to confirm availability and price. Have photos? Attach them when you reply.",
+    "success": "Thank you! Your order request is in. Cinnamon will email you to confirm the details.",
     "next_steps": ["Cinnamon reviews your request", "She confirms availability, price and details", "Pickup in Lexington or delivery where available"],
     "faqs": [GENERAL_FAQS[2], GENERAL_FAQS[3], GENERAL_FAQS[4]]},
   "reviews": REVIEWS,
