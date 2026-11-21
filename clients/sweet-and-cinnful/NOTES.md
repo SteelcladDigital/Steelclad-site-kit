@@ -3,7 +3,7 @@
 **Client:** Cinnamon Larkin, Founder & CBO · Lexington, SC home bakery · cinnamonrlarkin@gmail.com
 **Old site:** GoHighLevel funnel at sweetandcinnful.com (4 pages, 3 legal pages)
 **Build:** `python3 build.py sweet-and-cinnful [--preview | --check]`
-**Status:** preview built, launch check READY. Not launched (`launched` is off). Off GHL: forms via Web3Forms.
+**Status:** LAUNCHED (client approved Nov 21, 2026). Off GHL: forms via Web3Forms.
 
 ## Confirm with Cinnamon before launch
 

@@ -277,7 +277,7 @@ CONFIG = {
   "thank_you": {"title": "Thank you | Sweet & Cinnful", "h1": "Thanks! Your order request is in.",
     "lead": "Cinnamon reviews every request herself and will email you to confirm availability, price and details.",
     "text": "Have inspiration photos? Attach them when you reply to her email. Questions in the meantime?"},
-  "launched": False,
+  "launched": True,                         # client approved Nov 21, 2026
   "labels": {
     "cta": "Place an Order", "cta_short": "Order", "cta_long": "Start Your Custom Order",
     "phone_prefix": "Email", "reach_verb": "Email",
