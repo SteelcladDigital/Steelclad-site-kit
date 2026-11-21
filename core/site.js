@@ -27,7 +27,7 @@
     });
   }
 
-  // demo form (no GHL connection yet): never pretends to send
+  //@@GHL-LINE demo form (no GHL connection yet): never pretends to send
   document.querySelectorAll('form[data-demo]').forEach(function(f){
     f.addEventListener('submit',function(e){
       e.preventDefault();
@@ -35,6 +35,7 @@
     });
   });
 
+  //@@GHL-START
   // native form captured by the GoHighLevel External Tracking script.
   // The tracking script listens for the submit event; we wait a moment so it can send, then confirm.
   // Spam bots that fill the hidden "website" field are dropped. If the tracking script never loaded
@@ -56,6 +57,7 @@
     });
   });
 
+  //@@GHL-END
   // first-touch attribution: remember how the visitor first arrived (UTMs, click IDs, referrer, landing page)
   // so a lead that converts three pages later still carries its source. Storage can be blocked: never fatal.
   var KEY='sk_attr',attr={};

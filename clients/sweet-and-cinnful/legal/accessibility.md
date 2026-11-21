@@ -27,7 +27,7 @@ To support accessibility, Sweet & Cinnful:
 
 Despite our best efforts, some areas of the website may not yet be fully accessible. Known limitations may include:
 
-- Third-party embedded content (such as social media feeds or chat widgets) that is outside our direct control
+- Third-party embedded content (such as linked social media pages) that is outside our direct control
 - Older photos that may not yet have complete alt-text descriptions — we are updating these on an ongoing basis
 
 We are actively working to resolve these issues and welcome feedback from users who encounter any barriers.

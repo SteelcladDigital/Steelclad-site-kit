@@ -920,6 +920,14 @@ class Site:
             open(os.path.join(d, "index.html"), "w").write(h)
         A = os.path.join(self.out, "assets"); os.makedirs(os.path.join(A, "fonts"))
         for f in ("site.css", "site.js"): shutil.copy(os.path.join(ROOT, "core", f), A)
+        # site.js carries GHL-only code between //@@GHL markers: keep it (markers removed) for GHL sites, drop it for GHL-free (web3forms) sites
+        js = open(os.path.join(A, "site.js"), encoding="utf-8").read()
+        if self.c["integrations"].get("form_mode") == "web3forms":
+            js = re.sub(r"  //@@GHL-START\n.*?  //@@GHL-END\n", "", js, flags=re.S)
+            js = js.replace("  //@@GHL-LINE demo form (no GHL connection yet): never pretends to send", "  // demo form (no form connection yet): never pretends to send")
+        else:
+            js = js.replace("  //@@GHL-START\n", "").replace("  //@@GHL-END\n", "").replace("  //@@GHL-LINE demo form", "  // demo form")
+        open(os.path.join(A, "site.js"), "w", encoding="utf-8").write(js)
         for f in {self.c["theme"]["fonts"]["display"], self.c["theme"]["fonts"]["body"]}: shutil.copy(os.path.join(ROOT, "core", "fonts", f + ".woff2"), os.path.join(A, "fonts"))
         open(os.path.join(A, "theme.css"), "w").write(self.theme_css())
         if self.c["logo"]["type"] == "svg":

@@ -29,7 +29,7 @@
 - **Domain:** registered at Namecheap, DNS on Namecheap (`dns1/dns2.registrar-servers.com`). To launch: add sweetandcinnful.com to Cloudflare (free plan), switch the Namecheap nameservers to Cloudflare's two, create the Pages project, then add the custom domain (root + www).
 - **Search Console** is still recommended (free, no tracking code; verify by DNS TXT in Cloudflare, submit `sitemap.xml`).
 - **GHL:** follow `claude/ghl-sub-account-offboarding.md` after launch (domain disconnect, check for a GHL phone number, export contacts/form submissions, then delete the sub-account).
-- **Legal pages:** the privacy policy and terms still describe an SMS program from the GHL template. With no GHL texting, consider trimming the SMS sections (client to approve).
+- **Legal pages (trimmed Nov 21, 2026, client approved):** removed the GHL-template SMS/texting sections (privacy notice, section 3, opt-out, carrier text, SMS terms), the account/password section (no logins on this site) and appointment wording. Cookies section now states no analytics/advertising cookies. "Last updated: November 21, 2026" added.
 
 ## Kit changes made for this client (generic, all clients benefit)
 

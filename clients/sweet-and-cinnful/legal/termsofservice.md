@@ -1,17 +1,4 @@
-**Sweet & Cinnful** · Effective Date: January 1, 2026
-
-## SMS messaging terms & compliance
-
-1. **Program description:** This messaging program sends order and appointment confirmation and reminder messages to customers who have placed an order or request with Sweet & Cinnful through our website at sweetandcinnful.com, or via our order forms, and have explicitly opted in to receive SMS notifications. Opt-in is collected via web forms with a dedicated checkbox for SMS consent. Messages include scheduling confirmations, reminders, rescheduling updates, and customer support communications.
-2. **Cancellation instructions:** You can cancel the SMS service at any time. Simply text "STOP" to the same number that sent you messages. Upon sending "STOP," we will confirm your unsubscribe status via SMS. Following this confirmation, you will no longer receive SMS messages from us. To rejoin, sign up as you did initially, and we will resume sending SMS messages to you.
-3. **Support information:** If you experience issues with the messaging program, reply with the keyword "HELP" for more assistance, or reach out directly to cinnamonrlarkin@gmail.com.
-4. **Carrier liability:** Carriers are not liable for delayed or undelivered messages.
-5. **Message & data rates:** Message and data rates may apply for messages sent to you from us and to us from you. Message frequency varies based on your service usage and order schedule. For questions about your text plan or data plan, contact your wireless provider.
-6. **Supported carriers:** Our SMS program works with all major U.S. wireless carriers, including AT&T, T-Mobile, Verizon, Sprint, and most regional carriers.
-7. **Age restriction:** You must be 18 years or older to participate in our SMS program.
-8. **Privacy policy:** For privacy-related inquiries, please refer to our [Privacy Policy](/privacy-page/).
-
-We comply with all applicable laws and regulations, including the Telephone Consumer Protection Act (TCPA) and CTIA guidelines, regarding the use of SMS communications.
+**Sweet & Cinnful** · Effective Date: January 1, 2026 · Last updated: November 21, 2026
 
 ## General terms
 
@@ -48,12 +35,6 @@ You agree at all times to indemnify and hold harmless Sweet & Cinnful, its affil
 Certain sections of the Site may allow you to purchase products and services from third-party vendors. We are not responsible for the quality, accuracy, timeliness, reliability, or any other aspect of these products and services. If you make a purchase from a third party linked through the Site, the information obtained during your visit, including payment information, may be collected by both the merchant and us.
 
 Your participation in any dealings with third-party vendors is solely between you and the third party. Sweet & Cinnful shall not be responsible for any loss or damage incurred as a result of such dealings.
-
-## Registration & passwords
-
-To access certain features of the Site, you may be required to register and create an account. You agree to provide accurate, current, and complete information during the registration process. You are responsible for maintaining the confidentiality of your login credentials and for all activities conducted under your account.
-
-If you suspect unauthorized use of your account, notify us immediately at cinnamonrlarkin@gmail.com. We are not liable for any loss or damage arising from your failure to comply with this obligation.
 
 ## Termination
 
