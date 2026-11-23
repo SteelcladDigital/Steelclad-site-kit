@@ -54,10 +54,13 @@ I = {
 def icon(name, cls=""):
     return f'<svg class="{cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{I.get(name, I["check"])}</svg>'
 
-FONT_FILES = {f[:-6] for f in os.listdir(os.path.join(ROOT, "core", "fonts"))}
+FONT_FILES = {f[:-6] for f in os.listdir(os.path.join(ROOT, "core", "fonts")) if not f.endswith("-italic.woff2")}   # <font>-italic.woff2 = that font's italic file
 FONT_FAMILY = {"oswald":"Oswald","inter":"Inter","fraunces":"Fraunces","playfair-display":"Playfair Display","outfit":"Outfit",
   "space-grotesk":"Space Grotesk","dm-sans":"DM Sans","archivo":"Archivo","nunito-sans":"Nunito Sans","manrope":"Manrope",
-  "bricolage-grotesque":"Bricolage Grotesque","source-serif-4":"Source Serif 4"}
+  "bricolage-grotesque":"Bricolage Grotesque","source-serif-4":"Source Serif 4","instrument-serif":"Instrument Serif","work-sans":"Work Sans"}
+# single-weight fonts: declare only that weight so bold headings get the browser's synthetic bold (as page builders like GHL render them)
+FONT_WEIGHTS = {"instrument-serif": "400"}
+def font_has_italic(f): return os.path.exists(os.path.join(ROOT, "core", "fonts", f + "-italic.woff2"))
 
 TEXTURES = {
  "ripples": "M0 60c40-20 80 20 120 0s80-20 120 0M0 140c40-20 80 20 120 0s80-20 120 0M0 220c40-20 80 20 120 0s80-20 120 0",
@@ -145,6 +148,7 @@ class Site:
         self.rh = f'tel:{self.b["tel"]}' if self.has_phone else f'mailto:{self.b.get("email", "")}'
         self.rt = self.b["phone"] if self.has_phone else self.b.get("email", "")
         self.reach_verb = self.L.get("reach_verb", "Call or text" if self.has_phone else "Email")
+        self.sx = self.c.get("layout") == "sections"   # layout "sections": pages built from CONFIG["pages"] (see sx_page)
         self.cta = self.c["contact"].get("slug", "contact"); self.noindex = set()   # every CTA button points at the primary lead page
         self.posts = []
         if self.blog:
@@ -189,7 +193,9 @@ class Site:
         sec = col.get("texture", col["secondary"]).replace("#", "%23")   # colors.texture: optional line color for the hero texture
         tex_css = f"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cpath d='{tex}' fill='none' stroke='{sec}' stroke-width='2'/%3E%3C/svg%3E\")" if tex else "none"
         dark = col.get("accent_text", "#121c35").replace("#", "%23")
-        faces = "".join(f'@font-face{{font-family:"{FONT_FAMILY[f]}";src:url(fonts/{f}.woff2) format("woff2");font-weight:100 900;font-display:swap}}\n' for f in sorted({disp, body}))
+        faces = "".join(f'@font-face{{font-family:"{FONT_FAMILY[f]}";src:url(fonts/{f}.woff2) format("woff2");font-weight:{FONT_WEIGHTS.get(f, "100 900")};font-display:swap}}\n'
+                        + (f'@font-face{{font-family:"{FONT_FAMILY[f]}";font-style:italic;src:url(fonts/{f}-italic.woff2) format("woff2");font-weight:{FONT_WEIGHTS.get(f, "100 900")};font-display:swap}}\n' if font_has_italic(f) else "")
+                        for f in sorted({disp, body}))
         return faces + f''':root{{
 --c-primary:{col["primary"]};--c-primary-deep:{col["primary_deep"]};--c-secondary:{col["secondary"]};--c-secondary-deep:{col["secondary_deep"]};
 --c-secondary-wash:{col["secondary_wash"]};--c-accent:{col["accent"]};--c-highlight:{col.get("highlight", col["accent"])};--c-accent-text:{col.get("accent_text","#121c35")};
@@ -232,6 +238,8 @@ class Site:
         served = [{"@type": "AdministrativeArea", "name": x} for x in b.get("counties", [])]
         if self.areas: served += [{"@type": "City", "name": f'{a["city"]}, {b["address"]["region"]}'} for a in self.areas["pages"]]
         if served: s["areaServed"] = served
+        if b.get("area_served"): s["areaServed"] = b["area_served"]   # business.area_served: explicit schema.org areaServed list
+        if b.get("schema_extra"): s.update(b["schema_extra"])          # business.schema_extra: any other properties (e.g. hasCredential)
         if self.tiers:
             s["hasOfferCatalog"] = {"@type": "OfferCatalog", "name": self.tiers["nav_label"], "itemListElement": [
                 self.tier_offer(t) for t in self.tiers["items"]]}
@@ -256,6 +264,7 @@ class Site:
 
     # ---------- chrome
     def header(self, cur):
+        if self.sx: return self.sx_header(cur)
         b, L = self.b, self.L
         def ca(p): return ' aria-current="page"' if cur == p else ""
         items = []
@@ -285,6 +294,7 @@ class Site:
 </div></header>'''
 
     def footer(self, cur):
+        if self.sx: return self.sx_footer(cur)
         b, L = self.b, self.L
         svc = "".join(f'<li><a href="{self.href(cur,self.svc_path(s))}">{esc(s["name"])}</a></li>' for s in self.c["services"])
         if self.tiers: svc = f'<li><a href="{self.href(cur,self.tiers["slug"])}">{esc(self.tiers["nav_label"])}</a></li>' + svc
@@ -318,9 +328,10 @@ class Site:
 </div><div class="legal"><span>© {date.today().year} {esc(b["legal_name"])}. All rights reserved.</span><span>{legal}</span></div></div></footer>
 <nav class="mbar" aria-label="Quick actions"><a href="{self.rh}">{icon("phone" if self.has_phone else "mail")}{"Call" if self.has_phone else "Email"}</a><a href="{L.get("mbar_second_href") or (self.href(cur, L["mbar_second_slug"]) if L.get("mbar_second_slug") else ("sms:" + b["tel"] if self.has_phone else self.href(cur, self.c["services_hub"]["slug"])))}">{icon(L.get("mbar_second_icon","chat"))}{esc(L.get("mbar_second_label","Text"))}</a><a class="go" href="{self.href(cur,self.cta)}">{icon("calendar")}{esc(L["cta_short"])}</a></nav>'''
 
-    def page(self, cur, title, meta, body, schema=None, trail=None, noindex=False, og_override=None, og_type="website"):
+    def page(self, cur, title, meta, body, schema=None, trail=None, noindex=False, og_override=None, og_type="website", exact_title=False):
         brand = self.b["name"]; base = title.split(" | ")[0]
-        title = f"{base} | {brand}" if len(base) + 3 + len(brand) <= 60 else base   # keep the full <title> within 60 chars
+        if not exact_title:   # exact_title: use the title as written (e.g. a custom "Keyword | Brand" for the home page)
+            title = f"{base} | {brand}" if len(base) + 3 + len(brand) <= 60 else base   # keep the full <title> within 60 chars
         if noindex: self.noindex.add(cur)
         ig = self.c.get("integrations", {})
         graph = [self.business_schema(), {"@type": "WebPage", "@id": self.canon(cur) + "#webpage", "url": self.canon(cur), "name": title, "description": meta,
@@ -349,9 +360,9 @@ class Site:
 <meta property="og:url" content="{self.canon(cur)}"><meta property="og:image" content="{self.D}/assets/{og}"><meta name="twitter:card" content="summary_large_image">
 <meta name="geo.region" content="US-{self.b["address"]["region"]}"><meta name="geo.placename" content="{esc(self.b["address"]["locality"])}">
 <meta name="theme-color" content="{self.c["theme"]["colors"]["primary"]}"><link rel="icon" href="{self.asset(cur,"favicon.svg")}" type="image/svg+xml">{f'<link rel="apple-touch-icon" href="{self.asset(cur,"apple-touch-icon.png")}">' if os.path.exists(os.path.join(self.client_assets, "apple-touch-icon.png")) else ""}
-{pre}<link rel="stylesheet" href="{self.asset(cur,"theme.css")}"><link rel="stylesheet" href="{self.asset(cur,"site.css")}">
+{pre}<link rel="stylesheet" href="{self.asset(cur,"theme.css")}"><link rel="stylesheet" href="{self.asset(cur,"sections.css" if self.sx else "site.css")}">
 <script type="application/ld+json">{ld}</script>{gtm}{rss}
-</head><body{' class="hdr-light"' if self.c["theme"].get("header") == "light" else ""}>
+</head><body{' class="hdr-light"' if self.c["theme"].get("header") == "light" else (' class="sx"' if self.sx else "")}>
 {self.header(cur)}
 <main id="main">
 {body}
@@ -789,12 +800,24 @@ class Site:
             note = "<!-- DEMO FORM: set integrations.form_mode (web3forms + web3forms_access_key, ghl_embed + ghl_form_id, or native + ghl_tracking_snippet) to go live -->"
             msg = '<div class="form-msg" role="status">Preview only: this form goes live once a form connection (Web3Forms or GoHighLevel) is set in the site config.</div>'
         email_req = " required" if C.get("email_required") else ""
+        PH = C.get("placeholders", {})   # contact.placeholders: {field name: placeholder}, e.g. {"email": "your@email.com"}
+        ph = lambda n: f' placeholder="{esc(PH[n])}"' if PH.get(n) else ""
+        if C.get("name_split"):   # contact.name_split: First / Last name boxes instead of one Name box (name_required: False makes them optional)
+            req = " required" if C.get("name_required", True) else ""
+            name_html = (f'<div><label for="{fid}-first">{esc(C.get("first_label", "First name"))}</label><input id="{fid}-first" name="first_name" autocomplete="given-name"{ph("first_name")}{req}></div>\n'
+                         f'<div><label for="{fid}-last">{esc(C.get("last_label", "Last name"))}</label><input id="{fid}-last" name="last_name" autocomplete="family-name"{ph("last_name")}{req}></div>\n')
+        else:
+            name_html = f'<div><label for="{fid}-name">{esc(C.get("name_label", "Name"))}</label><input id="{fid}-name" name="name" autocomplete="name"{ph("name")} required></div>\n'
+        msg_req = " required" if C.get("message_required") else ""
+        email_cls = "" if C.get("name_split") else ' class="full"'
+        btn_cls = C.get("submit_class", "btn btn-gold")
         return (f'<form class="form-card" {attrs}>{note}{hidden}\n{hp}'
-                f'<div class="form-grid"><div><label for="{fid}-name">Name</label><input id="{fid}-name" name="name" autocomplete="name" required></div>\n'
-                f'<div><label for="{fid}-phone">{esc(C.get("phone_label", "Mobile phone"))}</label><input id="{fid}-phone" name="phone" type="tel" autocomplete="tel" required></div>\n'
-                f'<div class="full"><label for="{fid}-email">Email</label><input id="{fid}-email" name="email" type="email" autocomplete="email"{email_req}></div>{extra_inputs}{selects}\n'
-                f'<div class="full"><label for="{fid}-msg">{esc(C["message_label"])}</label><textarea id="{fid}-msg" name="message" rows="4"></textarea></div>{extra_tas}{after_inputs}{consent}</div>\n'
-                f'<button class="btn btn-gold" type="submit" style="width:100%;margin-top:16px">{esc(C["submit"])}</button><p class="form-note">{esc(C["note"])}</p>\n'
+                f'<div class="form-grid">{name_html}'
+                f'<div><label for="{fid}-phone">{esc(C.get("phone_label", "Mobile phone"))}</label><input id="{fid}-phone" name="phone" type="tel" autocomplete="tel"{ph("phone")} required></div>\n'
+                f'<div{email_cls}><label for="{fid}-email">{esc(C.get("email_label", "Email"))}</label><input id="{fid}-email" name="email" type="email" autocomplete="email"{ph("email")}{email_req}></div>{extra_inputs}{selects}\n'
+                f'<div class="full"><label for="{fid}-msg">{esc(C["message_label"])}</label><textarea id="{fid}-msg" name="message" rows="4"{ph("message")}{msg_req}></textarea></div>{extra_tas}{after_inputs}{consent}</div>\n'
+                f'<button class="{btn_cls}" type="submit" style="width:100%;margin-top:16px">{esc(C["submit"])}</button>'
+                + (f'<p class="form-note">{esc(C["note"])}</p>' if C.get("note") else "") + '\n'
                 f'{msg}</form>')
 
     def contact_page(self, C=None):
@@ -854,6 +877,155 @@ class Site:
         if mode == "web3forms" and not ig.get("web3forms_access_key"): mode = "demo"
         return mode
 
+    # ============================================================== "sections" layout
+    # layout: "sections" builds every page from an ordered list of content sections in CONFIG["pages"], with
+    # config-driven nav and footer. For clients whose approved copy must be used word for word (e.g. a site
+    # designed and approved in GHL): the kit adds no body copy of its own, only markup, SEO tags and schema.
+    # Text fields accept a tiny markup: *gold italic*, **bold**, [label](/slug/) links; everything else is escaped.
+    def rich(self, cur, t):
+        t = esc(t, quote=False)
+        t = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", t)
+        t = re.sub(r"\*(.+?)\*", r"<em>\1</em>", t)
+        t = re.sub(r"\[([^\]]+)\]\((/[^)]*)\)", lambda m: f'<a href="{self.href(cur, m.group(2).split("#")[0].strip("/"))}{("#" + m.group(2).split("#")[1]) if "#" in m.group(2) else ""}">{m.group(1)}</a>', t)
+        return t
+    def sx_btn(self, cur, b, cls="sx-btn"):
+        label, target = b[0], b[1]
+        href = self.rh if target == "tel" else self.href(cur, target)
+        arrow = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        return f'<a class="{cls}" href="{href}">{esc(label)}{"" if target == "tel" or "sx-btn-sm" in cls else arrow}</a>'
+    SX_ICONS = {
+        "shield": '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>',
+        "briefcase": '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2M3 13h18"/>',
+        "star": '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
+        "world": '<circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8M3.6 15h16.8M12 3a15 15 0 010 18M12 3a15 15 0 000 18"/>',
+        "fingerprint": '<path d="M12 11v4a6 6 0 01-1 3.3M8.5 9.5A4 4 0 0116 11v1.5M6 13a7 7 0 01.6-4.6M17.8 15.5A11 11 0 0018 12a6 6 0 00-9.3-5"/>',
+        "scale": '<path d="M12 4v16M7 20h10M5 8h14M5 8l-3 6a3 3 0 006 0zM19 8l-3 6a3 3 0 006 0z"/>',
+        "shield-check": '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+        "lock": '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4M12 15v2"/>',
+    }
+    def sx_icon(self, name):
+        return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{self.SX_ICONS.get(name, I.get(name, I["check"]))}</svg>'
+
+    def sx_header(self, cur):
+        items = []
+        for n in self.c["nav"]:
+            kids = n.get("children", [])
+            here = ' aria-current="page"' if cur == n["slug"] else ""
+            if kids:
+                sub = "".join(f'<li><a href="{self.href(cur, k)}"{" aria-current=page" if cur == k else ""}>{esc(lbl)}</a></li>' for lbl, k in kids)
+                items.append(f'<li class="has-dd"><a class="nl" href="{self.href(cur, n["slug"])}"{here}>{esc(n["label"])}<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>'
+                             f'<ul class="dropdown"><li class="dd-all"><a href="{self.href(cur, n["slug"])}">{esc(n["label"])}</a></li>{sub}</ul></li>')
+            else:
+                items.append(f'<li><a class="nl" href="{self.href(cur, n["slug"])}"{here}>{esc(n["label"])}</a></li>')
+        call = self.L.get("header_call", f'Call {self.rt}')
+        return f'''<a class="skip" href="#main">Skip to content</a>
+<header class="sx-header"><div class="sx-wrap sx-bar">
+<a class="sx-logo" href="{self.href(cur, "")}" aria-label="{esc(self.b["name"])} home">{self.logo(cur)}</a>
+<nav class="nav" id="nav" aria-label="Main"><ul>{"".join(items)}</ul></nav>
+<div class="sx-hcta"><a class="sx-btn sx-call" href="{self.rh}">{esc(call)}</a>
+<button class="menu-toggle" aria-label="Open menu" aria-controls="nav" aria-expanded="false">{icon("menu")}</button></div>
+</div></header>'''
+
+    def sx_footer(self, cur):
+        F = self.c["footer"]
+        mbar = (f'<nav class="sx-mbar" aria-label="Quick actions"><a href="{self.rh}">{icon("phone")}{esc(self.L.get("mbar_call", "Call"))}</a>'
+                f'<a class="go" href="{self.href(cur, self.cta)}">{icon("mail")}{esc(self.L.get("mbar_contact", "Contact"))}</a></nav>') if self.L.get("mobile_bar", True) else ""
+        legal = " · ".join(f'<a href="{self.href(cur,s)}">{esc(n)}</a>' for s, n in self.c.get("legal_pages", []))
+        return f'''<footer class="sx-footer"><div class="sx-wrap"><div class="sx-fcols">
+<div><a class="sx-logo" href="{self.href(cur, "")}">{self.logo(cur, "footer")}</a>
+<p class="sx-fname">{esc(F["name"])}</p><p class="sx-fkicker">{esc(F["kicker"])}</p><p class="sx-fmuted">{self.rich(cur, F["text"])}</p>
+<p class="sx-fcontact">{esc(F["contact_label"])}<br><a href="{self.rh}">{esc(self.rt)}</a></p></div>
+<div><p class="sx-fmuted sx-small">{self.rich(cur, F["disclaimer"])}</p></div></div>
+<p class="sx-copy">{esc(F["copyright"])}{(" · " + legal) if legal else ""}</p></div></footer>{mbar}'''
+
+    def sx_head(self, h, lead=None, center=True, tag="h2", cur=""):
+        return (f'<div class="sx-head{" center" if center else ""}"><{tag}>{self.rich(cur, h)}</{tag}>'
+                + (f'<p class="sx-lead">{self.rich(cur, lead)}</p>' if lead else "") + "</div>")
+
+    def sx_section(self, cur, s):
+        t = s["type"]; sid = f' id="{s["id"]}"' if s.get("id") else ""
+        if t == "hero":
+            img = self.c["theme"].get("hero_image")
+            has_img = img and os.path.exists(os.path.join(self.client_assets, img))
+            style = f' style="--hero-img:url({self.asset(cur, img)})"' if has_img else ""
+            h1 = "<br>".join(self.rich(cur, x) for x in s["h1"]) if isinstance(s["h1"], list) else self.rich(cur, s["h1"])
+            btns = "".join(self.sx_btn(cur, b) for b in s.get("buttons", []))
+            plain = s.get("plain")   # plain: no photo or pattern behind the hero (text-led pages)
+            if plain: has_img, style = False, ""
+            paras = s.get("paras") or ([s["lead"]] if s.get("lead") else [])
+            return (f'<section class="sx-hero{" has-img" if has_img else ""}{" plain" if plain else ""}{" tall" if s.get("tall") else ""}"{style}{sid}><div class="sx-wrap sx-narrow">'
+                    f'<h1>{h1}</h1>' + "".join(f'<p class="sx-lead">{self.rich(cur, x)}</p>' for x in paras)
+                    + (f'<div class="sx-btns">{btns}</div>' if btns else "") + "</div></section>")
+        if t == "contact":
+            C = {**self.c["contact"], **s.get("form", {})}
+            return (f'<section class="sx-hero sx-contact"{sid}><div class="sx-wrap sx-narrow"><h1>{self.rich(cur, s["h1"])}</h1>'
+                    f'<p class="sx-lead">{self.rich(cur, s["lead"])}</p><div class="sx-btns">{self.sx_btn(cur, (s["call_label"], "tel"))}</div>'
+                    f'{self.lead_form(cur, C)}</div></section>')
+        if t == "text":
+            out = self.sx_head(s["h2"], center=s.get("center", True), cur=cur) if s.get("h2") else ""
+            out += "".join(f'<p class="sx-motto">{self.rich(cur, p)}</p>' if i == s.get("motto_index") else f'<p>{self.rich(cur, p)}</p>' for i, p in enumerate(s.get("paras", [])))
+            if s.get("list"): out += '<ul class="sx-list">' + "".join(f"<li>{self.rich(cur, x)}</li>" for x in s["list"]) + "</ul>"
+            if s.get("creds"):
+                out += '<ul class="sx-creds">' + "".join(f'<li>{self.sx_icon(i)}<span>{esc(a)}</span>' + (f'<small>{esc(b)}</small>' if b else "") + "</li>" for i, a, b in s["creds"]) + "</ul>"
+            return f'<section class="sx-text{" center" if s.get("center", True) else ""}"{sid}><div class="sx-wrap{" sx-narrow" if s.get("narrow") else ""}">{out}</div></section>'
+        if t == "audience":
+            cards = "".join(f'<article class="sx-card"><span class="sx-ibox">{self.sx_icon(c["icon"])}</span><h3>{self.rich(cur, c["h3"])}</h3><p>{self.rich(cur, c["p"])}</p>'
+                            f'{self.sx_btn(cur, c["link"], "sx-btn sx-btn-sm")}</article>' for c in s["cards"])
+            D = s.get("disciplines")
+            disc = (f'<p class="sx-motto center">{self.rich(cur, D["lead"])}</p><ul class="sx-tiles">'
+                    + "".join(f'<li><a href="{self.href(cur, k)}">{esc(lbl)}</a></li>' for lbl, k in D["items"]) + "</ul>"
+                    + f'<div class="sx-btns center">{self.sx_btn(cur, D["button"])}</div>') if D else ""
+            return f'<section class="sx-audience"{sid}><div class="sx-wrap">{self.sx_head(s["h2"], s.get("lead"), cur=cur)}<div class="sx-cards4">{cards}</div>{disc}</div></section>'
+        if t == "svc_grid":
+            cards = ""
+            for c in s["items"]:
+                bl = "".join(f"<li>{self.rich(cur, x)}</li>" for x in c.get("bullets", []))
+                cards += (f'<article class="sx-svc"><h3><a href="{self.href(cur, c["link"][1])}">{esc(c["h3"])}</a></h3><p>{self.rich(cur, c["p"])}</p>'
+                          + (f'<ul class="sx-bul">{bl}</ul>' if bl else "")
+                          + f'<a class="sx-more" href="{self.href(cur, c["link"][1])}" aria-label="{esc(c["link"][0])}: {esc(c["h3"])}">{esc(c["link"][0])}</a></article>')
+            return f'<section class="sx-svcs"{sid}><div class="sx-wrap">{self.sx_head(s["h2"], s.get("lead"), cur=cur)}<div class="sx-grid3">{cards}</div></div></section>'
+        if t in ("items", "steps"):
+            rows = "".join(f'<div class="sx-item"><h3>{self.rich(cur, a)}</h3><p>{self.rich(cur, b)}</p></div>' for a, b in s["items"])
+            return f'<section class="sx-{t}"{sid}><div class="sx-wrap">{self.sx_head(s["h2"], cur=cur)}<div class="sx-{t}-list">{rows}</div></div></section>'
+        if t == "bullets":
+            rows = "".join(f'<li>{self.rich(cur, x)}</li>' for x in s["items"])
+            return f'<section class="sx-bullets"{sid}><div class="sx-wrap">{self.sx_head(s["h2"], s.get("lead"), cur=cur)}<ul class="sx-checks">{rows}</ul></div></section>'
+        if t == "faq":
+            rows = "".join(f'<details><summary>{esc(q)}</summary><p>{self.rich(cur, a)}</p></details>' for q, a in s["items"])
+            return f'<section class="sx-faq"{sid}><div class="sx-wrap sx-narrow">{self.sx_head(s["h2"], cur=cur)}<div class="faq">{rows}</div></div></section>'
+        if t == "numbered":
+            rows = "".join(f'<li><strong>{esc(a)}</strong><span>{self.rich(cur, b)}</span></li>' for a, b in s["items"])
+            return f'<section class="sx-numbered"{sid}><div class="sx-wrap sx-narrow">{self.sx_head(s["h2"], cur=cur)}<ol>{rows}</ol></div></section>'
+        if t == "split_cta":
+            k = s["card"]
+            return (f'<section class="sx-split"{sid}><div class="sx-wrap sx-split-grid"><div>{self.sx_head(s["h2"], s.get("lead"), center=False, cur=cur)}</div>'
+                    f'<aside class="sx-panel"><span class="sx-ibox">{self.sx_icon(k["icon"])}</span><p class="sx-panel-title">{esc(k["title"])}</p><p>{self.rich(cur, k["p"])}</p>'
+                    f'<div class="sx-btns center">{self.sx_btn(cur, k["button"])}</div></aside></div></section>')
+        if t == "cta":
+            return (f'<section class="sx-cta"{sid}><div class="sx-wrap"><div class="sx-cta-box">{self.sx_head(s["h2"], s.get("lead"), cur=cur)}'
+                    f'<div class="sx-btns center">{self.sx_btn(cur, s["button"])}</div></div></div></section>')
+        raise SystemExit(f"Unknown section type '{t}' on page '{cur}'")
+
+    def sx_page(self, P):
+        cur = P["slug"]
+        trail = [("Home", "")] + [tuple(x) for x in P.get("trail", [])] if cur else None
+        body = "".join(self.sx_section(cur, s) for s in P["sections"])
+        sch = []
+        faqs = [q for s in P["sections"] if s["type"] == "faq" for q in s["items"]]
+        if faqs: sch.append(self.faq_schema([(q, re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", a)) for q, a in faqs]))
+        if P.get("service"):
+            sv = {"@type": "Service", "name": P["service"], "description": P["meta"], "url": self.canon(cur), "provider": {"@id": self.D + "/#business"}, "serviceType": P["service"]}
+            if self.b.get("area_served"): sv["areaServed"] = self.b["area_served"]
+            if P.get("service_offers"): sv["hasOfferCatalog"] = {"@type": "OfferCatalog", "name": P["service"], "itemListElement": [{"@type": "Offer", "itemOffered": {"@type": "Service", "name": n}} for n in P["service_offers"]]}
+            sch.append(sv)
+        if P.get("page_type"):
+            sch.append({"@type": P["page_type"], "@id": self.canon(cur) + "#page", "url": self.canon(cur), "name": P["title"], "about": {"@id": self.D + "/#business"}})
+        sch += P.get("schema", [])
+        self.pages[cur] = self.page(cur, P["title"], P["meta"], body, sch or None, trail, exact_title=P.get("exact_title", False))
+
+    def sx_404(self):
+        return self.page("404", "Page not found", "Page not found.", self.sx_section("404", {"type": "hero", "h1": "Page not found", "buttons": [(self.L.get("home_label", "Home"), "")]}), noindex=True)
+
     # ============================================================== launch check
     def launch_check(self):
         """Returns (blockers, warnings). Blockers = things that lose leads, break URLs or show placeholder text."""
@@ -902,10 +1074,14 @@ class Site:
 
     # ============================================================== write
     def build(self):
-        self.home(); self.services_hub(); self.about_page(); self.contact_page(); self.legal_pages(); self.thank_you_page()
-        for lp in self.c.get("lead_pages", []): self.contact_page(lp)
-        if self.c.get("gallery_page"): self.gallery_page()
-        for s in self.c["services"]: self.service_page(s)
+        if self.sx:
+            for P in self.c["pages"]: self.sx_page(P)
+            self.legal_pages(); self.thank_you_page()
+        else:
+            self.home(); self.services_hub(); self.about_page(); self.contact_page(); self.legal_pages(); self.thank_you_page()
+            for lp in self.c.get("lead_pages", []): self.contact_page(lp)
+            if self.c.get("gallery_page"): self.gallery_page()
+            for s in self.c["services"]: self.service_page(s)
         if self.tiers: self.tiers_page()
         if self.areas:
             self.areas_hub()
@@ -919,7 +1095,7 @@ class Site:
             d = os.path.join(self.out, path); os.makedirs(d, exist_ok=True)
             open(os.path.join(d, "index.html"), "w").write(h)
         A = os.path.join(self.out, "assets"); os.makedirs(os.path.join(A, "fonts"))
-        for f in ("site.css", "site.js"): shutil.copy(os.path.join(ROOT, "core", f), A)
+        for f in ("sections.css" if self.sx else "site.css", "site.js"): shutil.copy(os.path.join(ROOT, "core", f), A)
         # site.js carries GHL-only code between //@@GHL markers: keep it (markers removed) for GHL sites, drop it for GHL-free (web3forms) sites
         js = open(os.path.join(A, "site.js"), encoding="utf-8").read()
         if self.c["integrations"].get("form_mode") == "web3forms":
@@ -928,7 +1104,9 @@ class Site:
         else:
             js = js.replace("  //@@GHL-START\n", "").replace("  //@@GHL-END\n", "").replace("  //@@GHL-LINE demo form", "  // demo form")
         open(os.path.join(A, "site.js"), "w", encoding="utf-8").write(js)
-        for f in {self.c["theme"]["fonts"]["display"], self.c["theme"]["fonts"]["body"]}: shutil.copy(os.path.join(ROOT, "core", "fonts", f + ".woff2"), os.path.join(A, "fonts"))
+        for f in {self.c["theme"]["fonts"]["display"], self.c["theme"]["fonts"]["body"]}:
+            shutil.copy(os.path.join(ROOT, "core", "fonts", f + ".woff2"), os.path.join(A, "fonts"))
+            if font_has_italic(f): shutil.copy(os.path.join(ROOT, "core", "fonts", f + "-italic.woff2"), os.path.join(A, "fonts"))
         open(os.path.join(A, "theme.css"), "w").write(self.theme_css())
         if self.c["logo"]["type"] == "svg":
             open(os.path.join(A, "logo.svg"), "w").write(self.c["logo"]["svg"].replace("<svg ", f'<svg xmlns="http://www.w3.org/2000/svg" style="background:{self.c["theme"]["colors"]["primary"]}" ', 1))
@@ -965,12 +1143,14 @@ class Site:
         d.text((80, 160), self.b["name"], font=load(72), fill=(255, 255, 255))
         import textwrap
         y = 270
-        for line in textwrap.wrap(re.sub("<[^>]+>", "", self.c["home"]["title"]), 40)[:3]:
+        for line in textwrap.wrap(re.sub("<[^>]+>", "", (self.c.get("home") or self.c["pages"][0])["title"]), 40)[:3]:
             d.text((80, y), line, font=load(40, False), fill=hx(col["secondary_wash"])); y += 56
         d.text((80, 500), f'{self.rt}  ·  {self.b["domain"].split("//")[-1]}', font=load(34), fill=hx(col["accent"]))
         im.save(path, quality=88)
 
     def pages_404(self):
+        if self.sx:
+            open(os.path.join(self.out, "404.html"), "w").write(self.sx_404()); return
         h = self.page("404", "Page not found", "Page not found.", self.page_hero("404", self.trail(("Not found", "404")), "That page isn't here", "It may have moved. Try the menu above or give us a call."), noindex=True)
         open(os.path.join(self.out, "404.html"), "w").write(h)
 

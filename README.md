@@ -29,7 +29,7 @@ Everything about a site's look and structure lives in that client's `site.py`.
 
 **Theme**
 - `colors`: primary, primary_deep, secondary, secondary_deep, secondary_wash, accent, accent_text, surface (optional: ink, muted, texture = hero texture line color)
-- `fonts`: display and body. Choose from: oswald, inter, fraunces, playfair-display, outfit, space-grotesk, dm-sans, archivo, nunito-sans, manrope, bricolage-grotesque, source-serif-4
+- `fonts`: display and body. Choose from: oswald, inter, fraunces, playfair-display, outfit, space-grotesk, dm-sans, archivo, nunito-sans, manrope, bricolage-grotesque, source-serif-4, instrument-serif, work-sans
 - `radius`: sharp, soft or round
 - `heading_case`: none or uppercase
 - `divider`: wave, angle or none
@@ -64,6 +64,16 @@ Two reference clients:
 2. Rewrite `site.py`: business info, theme, copy, services, areas and FAQs. Keep URL slugs that already rank on the old site, and add old-to-new 301s in `redirects`.
 3. Put the logo and photos in `clients/new-client/assets/`.
 4. Run `python3 build.py new-client --preview` and review.
+
+## Client-approved copy: "sections" layout
+
+For sites whose page copy is final and must be used word for word (e.g. a site designed and approved in GHL), set `"layout": "sections"`. The kit then adds no body copy of its own. Each page in `CONFIG["pages"]` is an ordered list of sections, and the nav and footer come from `CONFIG["nav"]` and `CONFIG["footer"]`. Reference: `clients/veritas-pi/`.
+
+- Page keys: `slug`, `title`, `meta`, `exact_title`, `trail`, `page_type` (AboutPage, ContactPage…), `service` + `service_offers` (Service schema), `schema` (extra JSON-LD), `sections`.
+- Section types: `hero` (h1 string or list of lines, `lead`/`paras`, `buttons`, `plain`, `tall`), `text` (`h2`, `paras`, `motto_index`, `list`, `creds`), `audience` (icon cards + `disciplines` tiles), `svc_grid`, `items`, `steps`, `bullets`, `faq` (adds FAQPage schema), `numbered`, `split_cta`, `cta`, `contact` (lead form).
+- Text markup: `*gold italic*`, `**bold**`, `[label](/slug/#anchor)`. Everything else is escaped.
+- `theme.hero_image`: a photo in `assets/` behind the heroes (overlaid dark). Until the file exists, a CSS background is used.
+- Styles: `core/sections.css` (dark editorial look driven by the theme colors). Fonts added for it: `instrument-serif`, `work-sans` (italic files ship as `<font>-italic.woff2`).
 
 ## Blog
 
