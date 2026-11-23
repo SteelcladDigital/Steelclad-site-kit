@@ -193,7 +193,7 @@ Each client is its own Cloudflare Pages project, and every project builds from t
 How it behaves:
 - Every push to `main` rebuilds all client sites, which is harmless because each one only changes if its files did.
 - Pushes to any other branch create a private preview URL, which is handy for showing a client changes before they go live.
-- `_redirects` (old URLs → new) and `404.html` work on Cloudflare Pages as-is.
+- `_redirects` (old URLs → new) and `404.html` work on Cloudflare Pages as-is. Each `redirects` entry is `(from, to)` for a 301, or `(from, to, 302)` for a temporary redirect such as a billing-portal short link.
 
 **Social share image:** the build creates `og-image.jpg` automatically when Pillow is installed. Cloudflare's build environment doesn't have Pillow, so run one local build per client and commit the result to `clients/<client>/assets/og-image.jpg`. Better still, add a real 1200×630 photo there.
 
