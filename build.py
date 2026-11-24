@@ -958,7 +958,11 @@ class Site:
             plain = s.get("plain")   # plain: no photo or pattern behind the hero (text-led pages)
             if plain: has_img, style = False, ""
             paras = s.get("paras") or ([s["lead"]] if s.get("lead") else [])
-            mark = (f'<svg class="sx-hero-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=".35" aria-hidden="true">{self.SX_ICONS["shield"]}<path d="M8.6 8.2L12 16l3.4-7.8"/></svg>') if self.sxo.get("hero_mark") and s.get("tall") else ""
+            hm = self.sxo.get("hero_mark")   # sx_options.hero_mark: True = line-drawn shield, or an image file in assets/ (e.g. the client's logo mark)
+            if hm and s.get("tall") and isinstance(hm, str):
+                mark = f'<img class="sx-hero-mark is-img" src="{self.asset(cur, hm)}" alt="" aria-hidden="true" width="250" height="286">'
+            else:
+                mark = (f'<svg class="sx-hero-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=".35" aria-hidden="true">{self.SX_ICONS["shield"]}<path d="M8.6 8.2L12 16l3.4-7.8"/></svg>') if hm and s.get("tall") else ""
             return (f'<section class="sx-hero{" has-img" if has_img else ""}{" plain" if plain else ""}{" tall" if s.get("tall") else ""}"{style}{sid}>{mark}<div class="sx-wrap sx-narrow">'
                     f'<h1>{h1}</h1>' + "".join(f'<p class="sx-lead">{self.rich(cur, x)}</p>' for x in paras)
                     + (f'<div class="sx-btns">{btns}</div>' if btns else "") + "</div></section>")

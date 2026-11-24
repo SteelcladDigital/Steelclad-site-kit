@@ -18,5 +18,6 @@ CONFIG["theme"] = {
 CONFIG["logo"] = {**CONFIG["logo"], "file": "logo-light.png", "footer_file": "logo-dark.png"}   # light header, navy footer
 CONFIG["sx_options"] = {
     "utility_bar": "SLED License #4362. Licensed, Bonded & Insured.",   # repeats the existing footer line above the fold
-    "hero_mark": True, "subnav": True, "contact_split": True,
+    "hero_mark": "hero-shield.png",   # the client's shield (from 04_shield_v_icon) in the home hero
+    "subnav": True, "contact_split": True,
 }

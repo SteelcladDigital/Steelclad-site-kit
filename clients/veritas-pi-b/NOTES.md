@@ -8,7 +8,7 @@ Build: `python3 build.py veritas-pi-b` → `dist/veritas-pi-b`. Same URLs, same 
 - **Light, document-like ("a well-set case brief")** instead of A's dark, cinematic skyscraper look. White pages, navy bands for the hero, calls to action and footer, gold only for rules, icons and accent words. It reads professional without being sterile, and it avoids the dark/noir and luxury-gold PI clichés.
 - **Type:** Source Serif 4 headings with a real italic for the gold accent words; Inter body. Calmer and more legible than A's condensed display face, which suits "simple and direct".
 - **Left-aligned section heads with a short gold rule**, like headings in a report. Confident without decoration.
-- The brand mark (shield + V) appears as a fine outline in the home hero only. No stock imagery, so no hero photo is needed (A still needs the GHL photo).
+- The home hero shows his actual shield (from `04_shield_v_icon`, upscaled to `assets/hero-shield.png`) beside the headline. No stock imagery, so no hero photo is needed (A still needs the GHL photo).
 
 ## UX improvements over A (no copy changes)
 1. **Trust line above the fold:** a slim utility bar on every page reads "SLED License #4362. Licensed, Bonded & Insured." plus the phone. This **repeats** the existing footer line; it is not new copy, but flag it to Mark.
@@ -24,6 +24,6 @@ Form (Web3Forms, same fields, `generate_lead`), GTM-KF4BGX7C, schema, titles and
 
 ## Kit additions (generic)
 - `theme.sections_css`: choose a sections stylesheet (`sections.css` default, `sections-brief.css` new).
-- `sx_options`: `utility_bar` (text), `hero_mark`, `subnav` (service pages), `contact_split`.
+- `sx_options`: `utility_bar` (text), `hero_mark` (True for a line-drawn shield, or an image file), `subnav` (service pages), `contact_split`.
 - `source-serif-4` now ships an italic file. `site.js` adds the sub-nav scroll highlight (inert unless a sub-nav exists).
 - Option A and all other clients build the same as before (verified by diff; only site.js gained the sub-nav block).
