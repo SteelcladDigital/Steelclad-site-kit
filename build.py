@@ -149,6 +149,9 @@ class Site:
         self.rt = self.b["phone"] if self.has_phone else self.b.get("email", "")
         self.reach_verb = self.L.get("reach_verb", "Call or text" if self.has_phone else "Email")
         self.sx = self.c.get("layout") == "sections"   # layout "sections": pages built from CONFIG["pages"] (see sx_page)
+        # sections layout variants: theme.sections_css picks the stylesheet in core/; sx_options turns on markup extras
+        self.sx_css = self.c["theme"].get("sections_css", "sections.css")
+        self.sxo = self.c.get("sx_options", {})
         self.cta = self.c["contact"].get("slug", "contact"); self.noindex = set()   # every CTA button points at the primary lead page
         self.posts = []
         if self.blog:
@@ -360,7 +363,7 @@ class Site:
 <meta property="og:url" content="{self.canon(cur)}"><meta property="og:image" content="{self.D}/assets/{og}"><meta name="twitter:card" content="summary_large_image">
 <meta name="geo.region" content="US-{self.b["address"]["region"]}"><meta name="geo.placename" content="{esc(self.b["address"]["locality"])}">
 <meta name="theme-color" content="{self.c["theme"]["colors"]["primary"]}"><link rel="icon" href="{self.asset(cur,"favicon.svg")}" type="image/svg+xml">{f'<link rel="apple-touch-icon" href="{self.asset(cur,"apple-touch-icon.png")}">' if os.path.exists(os.path.join(self.client_assets, "apple-touch-icon.png")) else ""}
-{pre}<link rel="stylesheet" href="{self.asset(cur,"theme.css")}"><link rel="stylesheet" href="{self.asset(cur,"sections.css" if self.sx else "site.css")}">
+{pre}<link rel="stylesheet" href="{self.asset(cur,"theme.css")}"><link rel="stylesheet" href="{self.asset(cur,self.sx_css if self.sx else "site.css")}">
 <script type="application/ld+json">{ld}</script>{gtm}{rss}
 </head><body{' class="hdr-light"' if self.c["theme"].get("header") == "light" else (' class="sx"' if self.sx else "")}>
 {self.header(cur)}
@@ -918,8 +921,10 @@ class Site:
             else:
                 items.append(f'<li><a class="nl" href="{self.href(cur, n["slug"])}"{here}>{esc(n["label"])}</a></li>')
         call = self.L.get("header_call", f'Call {self.rt}')
+        util = self.sxo.get("utility_bar")   # sx_options.utility_bar: short trust line above the header, with the phone number
+        util = (f'<div class="sx-util"><div class="sx-wrap"><span>{esc(util)}</span><a href="{self.rh}">{icon("phone")}{esc(self.rt)}</a></div></div>') if util else ""
         return f'''<a class="skip" href="#main">Skip to content</a>
-<header class="sx-header"><div class="sx-wrap sx-bar">
+<header class="sx-header">{util}<div class="sx-wrap sx-bar">
 <a class="sx-logo" href="{self.href(cur, "")}" aria-label="{esc(self.b["name"])} home">{self.logo(cur)}</a>
 <nav class="nav" id="nav" aria-label="Main"><ul>{"".join(items)}</ul></nav>
 <div class="sx-hcta"><a class="sx-btn sx-call" href="{self.rh}">{esc(call)}</a>
@@ -953,7 +958,8 @@ class Site:
             plain = s.get("plain")   # plain: no photo or pattern behind the hero (text-led pages)
             if plain: has_img, style = False, ""
             paras = s.get("paras") or ([s["lead"]] if s.get("lead") else [])
-            return (f'<section class="sx-hero{" has-img" if has_img else ""}{" plain" if plain else ""}{" tall" if s.get("tall") else ""}"{style}{sid}><div class="sx-wrap sx-narrow">'
+            mark = (f'<svg class="sx-hero-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=".35" aria-hidden="true">{self.SX_ICONS["shield"]}<path d="M8.6 8.2L12 16l3.4-7.8"/></svg>') if self.sxo.get("hero_mark") and s.get("tall") else ""
+            return (f'<section class="sx-hero{" has-img" if has_img else ""}{" plain" if plain else ""}{" tall" if s.get("tall") else ""}"{style}{sid}>{mark}<div class="sx-wrap sx-narrow">'
                     f'<h1>{h1}</h1>' + "".join(f'<p class="sx-lead">{self.rich(cur, x)}</p>' for x in paras)
                     + (f'<div class="sx-btns">{btns}</div>' if btns else "") + "</div></section>")
         if t == "contact":
@@ -1006,10 +1012,31 @@ class Site:
                     f'<div class="sx-btns center">{self.sx_btn(cur, s["button"])}</div></div></div></section>')
         raise SystemExit(f"Unknown section type '{t}' on page '{cur}'")
 
+    def sx_plain(self, t): return re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", t).replace("*", "")
     def sx_page(self, P):
         cur = P["slug"]
         trail = [("Home", "")] + [tuple(x) for x in P.get("trail", [])] if cur else None
-        body = "".join(self.sx_section(cur, s) for s in P["sections"])
+        secs = [dict(s) for s in P["sections"]]
+        if self.sxo.get("subnav") and P.get("service"):
+            # sx_options.subnav: on service pages, a sticky row of links to the page's own sections (labels = the existing H2s)
+            links = []
+            for s in secs[1:]:
+                if s.get("h2") and s["type"] in ("items", "steps", "text", "bullets", "faq"):
+                    s.setdefault("id", re.sub(r"[^a-z0-9]+", "-", self.sx_plain(s["h2"]).lower()).strip("-"))
+                    links.append(f'<a href="#{s["id"]}">{esc(self.sx_plain(s["h2"]))}</a>')
+            sub = f'<nav class="sx-subnav" aria-label="On this page"><div class="sx-wrap">{"".join(links)}</div></nav>'
+            body = self.sx_section(cur, secs[0]) + sub + "".join(self.sx_section(cur, s) for s in secs[1:])
+        elif self.sxo.get("contact_split") and [s["type"] for s in secs[:2]] == ["contact", "numbered"]:
+            # sx_options.contact_split: form and "what happens next" side by side on the contact page
+            c, n = secs[0], secs[1]
+            C = {**self.c["contact"], **c.get("form", {})}
+            rows = "".join(f'<li><strong>{esc(a)}</strong><span>{self.rich(cur, b)}</span></li>' for a, b in n["items"])
+            body = (f'<section class="sx-contact-split"><div class="sx-wrap sx-cs-grid"><div class="sx-cs-main"><h1>{self.rich(cur, c["h1"])}</h1>'
+                    f'<p class="sx-lead">{self.rich(cur, c["lead"])}</p><div class="sx-btns">{self.sx_btn(cur, (c["call_label"], "tel"), "sx-btn sx-btn-ghost")}</div>'
+                    f'{self.lead_form(cur, C)}</div><aside class="sx-cs-side sx-numbered">{self.sx_head(n["h2"], center=False, cur=cur)}<ol>{rows}</ol></aside></div></section>'
+                    + "".join(self.sx_section(cur, s) for s in secs[2:]))
+        else:
+            body = "".join(self.sx_section(cur, s) for s in secs)
         sch = []
         faqs = [q for s in P["sections"] if s["type"] == "faq" for q in s["items"]]
         if faqs: sch.append(self.faq_schema([(q, re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", a)) for q, a in faqs]))
@@ -1095,7 +1122,7 @@ class Site:
             d = os.path.join(self.out, path); os.makedirs(d, exist_ok=True)
             open(os.path.join(d, "index.html"), "w").write(h)
         A = os.path.join(self.out, "assets"); os.makedirs(os.path.join(A, "fonts"))
-        for f in ("sections.css" if self.sx else "site.css", "site.js"): shutil.copy(os.path.join(ROOT, "core", f), A)
+        for f in (self.sx_css if self.sx else "site.css", "site.js"): shutil.copy(os.path.join(ROOT, "core", f), A)
         # site.js carries GHL-only code between //@@GHL markers: keep it (markers removed) for GHL sites, drop it for GHL-free (web3forms) sites
         js = open(os.path.join(A, "site.js"), encoding="utf-8").read()
         if self.c["integrations"].get("form_mode") == "web3forms":

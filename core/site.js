@@ -110,3 +110,12 @@
     for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===h){sel.selectedIndex=i}}
   });}
 })();
+// sections layout sub-nav: highlight the link for the section in view
+(function(){
+  var nav=document.querySelector('.sx-subnav');if(!nav||!('IntersectionObserver' in window))return;
+  var links=[].slice.call(nav.querySelectorAll('a'));
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;
+    links.forEach(function(a){var on=a.getAttribute('href')==='#'+e.target.id;a.classList.toggle('on',on);
+      if(on&&a.scrollIntoView&&nav.scrollWidth>nav.clientWidth){nav.querySelector('.sx-wrap').scrollLeft=a.offsetLeft-20}})})},{rootMargin:'-45% 0px -50% 0px'});
+  links.forEach(function(a){var t=document.getElementById(a.getAttribute('href').slice(1));if(t)io.observe(t)});
+})();

@@ -73,7 +73,7 @@ For sites whose page copy is final and must be used word for word (e.g. a site d
 - Section types: `hero` (h1 string or list of lines, `lead`/`paras`, `buttons`, `plain`, `tall`), `text` (`h2`, `paras`, `motto_index`, `list`, `creds`), `audience` (icon cards + `disciplines` tiles), `svc_grid`, `items`, `steps`, `bullets`, `faq` (adds FAQPage schema), `numbered`, `split_cta`, `cta`, `contact` (lead form).
 - Text markup: `*gold italic*`, `**bold**`, `[label](/slug/#anchor)`. Everything else is escaped.
 - `theme.hero_image`: a photo in `assets/` behind the heroes (overlaid dark). Until the file exists, a CSS background is used.
-- Styles: `core/sections.css` (dark editorial look driven by the theme colors). Fonts added for it: `instrument-serif`, `work-sans` (italic files ship as `<font>-italic.woff2`).
+- Styles: `core/sections.css` (dark editorial look driven by the theme colors), or set `theme.sections_css: "sections-brief.css"` for a light, document-like look. `sx_options` adds markup extras: `utility_bar` (text), `hero_mark`, `subnav` (sticky in-page links on service pages), `contact_split`. Reference: `clients/veritas-pi-b/`. Fonts added for it: `instrument-serif`, `work-sans` (italic files ship as `<font>-italic.woff2`).
 
 ## Blog
 
