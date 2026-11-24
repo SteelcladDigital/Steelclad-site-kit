@@ -98,3 +98,8 @@ No redirects, because nothing was live or indexed.
   - `placeholders`, `message_required`, `submit_class`; `note` is now optional
 - `business.area_served`, `business.schema_extra`, and `exact_title` on pages.
 - All reference clients still build unchanged.
+
+## Cloudflare previews (Nov 24)
+- Both options get their own Pages project, built from branch `veritas-pi-group`. Option A: `veritas-pi` → `dist/veritas-pi`. Option B: `veritas-pi-b` → `dist/veritas-pi-b`.
+- `preview_noindex: True`: while `launched` is off, each `pages.dev` preview sends `X-Robots-Tag: noindex` and a disallow-all robots.txt. This clears itself when `launched: True` is set.
+- At launch: merge `veritas-pi-group` into main, switch the chosen project's production branch to `main`, delete the other project and client folder, then add the custom domain.

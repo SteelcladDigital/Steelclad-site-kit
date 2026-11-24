@@ -40,6 +40,7 @@ MEMBER_OF = ["South Carolina Association of Legal Investigators (SCALI)", "Natio
 
 CONFIG = {
     "layout": "sections",
+    "preview_noindex": True,   # keep veritas-pi(-b).pages.dev out of Google until launch
     "business": {
         "name": "Veritas Investigative Group",
         "legal_name": "Veritas Investigative Group",

@@ -1170,6 +1170,13 @@ class Site:
                 open(os.path.join(self.out, self.blog["index_slug"], "rss.xml"), "w").write(self.rss())
             open(os.path.join(self.out, "sitemap.xml"), "w").write(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>')
             open(os.path.join(self.out, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\n\nSitemap: {self.D}/sitemap.xml\n")
+            # preview_noindex: while not launched, the Cloudflare preview (<project>.pages.dev) tells search engines not to index it.
+            # Turns off by itself when "launched": True is set.
+            hp = os.path.join(self.out, "_headers")
+            if self.c.get("preview_noindex") and not self.c.get("launched"):
+                open(hp, "w").write("/*\n  X-Robots-Tag: noindex, nofollow\n")
+                open(os.path.join(self.out, "robots.txt"), "w").write("User-agent: *\nDisallow: /\n")
+            elif os.path.exists(hp): os.remove(hp)
             open(os.path.join(self.out, "_redirects"), "w").write("".join(f"{r[0]}  {r[1]}  {r[2] if len(r) > 2 else 301}\n" for r in self.c.get("redirects", [])))
         print(f"[{self.client}] built {len(self.pages)} pages -> {os.path.relpath(self.out, ROOT)}/")
 
