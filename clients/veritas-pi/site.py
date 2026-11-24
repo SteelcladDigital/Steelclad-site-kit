@@ -68,7 +68,7 @@ CONFIG = {
         "radius": "sharp", "heading_case": "none", "divider": "none", "texture": "none",
         "hero_image": "hero.jpg",   # drop the GHL hero photo in assets/hero.jpg to use it; until then a CSS navy/gold background is used
     },
-    "logo": {"type": "image", "file": "logo.png", "width": 156, "height": 54},
+    "logo": {"type": "image", "file": "logo-dark.png", "footer_file": "logo-dark.png", "width": 190, "height": 56},   # cut from the client's 02_horizontal_logo (source/logo-pack)
     "favicon_svg": FAVICON,
     "og_image": "og-image.jpg",
     "labels": {"cta": "Contact", "reach_verb": "Call", "header_call": f"Call {PHONE}"},

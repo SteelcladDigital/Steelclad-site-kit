@@ -15,6 +15,7 @@ CONFIG["theme"] = {
     "radius": "soft", "heading_case": "none", "divider": "none", "texture": "none",
     "sections_css": "sections-brief.css",
 }
+CONFIG["logo"] = {**CONFIG["logo"], "file": "logo-light.png", "footer_file": "logo-dark.png"}   # light header, navy footer
 CONFIG["sx_options"] = {
     "utility_bar": "SLED License #4362. Licensed, Bonded & Insured.",   # repeats the existing footer line above the fold
     "hero_mark": True, "subnav": True, "contact_split": True,
