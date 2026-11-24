@@ -229,3 +229,12 @@ section{padding:88px 0}
 .sx-hero.plain{background:none;padding:110px 0 30px}
 .sx-hero .sx-lead+.sx-lead{margin-top:1.2em}
 .sx-hero.sx-contact{background:none;padding:100px 0 60px}
+mark.sx-edit{background:rgba(197,160,89,.3);color:inherit;padding:0 .15em}
+.sx-legal-hero{padding:100px 0 30px}
+.sx-legal{padding-top:20px}
+.sx-prose{max-width:780px;margin:0 auto}
+.sx-prose h2{font-size:1.9rem;margin:1.4em 0 .4em}
+.sx-prose a{color:var(--c-accent)}
+.sx-btn-mail{background:transparent;color:#fff;border-color:rgba(255,255,255,.5)}
+.sx-btn-mail:hover{color:#fff;border-color:#fff}
+.sx-btn-mail svg{width:18px;height:18px}

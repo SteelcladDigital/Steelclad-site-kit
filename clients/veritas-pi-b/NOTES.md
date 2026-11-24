@@ -1,6 +1,6 @@
 # Veritas Investigative Group: Design Option B ("Brief")
 
-A second look for Mark to choose from. **Pages, copy, SEO and integrations are imported from `clients/veritas-pi/site.py` (Option A) at build time**, so the wording is identical by construction. A script also compared the text inside `<main>` on all 14 pages of A and B: 0 differences. Only the theme, stylesheet (`core/sections-brief.css`) and four layout options differ.
+A second look for Mark to choose from. **Pages, copy, SEO and integrations are imported from `clients/veritas-pi/site.py` (Option A) at build time**, so the wording is identical by construction (except the highlighted Lexington/Columbia proposals below). A script also compared the text inside `<main>` on all 14 pages of A and B: 0 differences. Only the theme, stylesheet (`core/sections-brief.css`) and four layout options differ.
 
 Build: `python3 build.py veritas-pi-b` → `dist/veritas-pi-b`. Same URLs, same canonical domain (veritaspigroup.com). **Only one option ever goes live:** after Mark chooses, delete the other client folder (or, if B wins, move B's theme/options into `veritas-pi/site.py` and delete `veritas-pi-b`).
 
@@ -27,3 +27,25 @@ Form (Web3Forms, same fields, `generate_lead`), GTM-KF4BGX7C, schema, titles and
 - `sx_options`: `utility_bar` (text), `hero_mark` (True for a line-drawn shield, or an image file), `subnav` (service pages), `contact_split`.
 - `source-serif-4` now ships an italic file. `site.js` adds the sub-nav scroll highlight (inert unless a sub-nav exists).
 - Option A and all other clients build the same as before (verified by diff; only site.js gained the sub-nav block).
+
+## Lexington / Columbia wording (Option B only, proposed Nov 24)
+Mark's approved copy never names Lexington or Columbia, which limits local rankings. Option B mixes the cities in so he can compare. **This is proposed wording, not approved copy.** In the preview every insertion is **highlighted in gold** (`sx_options.highlight_edits`), and `--check` blocks launch while the highlight is on.
+
+Body copy (12 short insertions, in `LOCAL_EDITS` in `site.py`):
+- Home hero: "based in **Lexington, serving Columbia and all of** South Carolina"
+- Home services lead: "people and organizations **in Lexington, Columbia and across South Carolina** who need answers"
+- Services hub lead: "…government clients **in Lexington, Columbia and throughout South Carolina**"
+- About: "private investigative work **in Lexington, Columbia and** throughout South Carolina"
+- Hero leads on 7 service pages (Private Investigations, Attorney, Insurance, Corporate, Polygraph, Background, Security): "**in Lexington, Columbia and across South Carolina**" or similar. Critical Response and International are left alone because they aren't local services.
+- Contact: added the sentence "**Based in Lexington, serving Columbia and all of South Carolina.**"
+
+Page titles (not visible on the page, shown in Google results):
+- Services: "Private Investigators in Lexington & Columbia, SC"
+- About: "About Veritas | Lexington & Columbia, SC Investigators"
+- Contact: "Contact a Lexington & Columbia, SC Private Investigator"
+- 7 service pages: "<Service> | Columbia & Lexington, SC" (e.g. "Insurance Investigations | Columbia & Lexington, SC")
+
+If Mark approves: set `highlight_edits` to False (and, if he picks Option A's design, move `LOCAL_EDITS`/titles into A). If he declines: delete `LOCAL_EDITS`, `LOCAL_TITLES` and `SVC_TITLES` and B is word-for-word A again.
+
+## Other Nov 24 changes (shared with A)
+Auto-updating © year, email in the footer and on Contact, draft Privacy Policy (`legal_from: "veritas-pi"`), "Veritas Group" → "Veritas Investigative Group", em dashes → short dashes. See `clients/veritas-pi/NOTES.md`.

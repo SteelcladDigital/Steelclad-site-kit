@@ -28,26 +28,26 @@ Domain: veritaspigroup.com (GoDaddy, not live, not connected) · SLED License No
 
 No redirects, because nothing was live or indexed.
 
-## Before launch: must confirm
+## Before launch: status (updated Nov 24)
 
-1. **Lead inbox.** The Web3Forms key (e088f1a2-…) sends to whatever email it was created with. If that's mark@veritaspigroup.com, check that the mailbox exists. The domain isn't live, so email on it may not be set up at GoDaddy yet. If it isn't, leads will bounce. Send a test from the preview once the inbox works. Network limits meant no test submission could be sent from the build environment.
-2. **Hero photo.** GHL uses a dark skyscraper photo behind every service hero. It couldn't be exported (GHL serves it as a CSS background), so the preview uses a navy/gold CSS background instead. Download it from the GHL media library and save it as `clients/veritas-pi/assets/hero.jpg` (about 1920px wide). The build picks it up automatically. Also confirm it's a licensed stock image and not a GHL AI/template image.
-3. **Logo (updated Nov 24).** Mark sent a 14-file pack (`source/logo-pack/`). Every file is a small (≤610px) PNG with a solid background baked in, apparently exported or screenshotted from the design tool. The best-formatted is `02_horizontal_logo`, which was cut from its white background with `source/logo_cut.py`:
-   - `assets/logo-light.png`: navy + gold lettering, for light backgrounds (Option B header).
-   - `assets/logo-dark.png`: the same lockup with "INVESTIGATIVE GROUP" in off-white, for navy backgrounds (Option A header, both footers).
-   - Favicon and touch icon from `04_shield_v_icon`; the share image is rebuilt from the dark lockup.
+1. **Lead inbox:** confirmed working (mark@veritaspigroup.com). Still send one test lead from the live domain at launch.
+2. **Hero photo (Option A):** on hold. The team likes it without the photo, so the CSS navy/gold background stays. Drop a photo in `assets/hero.jpg` only if that changes.
+3. **Logo:** a transparent cut of `02_horizontal_logo` is in use (see below). Better source files are still to be discussed with Mark.
+4. **FCRA wording** on the Background FAQ: still open. Undecided whether counsel should review.
+5. **Polygraph "examiners" (plural):** confirmed correct per Mark's master content document.
+6. **SLED License #4362:** confirmed current and correct.
+7. **Copyright year:** now automatic. The footer uses `{year}`: the build fills the current year and `site.js` updates it on every visit.
+8. **About > Founder** label: approved.
+9. **Email added for Mark's review:** mark@veritaspigroup.com in the footer contact block and as a button beside "Call Veritas" on the Contact page (`footer.show_email`, contact section `show_email`).
+10. **Privacy Policy: DRAFT for Mark's approval** at `/privacy-policy/` (`legal/privacy-policy.md`), linked in the footer. It covers the contact form (Web3Forms), Cloudflare hosting logs, Google Tag Manager/Analytics, campaign attribution stored in the browser, no selling of data, legal-process disclosure, retention, security, children and contact details. Not legal advice; Mark (or his attorney) should approve it before launch. Update "Last updated" when approved.
 
-   Still ask for the **original vector file (SVG/AI/EPS/PDF) or a 2000px+ transparent PNG** from whoever made the logo. The current cut is sharp up to about 250px wide, which covers the site, but not print or large uses. The pack also has no white-on-transparent version (15 is white on black).
-4. **FCRA.** The Background FAQ says screening is "compliant with ... the FCRA". If Veritas supplies background reports to employers for hiring decisions, it may count as a consumer reporting agency under the FCRA, with its own obligations. Mark should confirm this with counsel.
-5. **Polygraph.** The page says "Veritas examiners each bring 25+ years". Confirm there is more than one examiner, and get their credentials (e.g. APA membership, federal polygraph school) if Mark wants to show them.
-6. **License, bond and insurance.** SLED No. 4362 and "Licensed, Bonded & Insured" appear site-wide. Verify the license number on SLED's lookup and that the bond and insurance are current.
-7. **"© 2026" is hard-coded** (verbatim from GHL). It goes stale in January. Approve a switch to an auto year.
-8. **About submenu label.** The GHL About dropdown's child label wasn't visible, so it's shown as "Founder" (the GHL page title).
+**Copy changes applied Nov 24 (client rules, both options):**
+- Name pattern: "Veritas Investigative Group" or "Veritas" only. The Services page lead "Veritas Group provides…" is now "Veritas Investigative Group provides…".
+- Short dash: every em dash (—) in site content is now a short dash (-).
 
 ## Placeholder / template content flagged
 
 - The phone placeholder `+1 (555) 000-0000` in the contact form is the GHL default. It's only a placeholder, not shown as a number, and was kept.
-- The Services page lead says "**Veritas Group** provides…"; everywhere else says "Veritas Investigative Group". Kept verbatim.
 - No fake testimonials, stock team names or lorem ipsum were found. The phone number and SLED number are consistent on every page.
 - No GHL code, form, chat widget or tracking was carried over.
 
@@ -60,7 +60,7 @@ No redirects, because nothing was live or indexed.
 - **Contact form** posts to Web3Forms with the same fields: First/Last optional; Phone, Email and Nature of Request required. Each submission carries first-touch UTM/gclid attribution and pushes `generate_lead` to GTM. The success and error messages are kit wording ("Thanks! We got your request…" / "please call…").
 - **Header and footer** match GHL. The nav dropdown is navy with gold hover instead of GHL's white box. The mobile hamburger menu is new, and so is a fixed **Call / Contact bar** on phones.
 - **Removed GHL scroll animations,** which hid text until scrolled into view, and the GHL load weight. Fonts are self-hosted: Instrument Serif (synthetic bold, as GHL renders it) and Work Sans.
-- **Not added:** privacy policy, thank-you page, breadcrumbs (schema only), reviews. A privacy policy is recommended because the form collects personal data. Add `legal_pages` + `legal/privacy-policy.md` once the client approves the text.
+- **Not added:** thank-you page, visible breadcrumbs (schema only), reviews. The Privacy Policy draft was added Nov 24 (see above).
 
 ## SEO added
 
@@ -75,14 +75,12 @@ No redirects, because nothing was live or indexed.
 
 ## Suggested copy changes (NOT applied: for Mark's approval)
 
-1. **No local wording in the body copy.** "Lexington" and "Columbia" never appear on the site; only "South Carolina". This is the biggest ranking gap for "private investigator Lexington SC / Columbia SC". Even one line on the home page and the PI page ("based in Lexington, serving Columbia and the Midlands") would help.
+1. **No local wording in the body copy** (Option B now shows Lexington/Columbia wording, highlighted, for Mark to compare). "Lexington" and "Columbia" never appear on the site; only "South Carolina". This is the biggest ranking gap for "private investigator Lexington SC / Columbia SC". Even one line on the home page and the PI page ("based in Lexington, serving Columbia and the Midlands") would help.
 2. **The home "Confidential Consultation" card repeats the H2 and lead word for word** right beside them. Suggest card text like "Free, confidential first conversation. Call (803) 904-1755."
 3. **Reviews:** none yet. Once GBP is set up, add 2–3 real reviews (attorneys/adjusters especially).
 4. **Small wording fixes:**
-   - Hero and card copy use " - " where the rest of the site uses "—".
    - "conducted objectively" repeats "objective" in Internal & Workplace Investigations.
    - Nav label "Critical Invest Response" is abbreviated.
-   - "Veritas Group" on Services (see above).
 5. **Photo of Mark** on the Founder page. PI clients hire the person; a professional headshot builds trust.
 6. **Response-time promise** (e.g. "calls returned same business day") if Mark can commit to it.
 

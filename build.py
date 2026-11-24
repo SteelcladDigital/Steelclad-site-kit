@@ -863,7 +863,14 @@ class Site:
 
     def legal_pages(self):
         for slug, name in self.c.get("legal_pages", []):
-            f = os.path.join(ROOT, "clients", self.client, "legal", slug + ".md")
+            f = os.path.join(ROOT, "clients", self.c.get("legal_from", self.client), "legal", slug + ".md")   # legal_from: reuse another client folder's legal/ (design options of one site)
+            if self.sx:
+                inner = markdown(open(f, encoding="utf-8").read(), lambda u: u) if os.path.exists(f) else f'<p>[Paste the {esc(name)} text here before launch.]</p>'
+                inner = self.year_html(inner)
+                body = (f'<section class="sx-hero plain sx-legal-hero"><div class="sx-wrap sx-narrow"><h1>{esc(name)}</h1></div></section>'
+                        f'<section class="sx-legal"><div class="sx-wrap"><div class="sx-prose">{inner}</div></div></section>')
+                self.pages[slug] = self.page(slug, name, f'{name} for {self.b["legal_name"]}: what information the website collects, how it is used and how to contact us.', body, None, [("Home", ""), (name, slug)])
+                continue
             if os.path.exists(f):
                 inner = markdown(open(f, encoding="utf-8").read(), self.post_link(slug) if self.blog else (lambda u: u))
             else:
@@ -887,10 +894,16 @@ class Site:
     # Text fields accept a tiny markup: *gold italic*, **bold**, [label](/slug/) links; everything else is escaped.
     def rich(self, cur, t):
         t = esc(t, quote=False)
+        # ==text==: wording proposed for client review; highlighted when sx_options.highlight_edits is on, plain text otherwise
+        t = re.sub(r"==(.+?)==", r'<mark class="sx-edit">\1</mark>' if self.sxo.get("highlight_edits") else r"\1", t)
         t = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", t)
         t = re.sub(r"\*(.+?)\*", r"<em>\1</em>", t)
         t = re.sub(r"\[([^\]]+)\]\((/[^)]*)\)", lambda m: f'<a href="{self.href(cur, m.group(2).split("#")[0].strip("/"))}{("#" + m.group(2).split("#")[1]) if "#" in m.group(2) else ""}">{m.group(1)}</a>', t)
         return t
+    def sx_mail(self, s, cls="sx-btn sx-btn-mail"):
+        # contact section show_email: a mailto button showing the business email address
+        if not (s.get("show_email") and self.b.get("email")): return ""
+        return f'<a class="{cls}" href="mailto:{esc(self.b["email"])}">{icon("mail")}{esc(self.b["email"])}</a>'
     def sx_btn(self, cur, b, cls="sx-btn"):
         label, target = b[0], b[1]
         href = self.rh if target == "tel" else self.href(cur, target)
@@ -939,10 +952,13 @@ class Site:
         return f'''<footer class="sx-footer"><div class="sx-wrap"><div class="sx-fcols">
 <div><a class="sx-logo" href="{self.href(cur, "")}">{self.logo(cur, "footer")}</a>
 <p class="sx-fname">{esc(F["name"])}</p><p class="sx-fkicker">{esc(F["kicker"])}</p><p class="sx-fmuted">{self.rich(cur, F["text"])}</p>
-<p class="sx-fcontact">{esc(F["contact_label"])}<br><a href="{self.rh}">{esc(self.rt)}</a></p></div>
+<p class="sx-fcontact">{esc(F["contact_label"])}<br><a href="{self.rh}">{esc(self.rt)}</a>{f'<br><a href="mailto:{esc(self.b["email"])}">{esc(self.b["email"])}</a>' if F.get("show_email") and self.b.get("email") else ""}</p></div>
 <div><p class="sx-fmuted sx-small">{self.rich(cur, F["disclaimer"])}</p></div></div>
-<p class="sx-copy">{esc(F["copyright"])}{(" · " + legal) if legal else ""}</p></div></footer>{mbar}'''
+<p class="sx-copy">{self.year_html(esc(F["copyright"]))}{(" · " + legal) if legal else ""}</p></div></footer>{mbar}'''
 
+    def year_html(self, t):
+        # "{year}" in footer text: the build year, kept current by site.js on every visit (no yearly rebuild needed)
+        return t.replace("{year}", f'<span data-year>{date.today().year}</span>')
     def sx_head(self, h, lead=None, center=True, tag="h2", cur=""):
         return (f'<div class="sx-head{" center" if center else ""}"><{tag}>{self.rich(cur, h)}</{tag}>'
                 + (f'<p class="sx-lead">{self.rich(cur, lead)}</p>' if lead else "") + "</div>")
@@ -969,7 +985,7 @@ class Site:
         if t == "contact":
             C = {**self.c["contact"], **s.get("form", {})}
             return (f'<section class="sx-hero sx-contact"{sid}><div class="sx-wrap sx-narrow"><h1>{self.rich(cur, s["h1"])}</h1>'
-                    f'<p class="sx-lead">{self.rich(cur, s["lead"])}</p><div class="sx-btns">{self.sx_btn(cur, (s["call_label"], "tel"))}</div>'
+                    f'<p class="sx-lead">{self.rich(cur, s["lead"])}</p><div class="sx-btns">{self.sx_btn(cur, (s["call_label"], "tel"))}{self.sx_mail(s)}</div>'
                     f'{self.lead_form(cur, C)}</div></section>')
         if t == "text":
             out = self.sx_head(s["h2"], center=s.get("center", True), cur=cur) if s.get("h2") else ""
@@ -1036,7 +1052,7 @@ class Site:
             C = {**self.c["contact"], **c.get("form", {})}
             rows = "".join(f'<li><strong>{esc(a)}</strong><span>{self.rich(cur, b)}</span></li>' for a, b in n["items"])
             body = (f'<section class="sx-contact-split"><div class="sx-wrap sx-cs-grid"><div class="sx-cs-main"><h1>{self.rich(cur, c["h1"])}</h1>'
-                    f'<p class="sx-lead">{self.rich(cur, c["lead"])}</p><div class="sx-btns">{self.sx_btn(cur, (c["call_label"], "tel"), "sx-btn sx-btn-ghost")}</div>'
+                    f'<p class="sx-lead">{self.rich(cur, c["lead"])}</p><div class="sx-btns">{self.sx_btn(cur, (c["call_label"], "tel"), "sx-btn sx-btn-ghost")}{self.sx_mail(c, "sx-btn sx-btn-ghost")}</div>'
                     f'{self.lead_form(cur, C)}</div><aside class="sx-cs-side sx-numbered">{self.sx_head(n["h2"], center=False, cur=cur)}<ol>{rows}</ol></aside></div></section>'
                     + "".join(self.sx_section(cur, s) for s in secs[2:]))
         else:
@@ -1084,7 +1100,7 @@ class Site:
         if not ig.get("gtm_id") and want != "web3forms": W.append("No Google Tag Manager ID (integrations.gtm_id): GA4 / conversion tracking not installed.")
         if not ig.get("google_reviews_url"): W.append("No google_reviews_url: the 'Read more reviews on Google' button is hidden.")
         for slug, name in self.c.get("legal_pages", []):
-            if not os.path.exists(os.path.join(ROOT, "clients", self.client, "legal", slug + ".md")):
+            if not os.path.exists(os.path.join(ROOT, "clients", self.c.get("legal_from", self.client), "legal", slug + ".md")):
                 B.append(f"{name} page is placeholder text. Create clients/{self.client}/legal/{slug}.md.")
         pdir = os.path.join(ROOT, "clients", self.client, "posts")
         if self.blog and os.path.isdir(pdir):
@@ -1100,6 +1116,7 @@ class Site:
             W.append(f"No assets/{og} committed: social share image will be missing on Cloudflare builds.")
         if self.c["logo"]["type"] == "text": W.append("Logo is a text placeholder; add the real logo to assets/.")
         if any("placeholder" in (t or "").lower() for _, _, t in self.c.get("reviews", [])): B.append("Reviews contain placeholder text.")
+        if self.c.get("sx_options", {}).get("highlight_edits"): B.append("sx_options.highlight_edits is on: proposed wording is highlighted. Get it approved, then set it to False.")
         if "example.com" in self.D: B.append("business.domain is still example.com.")
         return B, W
 

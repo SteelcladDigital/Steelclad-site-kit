@@ -83,8 +83,9 @@ CONFIG = {
         "kicker": "SLED LICENSE NO. 4362",
         "text": "Licensed, Bonded & Insured. Operating under strict regulatory oversight of the South Carolina Law Enforcement Division (SLED) pursuant to S.C. Code Ann. § 40-18.",
         "contact_label": "Institutional inquiries, legal counsel retaining, and formal casework:",
+        "show_email": True,   # email added Nov 24 for client review
         "disclaimer": "Veritas Investigative Group is licensed by the South Carolina Law Enforcement Division (SLED), License No. 4362. Services are provided in accordance with applicable law and the facts of each matter, and Veritas does not guarantee any particular result. Client information is held in confidence, subject to legal process. Whether reports or evidence are admissible in any proceeding is determined by the court. Veritas is not a law firm and does not provide legal advice.",
-        "copyright": "© 2026 Veritas Investigative Group. All rights reserved. SLED License #4362. Licensed, Bonded & Insured.",
+        "copyright": "© {year} Veritas Investigative Group. All rights reserved. SLED License #4362. Licensed, Bonded & Insured.",
     },
     "contact": {
         "slug": "contact", "form_name": "contact",
@@ -102,6 +103,7 @@ CONFIG = {
         "gtm_id": "GTM-KF4BGX7C",
     },
     "reviews": [], "faqs": [],
+    "legal_pages": [("privacy-policy", "Privacy Policy")],   # DRAFT for client approval: clients/veritas-pi/legal/privacy-policy.md
 
     # ------------------------------------------------------------------ pages (same pages and order as GHL)
     "pages": [
@@ -117,7 +119,7 @@ CONFIG = {
              "paras": ["Veritas was founded on over two decades of investigative experience. That experience began as uniformed patrol service and progressed into a career as a Special Agent and Supervisory Special Agent in federal law enforcement, conducting and supervising complex criminal investigations throughout the United States and around the world."],
              "creds": CREDS},
             {"type": "text", "h2": "Methodology Built on Federal *Experience*",
-             "paras": ["Every investigation begins with understanding your situation and clearly defining your objectives. From there, Veritas applies the same discipline and methodology built with our extensive investigative experience — see [Our Philosophy](/about/#our-philosophy) on the About page."]},
+             "paras": ["Every investigation begins with understanding your situation and clearly defining your objectives. From there, Veritas applies the same discipline and methodology built with our extensive investigative experience - see [Our Philosophy](/about/#our-philosophy) on the About page."]},
             {"type": "audience", "h2": "Specialized Investigative *Services*", "lead": "Veritas works directly with the people and organizations who need answers.",
              "cards": [
                 {"icon": "fingerprint", "h3": "Individuals & Families", "p": "Personal matters call for discretion and a clear plan. Whether it's a relationship concern, a missing family member, or a background question, Veritas walks you through your options starting with the first conversation.", "link": ("Private Investigations & Surveillance", S("pi"))},
@@ -144,13 +146,13 @@ CONFIG = {
             {"type": "hero", "h1": "Private Investigative *Services* in South Carolina",
              "lead": "Veritas offers nine investigative services for individuals, attorneys, insurers, businesses and government clients. Each is delivered with the methodology of federal criminal casework and documented as if it may one day be tested in court. Use the short summaries below to find the right starting point, or contact Veritas and we'll help you sort it out.",
              "buttons": [CTA]},
-            {"type": "svc_grid", "h2": "Specialized Investigative *Services*", "lead": "Veritas Group provides investigative services across the following disciplines.",
+            {"type": "svc_grid", "h2": "Specialized Investigative *Services*", "lead": "Veritas Investigative Group provides investigative services across the following disciplines.",   # was "Veritas Group" (client name rule)
              "items": [
                 {"h3": "Private Investigations & Surveillance", "link": ("Learn More", S("pi")),
                  "p": "When you need clear, reliable information about a personal or family matter, Veritas provides thorough investigation and surveillance handled with discretion. Every case begins with a clear understanding of your goals and a plan built around them.",
                  "bullets": ["Domestic & Family Investigations", "Child Custody Investigations", "Missing Persons & Locate Services"]},
                 {"h3": "Attorney & Litigation Support", "link": ("Learn More", S("atty")),
-                 "p": "Veritas supports attorneys and legal teams with investigative research that holds up under scrutiny. From locating witnesses to developing evidence, the work is built on the same standards used in federal criminal investigations — backed by direct experience testifying in both state and federal court.",
+                 "p": "Veritas supports attorneys and legal teams with investigative research that holds up under scrutiny. From locating witnesses to developing evidence, the work is built on the same standards used in federal criminal investigations - backed by direct experience testifying in both state and federal court.",
                  "bullets": ["Civil & Criminal Litigation Support", "Witness & Subject Location", "Investigative Research & Evidence Development"]},
                 {"h3": "Insurance Investigations", "link": ("Learn More", S("ins")),
                  "p": "Veritas helps insurance carriers and adjusters verify claims and identify fraud through surveillance, activity verification, and clearly documented investigative reporting.",
@@ -182,8 +184,8 @@ CONFIG = {
          "meta": "Veritas Investigative Group brings the discipline and standards of federal criminal investigations to private investigative work throughout South Carolina.",
          "sections": [
             {"type": "hero", "plain": True, "h1": "About *Veritas Investigative Group*",
-             "paras": ["Veritas Investigative Group was founded to bring the same discipline, judgment, and standards used in federal criminal investigations to private investigative work throughout South Carolina — with the experience to support matters that reach beyond state and national borders.",
-                       "That standard didn't come from a training manual — it came from over two decades of working real cases, from patrol work through complex federal investigations. Veritas exists because individuals, attorneys, and businesses deserve investigators held to that same bar."]},
+             "paras": ["Veritas Investigative Group was founded to bring the same discipline, judgment, and standards used in federal criminal investigations to private investigative work throughout South Carolina - with the experience to support matters that reach beyond state and national borders.",
+                       "That standard didn't come from a training manual - it came from over two decades of working real cases, from patrol work through complex federal investigations. Veritas exists because individuals, attorneys, and businesses deserve investigators held to that same bar."]},
             {"type": "text", "id": "our-philosophy", "h2": "Our *Philosophy*", "motto_index": 0,
              "paras": ["Listen. Understand. Plan. Investigate. Report.",
                        "Every investigation begins with understanding the situation, clearly defining the client's objectives, and determining how Veritas can best assist. Our approach is grounded in experience, discretion, and a commitment to clear and credible results."]},
@@ -219,7 +221,7 @@ CONFIG = {
          "sections": [
             {"type": "contact", "h1": "Tell Us About Your *Situation*",
              "lead": "We'll help you understand your options and determine how Veritas can best assist.",
-             "call_label": f"Call Veritas {PHONE}"},
+             "call_label": f"Call Veritas {PHONE}", "show_email": True},
             {"type": "numbered", "h2": "What Happens *Next?*", "items": [
                 ("1. Initial Consultation", "Discuss the situation, answer questions, clarify objectives, and determine whether and how Veritas can assist."),
                 ("2. Assessment & Engagement", "If appropriate, establish the scope and terms of the engagement."),
@@ -248,7 +250,7 @@ CONFIG = {
                 ("Step 4: Reporting.", "A clear, documented report of findings, delivered directly and confidentially."),
             ]},
             {"type": "text", "h2": "Why Experience *Matters*",
-             "paras": ["Personal investigations touch some of the most sensitive moments in a person's life. Over two decades of investigative experience — including complex, high-stakes federal casework — means every matter is handled with the discretion, judgment, and professionalism it deserves."]},
+             "paras": ["Personal investigations touch some of the most sensitive moments in a person's life. Over two decades of investigative experience - including complex, high-stakes federal casework - means every matter is handled with the discretion, judgment, and professionalism it deserves."]},
             {"type": "bullets", "h2": "Who This Is *For*", "items": [
                 "Individuals who suspect infidelity or dishonesty in a relationship",
                 "Parents navigating a custody matter who need documented, credible evidence",
@@ -273,17 +275,17 @@ CONFIG = {
              "buttons": [("Discuss a Case", "contact")]},
             {"type": "items", "h2": "What This *Covers*", "items": [
                 ("Witness & Subject Location", "Finding a witness who's moved, changed jobs, or gone quiet using licensed investigative databases, field verification, and direct-contact skip tracing, documented so the process can be explained if the location itself is ever challenged."),
-                ("Investigative Research & Evidence Development", "Background research on opposing parties, verification of claims made in depositions or filings, asset location, and surveillance that turns a suspicion into documented evidence — built with the expectation it may be cross-examined or entered into the record."),
+                ("Investigative Research & Evidence Development", "Background research on opposing parties, verification of claims made in depositions or filings, asset location, and surveillance that turns a suspicion into documented evidence - built with the expectation it may be cross-examined or entered into the record."),
                 ("Civil & Criminal Litigation Support", "Veritas works both sides of the docket, supporting plaintiff and defense counsel in civil matters. In criminal cases, Veritas assists defense attorneys on a case-by-case basis with independent, fact-based investigation."),
             ]},
             {"type": "steps", "h2": "How Veritas *Works*", "items": [
                 ("Step 1: Case Intake.", "Understanding the legal theory, the timeline, and what specific facts or individuals need to be developed or verified."),
                 ("Step 2: Investigative Path.", "A scoped plan built around your objectives and budget, agreed to before work begins."),
                 ("Step 3: Field Work & Documentation.", "Surveillance, interviews, records research, or location work conducted with an eye toward how the results will hold up if challenged."),
-                ("Step 4: Reporting.", "Clear, organized reporting delivered on your timeline, written to be usable — not just informative."),
+                ("Step 4: Reporting.", "Clear, organized reporting delivered on your timeline, written to be usable - not just informative."),
             ]},
             {"type": "text", "h2": "Why Courtroom Matters *Here*",
-             "paras": ["A lot of investigative work never gets tested. This does. Two decades of federal investigative experience includes direct, ongoing work with prosecutors and defense attorneys, and firsthand experience testifying in both state and federal court — not just gathering information, but standing behind it under cross-examination. That's a different discipline than investigative work that's never had to survive a courtroom, and it shapes how every report is built from the first day of an engagement."]},
+             "paras": ["A lot of investigative work never gets tested. This does. Two decades of federal investigative experience includes direct, ongoing work with prosecutors and defense attorneys, and firsthand experience testifying in both state and federal court - not just gathering information, but standing behind it under cross-examination. That's a different discipline than investigative work that's never had to survive a courtroom, and it shapes how every report is built from the first day of an engagement."]},
             {"type": "bullets", "h2": "Who This Is *For*", "items": [
                 "Plaintiff and defense attorneys who need an independent investigator for civil litigation",
                 "Criminal defense attorneys who need independent investigation and fact development",
@@ -318,7 +320,7 @@ CONFIG = {
                 ("Step 4: Reporting.", "Clear, thoroughly documented reporting prepared with litigation in mind, delivered on the carrier's timeline."),
             ]},
             {"type": "text", "h2": "Why This Experience *Matters*",
-             "paras": ["Insurance investigations require the same rigor as a criminal case file — documentation that holds up to scrutiny, whether that's an internal claims review or a courtroom. Over two decades of investigative and courtroom experience shapes every report Veritas produces."]},
+             "paras": ["Insurance investigations require the same rigor as a criminal case file - documentation that holds up to scrutiny, whether that's an internal claims review or a courtroom. Over two decades of investigative and courtroom experience shapes every report Veritas produces."]},
             {"type": "bullets", "h2": "Who This Is *For*", "items": [
                 "Claims adjusters who need independent verification of a claim",
                 "SIU (Special Investigations Unit) teams evaluating suspected fraud",
@@ -326,7 +328,7 @@ CONFIG = {
                 "MGAs and carriers who need a reliable investigative vendor relationship, not a one-off contractor"]},
             {"type": "faq", "h2": "Common *Questions*", "items": [
                 ("How quickly can surveillance begin on an active claim?", "Often within days of receiving the referral, depending on the facts and scheduling. Urgent claims may be able to move faster."),
-                ("Is Veritas familiar with SIU documentation standards?", "Yes — reporting is built to the same evidentiary standard used in federal investigations, with claims and litigation use in mind."),
+                ("Is Veritas familiar with SIU documentation standards?", "Yes - reporting is built to the same evidentiary standard used in federal investigations, with claims and litigation use in mind."),
                 ("Does Veritas work directly with carriers, or only through vendor panels?", "Veritas is available to work directly with carriers, adjusters, and MGAs, and is glad to discuss vendor panel relationships as well."),
             ]},
             {**NOT_SURE, "button": ("Discuss a Claim", "contact")},
@@ -353,14 +355,14 @@ CONFIG = {
                 ("Step 4: Reporting.", "A clear, thoroughly documented report of findings, prepared for internal decision-making and, if needed, legal proceedings."),
             ]},
             {"type": "text", "h2": "Why Independence *Matters*",
-             "paras": ["An internal investigation conducted by someone within the organization can raise questions about objectivity. Veritas provides an independent, outside perspective — backed by federal investigative experience — that protects both the integrity of the investigation and the organization's interests."]},
+             "paras": ["An internal investigation conducted by someone within the organization can raise questions about objectivity. Veritas provides an independent, outside perspective - backed by federal investigative experience - that protects both the integrity of the investigation and the organization's interests."]},
             {"type": "bullets", "h2": "Who This Is *For*", "items": [
                 "HR leaders and business owners handling a workplace complaint",
                 "Companies evaluating a partner, vendor, or acquisition target",
                 "Organizations that need an independent investigator rather than an internal one",
                 "Businesses building a relationship with an investigator before they need one urgently"]},
             {"type": "faq", "h2": "Common *Questions*", "items": [
-                ("Will the investigation stay confidential?", "Yes — findings are shared only with the individuals you designate, typically ownership, HR leadership, or legal counsel, except where disclosure is required by law."),
+                ("Will the investigation stay confidential?", "Yes - findings are shared only with the individuals you designate, typically ownership, HR leadership, or legal counsel, except where disclosure is required by law."),
                 ("Can Veritas work alongside our employment attorney?", "Yes, and it's often the right approach. Veritas coordinates with legal counsel as the matter requires."),
                 ("What's the difference between this and corporate due diligence?", "Workplace investigations look inward at conduct within the organization. Due diligence looks outward, at a company or individual you're considering doing business with. See [Background & Due Diligence](" + L("bg") + ") for more."),
             ]},
@@ -400,7 +402,7 @@ CONFIG = {
              "lead": "Some matters can't wait. Veritas provides time-sensitive investigative support for urgent domestic and international situations, mobilizing quickly when clients need immediate answers.",
              "buttons": [("Contact Veritas Immediately", "contact")]},
             {"type": "items", "h2": "What This *Covers*", "items": [
-                ("Rapid Deployment", "When a situation is developing in real time — a missing family member, an active corporate incident, a time-critical legal deadline — Veritas prioritizes urgent matters and mobilizes quickly."),
+                ("Rapid Deployment", "When a situation is developing in real time - a missing family member, an active corporate incident, a time-critical legal deadline - Veritas prioritizes urgent matters and mobilizes quickly."),
                 ("Domestic & International Response", "Experience coordinating urgent investigative response both within the United States and internationally, drawing on established relationships and investigative coordination experience."),
             ]},
             {"type": "steps", "h2": "How Veritas *Works*", "items": [
@@ -417,7 +419,7 @@ CONFIG = {
                 "Attorneys facing a fast-approaching filing deadline that requires immediate investigative work",
                 "Anyone facing a time-critical situation who needs an investigator to act quickly"]},
             {"type": "faq", "h2": "Common *Questions*", "items": [
-                ("How fast can Veritas respond?", "Response times depend on the situation, but urgent matters are prioritized — contact Veritas directly to discuss timing for your specific circumstances."),
+                ("How fast can Veritas respond?", "Response times depend on the situation, but urgent matters are prioritized - contact Veritas directly to discuss timing for your specific circumstances."),
                 ("Does this cost more than a standard investigation?", "Rapid-response engagements are scoped individually based on urgency and resource needs; this will be discussed clearly before work begins."),
                 ("Is this only for domestic situations?", "No. Veritas has experience coordinating time-sensitive matters internationally as well as domestically, depending on the jurisdiction involved."),
             ]},
@@ -445,7 +447,7 @@ CONFIG = {
                 ("Step 4: Reporting.", "Clear reporting on findings and coordination outcomes."),
             ]},
             {"type": "text", "h2": "Why This Experience *Matters*",
-             "paras": ["Few domestic PI firms have direct experience with international investigative work. Veritas's founder spent years coordinating with foreign government officials and law enforcement leaders on complex international matters — experience that informs private international investigative work."]},
+             "paras": ["Few domestic PI firms have direct experience with international investigative work. Veritas's founder spent years coordinating with foreign government officials and law enforcement leaders on complex international matters - experience that informs private international investigative work."]},
             {"type": "bullets", "h2": "Who This Is *For*", "items": [
                 "Attorneys and businesses with a matter involving individuals or assets abroad",
                 "Individuals with a family or personal matter that crosses international borders",
@@ -469,9 +471,9 @@ CONFIG = {
              "buttons": [("Request a Background Investigation", "contact")]},
             {"type": "items", "h2": "What This *Covers*", "items": [
                 ("Pre-Employment Screening & Background Checks", "Verification of a candidate's background prior to hiring, conducted in compliance with applicable background screening laws."),
-                ("Personal & Professional Background Checks", "Background research on an individual for personal or professional reasons — a new business partner, a caregiver, or someone entering your life in a significant way."),
-                ("Individual & Executive Due Diligence", "Background investigation on a specific person — a prospective executive hire, business partner, or key individual — including criminal and litigation history, financial red flags, and credential verification."),
-                ("Corporate Due Diligence", "Investigative due diligence on companies and business relationships — including ownership and litigation history, regulatory standing, and reputational risk review — to support partnerships, vendor relationships, and transactions."),
+                ("Personal & Professional Background Checks", "Background research on an individual for personal or professional reasons - a new business partner, a caregiver, or someone entering your life in a significant way."),
+                ("Individual & Executive Due Diligence", "Background investigation on a specific person - a prospective executive hire, business partner, or key individual - including criminal and litigation history, financial red flags, and credential verification."),
+                ("Corporate Due Diligence", "Investigative due diligence on companies and business relationships - including ownership and litigation history, regulatory standing, and reputational risk review - to support partnerships, vendor relationships, and transactions."),
             ]},
             {"type": "steps", "h2": "How Veritas *Works*", "items": [
                 ("Step 1: Scope the Request.", "Define exactly what needs to be verified and why."),
@@ -480,7 +482,7 @@ CONFIG = {
                 ("Step 4: Reporting.", "Deliver a clear, organized report of findings."),
             ]},
             {"type": "text", "h2": "Why Thoroughness *Matters*",
-             "paras": ["Background research is only as good as the diligence behind it. Veritas applies the same investigative standards used in federal casework to background and due diligence work — going beyond a database search to verify what matters most, where verification is possible."]},
+             "paras": ["Background research is only as good as the diligence behind it. Veritas applies the same investigative standards used in federal casework to background and due diligence work - going beyond a database search to verify what matters most, where verification is possible."]},
             {"type": "bullets", "h2": "Who This Is *For*", "items": [
                 "Employers hiring for sensitive or leadership positions",
                 "Individuals entering a new personal or business relationship",
@@ -488,8 +490,8 @@ CONFIG = {
                 "Attorneys who need background verification to support a case"]},
             {"type": "faq", "h2": "Common *Questions*", "items": [
                 ("How is this different from an online background check service?", "Many online services return database records automatically, with little or no verification. Veritas conducts investigative research, working to verify, contextualize, and follow up on what the records show. Records can be incomplete or out of date, so findings are reported with any limitations noted."),
-                ("How long does a background investigation take?", "It depends on scope — a standard background check may take a few days, while corporate due diligence can take longer depending on complexity."),
-                ("Is this compliant with background screening laws like the FCRA?", "Yes — background screening is conducted in compliance with applicable federal and state law."),
+                ("How long does a background investigation take?", "It depends on scope - a standard background check may take a few days, while corporate due diligence can take longer depending on complexity."),
+                ("Is this compliant with background screening laws like the FCRA?", "Yes - background screening is conducted in compliance with applicable federal and state law."),
             ]},
             {**NOT_SURE, "button": ("Request a Background Investigation", "contact")},
          ]},
@@ -515,15 +517,15 @@ CONFIG = {
                 ("Step 4: Implementation Support.", "Support developing or refining policies, procedures, or training as needed."),
             ]},
             {"type": "text", "h2": "Why Real-World Experience *Matters*",
-             "paras": ["Security consulting is only as good as the experience behind it. Veritas draws on two decades of federal law enforcement and crisis response experience to provide security guidance that reflects how real incidents actually unfold — not just industry checklists."]},
+             "paras": ["Security consulting is only as good as the experience behind it. Veritas draws on two decades of federal law enforcement and crisis response experience to provide security guidance that reflects how real incidents actually unfold - not just industry checklists."]},
             {"type": "bullets", "h2": "Who This Is *For*", "items": [
                 "Hospitality and corporate operators wanting to assess physical security and vulnerabilities",
                 "Organizations without an internal security function",
                 "Businesses preparing workplace violence response plans for the first time",
                 "Companies that experienced a security incident and want an outside review"]},
             {"type": "faq", "h2": "Common *Questions*", "items": [
-                ("Is this a one-time assessment or an ongoing relationship?", "Both are available — some clients want a single assessment, others prefer an ongoing advisory relationship."),
-                ("Do you provide training, not just consulting?", "Yes — training on topics like workplace violence response can be included as part of an engagement."),
+                ("Is this a one-time assessment or an ongoing relationship?", "Both are available - some clients want a single assessment, others prefer an ongoing advisory relationship."),
+                ("Do you provide training, not just consulting?", "Yes - training on topics like workplace violence response can be included as part of an engagement."),
                 ("What industries does Veritas typically work with?", "Experience spans multiple sectors, with particular interest in hospitality and corporate clients seeking practical, real-world security guidance."),
             ]},
             {**NOT_SURE, "button": ("Request a Security Assessment", "contact")},

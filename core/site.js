@@ -119,3 +119,5 @@
       if(on&&a.scrollIntoView&&nav.scrollWidth>nav.clientWidth){nav.querySelector('.sx-wrap').scrollLeft=a.offsetLeft-20}})})},{rootMargin:'-45% 0px -50% 0px'});
   links.forEach(function(a){var t=document.getElementById(a.getAttribute('href').slice(1));if(t)io.observe(t)});
 })();
+// keep footer years current without a rebuild
+(function(){var y=String(new Date().getFullYear());document.querySelectorAll('[data-year]').forEach(function(e){e.textContent=y})})();

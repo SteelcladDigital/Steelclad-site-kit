@@ -312,3 +312,14 @@ main>section:nth-of-type(odd).sx-steps .sx-item::before{box-shadow:0 0 0 6px #ff
 @media (prefers-reduced-motion:reduce){ *{transition:none!important;scroll-behavior:auto!important} }
 /* hero mark as the client's own shield image */
 .sx-hero-mark.is-img{opacity:1;width:min(22vw,250px);right:max(6vw,calc(50% - 560px));filter:drop-shadow(0 26px 50px rgba(0,0,0,.5)) drop-shadow(0 0 60px rgba(197,160,89,.12))}
+/* proposed wording highlighted for client review (sx_options.highlight_edits) */
+mark.sx-edit{background:rgba(197,160,89,.28);color:inherit;padding:0 .15em;border-radius:2px;box-shadow:0 1px 0 var(--gold)}
+.sx-hero mark.sx-edit,.sx-split mark.sx-edit,.sx-cta mark.sx-edit{background:rgba(197,160,89,.32);color:#fff}
+/* legal pages */
+.sx-legal-hero{padding:72px 0 64px}
+.sx-prose{max-width:760px}
+.sx-prose h2{font-size:1.5rem;margin:1.6em 0 .5em}
+.sx-prose h2::before{display:none}
+.sx-prose ul{padding-left:1.2em}
+.sx-prose li{margin:.3em 0}
+.sx-btn-mail svg{width:18px;height:18px}
