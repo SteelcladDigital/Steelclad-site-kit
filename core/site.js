@@ -104,6 +104,26 @@
     });
   });
 
+  // reviews carousel: rotate one card at a time, loop, pause on hover/focus/touch, honour reduced motion
+  document.querySelectorAll('.review-carousel').forEach(function(rc){
+    var tr=rc.querySelector('.rc-track'), cards=tr.children, dots=rc.querySelector('.rc-dots'), i=0, timer=null, paused=false;
+    var iv=parseInt(rc.dataset.interval,10)||6000, reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function perView(){return Math.max(1,Math.round(tr.clientWidth/(cards[0].getBoundingClientRect().width||1)));}
+    function maxI(){return Math.max(0,cards.length-perView());}
+    function go(n){i=n>maxI()?0:(n<0?maxI():n);tr.scrollTo({left:cards[i].offsetLeft-cards[0].offsetLeft,behavior:reduce?'auto':'smooth'});mark();}
+    function build(){dots.innerHTML='';for(var k=0;k<=maxI();k++){var b=document.createElement('button');b.type='button';b.tabIndex=-1;(function(k){b.onclick=function(){go(k);restart();};})(k);dots.appendChild(b);}mark();}
+    function mark(){[].forEach.call(dots.children,function(b,k){b.setAttribute('aria-current',k===i?'true':'false');});}
+    function restart(){clearInterval(timer);if(!reduce&&!paused)timer=setInterval(function(){go(i+1);},iv);}
+    rc.querySelector('.rc-prev').onclick=function(){go(i-1);restart();};
+    rc.querySelector('.rc-next').onclick=function(){go(i+1);restart();};
+    tr.addEventListener('keydown',function(e){if(e.key==='ArrowRight'){e.preventDefault();go(i+1);restart();}if(e.key==='ArrowLeft'){e.preventDefault();go(i-1);restart();}});
+    var st;tr.addEventListener('scroll',function(){clearTimeout(st);st=setTimeout(function(){var x=tr.scrollLeft,b=0,d=1e9;for(var k=0;k<cards.length;k++){var dd=Math.abs(cards[k].offsetLeft-cards[0].offsetLeft-x);if(dd<d){d=dd;b=k;}}i=Math.min(b,maxI());mark();},120);});
+    ['mouseenter','focusin','touchstart'].forEach(function(ev){rc.addEventListener(ev,function(){paused=true;clearInterval(timer);},{passive:true});});
+    ['mouseleave','focusout'].forEach(function(ev){rc.addEventListener(ev,function(){paused=false;restart();});});
+    window.addEventListener('resize',function(){build();});
+    build();restart();
+  });
+
   // preselect plan from #plan-<slug> (links from plan cards)
   var h=(location.hash||'').replace('#plan-','');
   if(h){document.querySelectorAll('select[name=plan]').forEach(function(sel){

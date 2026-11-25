@@ -681,7 +681,7 @@ CONFIG = {
     "next_steps": ["We reply within one business day", "A free on-site assessment", "Written proposal before any work"],
     "faqs": [GENERAL_FAQS[0], GENERAL_FAQS[5], GENERAL_FAQS[4]], "page_type": "ContactPage"},
   "thank_you": {"title": "Thank you", "h1": "Thanks, we got your request.", "lead": "We'll follow up within one business day.", "text": "Need us sooner?"},
-  "reviews": REVIEWS,
+  "reviews": REVIEWS, "reviews_display": "carousel", "reviews_interval": 6000,   # 3 across, rotates every 6s
   "faqs": GENERAL_FAQS,
   "legal_pages": [("privacy-policy", "Privacy Policy")],
   "redirects": [("/home", "/"), ("/index", "/"),

@@ -131,6 +131,7 @@ Launch check in this mode: the demo form and a missing `gtm_id` are blockers; th
 - `blog.category_prefix` (e.g. `blog/c`, GHL style) + `blog.categories`: category archive pages, so old category URLs keep working. Map each category name to a slug, or to `{slug, h1, title, lead, meta}`.
 - `business.legal_entity`, `founder`, `slogan`: extra organization structured data.
 - `business.credentials` ([(name, issuer, url)]) and `business.member_of` ([(org, url)]): certifications and memberships in the structured data (`hasCredential`, `memberOf`). `home.credentials` + `"credentials"` in `home.order`: linked credential cards on the home page.
+- `reviews_display: "carousel"` (+ optional `reviews_interval` ms, default 6000): reviews as a rotating carousel, 3 across on desktop, 2 on tablet, 1 on phones, with arrows, dots, swipe and keyboard; pauses on hover/focus/touch and stays still with reduced motion. Default is the static grid.
 - `areas.pages[]` overrides for regional or out-of-state pages: `region` (e.g. `"NC"`), `title`, `meta`, `h1`, `crumb`, `place_type` / `place_name` (schema areaServed). `zips` is optional. `theme.colors.texture`: hero texture line color.
 - Pages built with `noindex` (thank-you, 404) are left out of `sitemap.xml`.
 

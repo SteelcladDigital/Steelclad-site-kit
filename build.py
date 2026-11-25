@@ -415,6 +415,13 @@ class Site:
         btns = (f'<a class="btn btn-outline" href="{url}" rel="noopener" target="_blank">Read more reviews on Google</a>' if url else "") + \
                (f'<a class="btn btn-outline" href="{write}" rel="noopener" target="_blank"><span class="rv-stars" aria-hidden="true">★★★★★</span> Leave us a Google review</a>' if write else "")
         more = f'<p class="btn-row" style="justify-content:center;margin-top:28px">{btns}</p>' if btns else ""
+        # reviews_display: "carousel" -> 3 across (2 tablet, 1 phone), rotates every reviews_interval ms, pauses on hover/focus/touch,
+        # prev/next + dots, native scroll-snap so it still swipes and works without JS. Default "grid".
+        if self.c.get("reviews_display") == "carousel" and len(self.c["reviews"]) > 1:
+            n = len(self.c["reviews"]); iv = int(self.c.get("reviews_interval", 6000))
+            arrows = '<button type="button" class="rc-btn rc-prev" aria-label="Previous reviews">‹</button><button type="button" class="rc-btn rc-next" aria-label="Next reviews">›</button>'
+            return (f'<div class="review-carousel" role="region" aria-roledescription="carousel" aria-label="Customer reviews" data-interval="{iv}">'
+                    f'<div class="reviews rc-track" tabindex="0">{cards}</div>{arrows}<div class="rc-dots" aria-hidden="true"></div></div>{more}')
         return f'<div class="reviews">{cards}</div>{more}'
 
     @staticmethod
