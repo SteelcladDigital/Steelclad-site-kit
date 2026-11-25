@@ -1,7 +1,7 @@
 """Harvest Moon Realty: client config for Steelclad Site Kit.
 Real estate brokerage, office at 411 N Lake Dr, Lexington, SC. Barry Keith, SC real estate license #43236.
 New site (no previous website). Build: python3 build.py harvest-moon-realty
-Forms: GoHighLevel (form id + tracking script still to add). Listing search: CMLS IDX embed, NO forced registration.
+Forms: Web3Forms (no GHL), GA4 via Tag Manager. Listing search: CMLS IDX embed, NO forced registration.
 Facts come from Barry's onboarding notes (Nov 2026), his Google Business Profile and Facebook page. See NOTES.md
 for everything still to confirm, and the placeholders the Buying a Home / Buying Land pages hold until his own copy arrives."""
 
@@ -399,14 +399,19 @@ CONFIG = {
   "logo": {"type": "image", "file": "logo.webp", "footer_file": "logo-footer.webp", "schema_file": "logo-light-bg.png", "width": 260, "height": 64, "footer_height": 80},   # footer: full-color logo on a cream badge
   "favicon_svg": FAVICON_SVG,
   "integrations": {
-    "form_mode": "ghl_embed",
-    "ghl_form_id": "",                 # TODO: Sites > Forms > "Harvest Moon contact" > Integrate (form id)
-    "ghl_tracking_snippet": "",        # TODO: Settings > External Tracking > Copy Script (Harvest Moon sub-account)
-    "ghl_chat_widget_id": "",
-    "gtm_id": "",
+    "form_mode": "web3forms",                # no GHL for this client (decided Nov 25, 2026): the contact form posts to Web3Forms, which emails Barry
+    "web3forms_access_key": "",              # TODO: web3forms.com > create a key with Barry's lead email (barry@harvestmoonrealty.com once it works)
+    "web3forms_subject": "New lead from harvestmoonrealty.com",
+    "web3forms_from_name": "Harvest Moon Realty website",
+    "thank_you_slug": "thank-you",
+    "gtm_id": "",                            # TODO: Tag Manager container (GA4 + generate_lead / phone_click), see claude/gtm-ga4-client-setup.md
     "google_reviews_url": "https://www.google.com/maps?cid=12121055207130619404",
     "google_review_write_url": "https://g.page/r/CQxe66N9ozaoEBM/review",
   },
+  "thank_you": {"title": "Thank you | Harvest Moon Realty", "h1": "Thanks! Barry has your note.",
+    "lead": "Barry reads every message himself and will reach out personally, usually the same day.",
+    "text": "In the meantime, keep searching homes and land on the Midlands MLS with no sign-up. Need him sooner?"},
+
   "labels": {
     "cta": "Let's Talk", "cta_short": "Let's Talk", "cta_long": "Start a Conversation",
     "phone_prefix": "Call or text", "topbar_promise": "No pressure. Just honest guidance.",

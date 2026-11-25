@@ -1,4 +1,4 @@
-*Last updated: November 19, 2026.*
+*Last updated: November 25, 2026.*
 
 Harvest Moon Realty ("Harvest Moon Realty," "we," "us") respects your privacy. This policy explains what information we collect through harvestmoonrealty.com, how we use it, and the choices you have.
 
@@ -27,7 +27,7 @@ We do not sell your personal information. We do not send you marketing text mess
 
 We share information only with service providers that help us run the business and the website, and only as needed for that purpose:
 
-- **HighLevel (GoHighLevel)**, our customer relationship and messaging system, which receives website form submissions
+- **Web3Forms**, which delivers website form submissions to our email
 - **Our IDX listing search provider**, which runs the MLS search on this site
 - **Google** (Tag Manager and Analytics), for website measurement
 - **Cloudflare**, which hosts and secures this website

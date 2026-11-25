@@ -10,10 +10,11 @@ Agent: Barry Keith, SC real estate license #43236. GBP primary category: Real es
 
 ## Launch blockers (`python3 build.py harvest-moon-realty --check`)
 
-1. **GHL form**: create the "Harvest Moon contact" form in his sub-account, set `integrations.ghl_form_id`.
-2. **GHL tracking script**: set `integrations.ghl_tracking_snippet`.
-3. **IDX search** for `/search-homes/` and `/search-land/`: paste the vendor's embed code into `search.pages[].embed_html` (plan below).
-4. (Recommended) GTM container → `integrations.gtm_id`.
+**No GHL for this client (decided Nov 25, 2026).** Forms go through Web3Forms; analytics through Tag Manager + GA4.
+
+1. **Web3Forms key**: create it with Barry's lead email (claude/web3forms-client-setup.md) → `integrations.web3forms_access_key`. Successful leads go to /thank-you/.
+2. **GTM container + GA4** (claude/gtm-ga4-client-setup.md) → `integrations.gtm_id`. Required: with no CRM, it's the only lead measurement. Key events: `generate_lead`, `phone_click`.
+3. **IDX search** for `/search-homes/` and `/search-land/`: paste the vendor's embed code into `search.pages[].embed_html` (plan below). IDX "request info" forms must email Barry directly (no GHL).
 
 ## Confirm with Barry before launch
 
@@ -44,7 +45,7 @@ Barry is in the **Consolidated MLS (CMLS, the Columbia/Midlands MLS)**. The site
 3. **Turn registration OFF**: IDX Broker: uncheck *Force Registration* and *Request Registration* for all five page types (search, map search, results, details, photo galleries). Diverse Solutions: Registration Level → *Never*. Whatever the vendor, also check there's no "soft" pop-up after X views.
 4. Paste the homes search embed into `/search-homes/` and a land-filtered search (property type Land/Lots/Acreage) into `/search-land/`. Optional: add `quick_links` (deep links like Lake Murray waterfront, acreage 5+, under $300k).
 5. Replace `search.disclaimer_html` with the exact attribution wording CMLS and the vendor require. The listing brokerage's name must show on each listing.
-6. Leads: the vendor's optional "Request a showing / Ask a question" form should be optional only, and routed into GHL (vendor email → GHL, or Zapier/webhook) with an owner notification.
+6. Leads: the vendor's optional "Request a showing / Ask a question" form should be optional only, and email Barry directly.
 7. Test in a private window: search, open listings, use the map and photos without ever seeing a sign-up wall.
 
 ## Design brief (benchmark)
@@ -104,7 +105,7 @@ Barry said on Nov 25 that two agents are joining the brokerage in January. Launc
 - [ ] "Our Agents" page: photo, bio, phone/email, license #, areas or specialties for each (get from each agent)
 - [ ] Update the About story and a few "I/me" lines to "we" where it's about the brokerage (keep Barry's personal voice on his own page)
 - [ ] Schema: RealEstateAgent organization with each agent as an employee (Person)
-- [ ] Contact page: change "Barry replies personally" copy; GHL round-robin or "which agent?" field, and agent notifications
+- [ ] Contact page: change "Barry replies personally" copy; add a "which agent?" field and Web3Forms recipients (Pro plan for up to 5 per form)
 - [ ] IDX: add agent rosters/agent IDs in the vendor so their listings attribute correctly
 - [ ] Agents' own ads/social must show the brokerage name (check SC LLR advertising rules with Barry)
 - [ ] Optional: individual Google Business Profiles for each agent at the office address (Google allows practitioner listings), each linking to their agent page
