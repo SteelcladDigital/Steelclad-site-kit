@@ -97,3 +97,14 @@ Barry thinks he has no reviews, but his Google profile has **11 reviews, 5.0 sta
 - `labels.mbar_second_href: "page:<slug>"` links a site page from the mobile bottom bar.
 - Icons: `key`, `tree`.
 - `logo.footer_height`: footer logo size in px.
+
+## Upcoming: two agents joining (January 2027)
+
+Barry said on Nov 25 that two agents are joining the brokerage in January. Launch as-is (Barry-centered); add them once they've actually transferred their licenses to Harvest Moon Realty:
+- [ ] "Our Agents" page: photo, bio, phone/email, license #, areas or specialties for each (get from each agent)
+- [ ] Update the About story and a few "I/me" lines to "we" where it's about the brokerage (keep Barry's personal voice on his own page)
+- [ ] Schema: RealEstateAgent organization with each agent as an employee (Person)
+- [ ] Contact page: change "Barry replies personally" copy; GHL round-robin or "which agent?" field, and agent notifications
+- [ ] IDX: add agent rosters/agent IDs in the vendor so their listings attribute correctly
+- [ ] Agents' own ads/social must show the brokerage name (check SC LLR advertising rules with Barry)
+- [ ] Optional: individual Google Business Profiles for each agent at the office address (Google allows practitioner listings), each linking to their agent page
