@@ -25,7 +25,7 @@ Domain: cosstormwater.com (registrar GoDaddy) · Email: Gmail · No GoHighLevel 
 - Area pages (11 new): Gilbert, Blythewood, Aiken, North Augusta, Greenville, Spartanburg, Anderson, York County, Midlands, Upstate, North Carolina. Each has distinct local copy built on cited county rules (Lexington annual checklist, Richland 30-day NOV, Greenville County maintenance plans, Fort Mill HOA handbook, NC annual SCM reports). Have him confirm he takes work in each, and how far into NC he goes.
 - Photos: the 13 gallery photos were pulled at the size GHL served them (~700px). **Ask for the full-size originals**, plus before/after pond photos. **No photos of Nicky or the crew:** he wants the company presented as a larger organization, so the copy uses the company voice (no owner spotlight, blog author is "Carolina Outdoor Services", no founder in schema). Customer reviews still mention Nicky by name, since they're quoted word for word.
 - The old "Asset vs Liability" before/after sliders were AI-generated images. They were not carried over.
-- Google Business Profile: Maps link is set. Still need the "ask for reviews" link (`google_review_write_url`, from GBP → Ask for reviews).
+- Google Business Profile: Maps link and "ask for reviews" link (https://g.page/r/CQiRDU3hBEarEBM/review) are both set.
 
 ## Nice to have later
 

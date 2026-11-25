@@ -541,7 +541,7 @@ CONFIG = {
     "thank_you_slug": "thank-you",
     "gtm_id": "GTM-578PKL83",
     "google_reviews_url": "https://maps.google.com/?cid=12341557194562310408",   # GBP listing (5.0, 7 reviews)
-    "google_review_write_url": "",       # TODO: GBP "Ask for reviews" link (g.page/r/.../review)
+    "google_review_write_url": "https://g.page/r/CQiRDU3hBEarEBM/review",   # GBP "Ask for reviews" link
   },
   "labels": {
     "cta": "Free Site Assessment", "cta_short": "Free Assessment", "cta_long": "Schedule a Free Site Assessment",
