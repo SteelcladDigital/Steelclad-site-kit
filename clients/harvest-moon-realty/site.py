@@ -391,9 +391,9 @@ CONFIG = {
     "fonts": {"display": "fraunces", "body": "dm-sans"},
     "radius": "round", "heading_case": "none", "divider": "wave", "texture": "none", "hero_layout": "card",
     "header": "light",
-    "hero_bg": "hero-fields.svg",
-    "hero_bg_position_mobile": "left bottom",              # phones: show the fields and the oak, not a giant moon behind the headline
-    "hero_bg_overlay_mobile": "linear-gradient(180deg,rgba(43,20,18,.78),rgba(43,20,18,.55))",
+    "hero_bg": "hero-midlands.webp",   # Nano Banana (Gemini) image, generated from a text prompt Nov 25; hero-fields.svg is the drawn backup
+    "hero_bg_position_mobile": "85% bottom",               # phones: show the farmhouse, oaks and road
+    "hero_bg_overlay_mobile": "linear-gradient(180deg,rgba(43,20,18,.8) 0%,rgba(43,20,18,.6) 70%,rgba(43,20,18,.35) 100%)",
     "hero_bg_overlay": "linear-gradient(90deg,rgba(43,20,18,.8) 0%,rgba(43,20,18,.45) 40%,rgba(43,20,18,.08) 62%,rgba(43,20,18,0) 100%)",
   },
   "logo": {"type": "image", "file": "logo.webp", "footer_file": "logo-footer.webp", "schema_file": "logo-light-bg.png", "width": 260, "height": 64, "footer_height": 80},   # footer: full-color logo on a cream badge
