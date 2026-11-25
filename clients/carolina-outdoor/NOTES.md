@@ -50,7 +50,7 @@ Patterns they share, and how they're applied here through COS's own brand:
 5. **Clear, repeated path to one offer.** → "Free Site Assessment" everywhere, sticky mobile Call/Text/Assessment bar, form on the home page, 4-step process.
 6. **Real photos, no stock.** → 13 job photos from his gallery across home, services, gallery and about.
 
-**Kept from the current site (to avoid change anxiety):** slate header (#333946), green buttons, sky-blue accent from the logo, round logo, uppercase headings, "asset or liability" message, FAQs, testimonials, same nav order and every URL.
+**Kept from the current site (to avoid change anxiety):** slate header (#333946), green buttons, sky-blue accent from the logo, round logo, uppercase headings, "asset or liability" message, FAQs, same nav order and every URL.
 
 **Bolder visual ideas for later:** a full-width photo hero (needs a high-res pond photo), a drone shot of a maintained pond, and a downloadable PDF version of the pond checklist for HOA boards.
 
