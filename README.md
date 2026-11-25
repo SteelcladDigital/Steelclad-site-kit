@@ -129,7 +129,9 @@ Launch check in this mode: the demo form and a missing `gtm_id` are blockers; th
 - `home.form` + `"form"` in `home.order`: the lead form right on the home page.
 - `tiers.items[].price` + `price_amount` (e.g. `"497"`): shows the price and adds it to the structured data as a monthly offer. `tiers.addons`: a priced add-ons list on the plans page.
 - `blog.category_prefix` (e.g. `blog/c`, GHL style) + `blog.categories`: category archive pages, so old category URLs keep working. Map each category name to a slug, or to `{slug, h1, title, lead, meta}`.
-- `business.legal_entity`, `founder`, `slogan`: extra organization structured data. `theme.colors.texture`: hero texture line color.
+- `business.legal_entity`, `founder`, `slogan`: extra organization structured data.
+- `business.credentials` ([(name, issuer, url)]) and `business.member_of` ([(org, url)]): certifications and memberships in the structured data (`hasCredential`, `memberOf`). `home.credentials` + `"credentials"` in `home.order`: linked credential cards on the home page.
+- `areas.pages[]` overrides for regional or out-of-state pages: `region` (e.g. `"NC"`), `title`, `meta`, `h1`, `crumb`, `place_type` / `place_name` (schema areaServed). `zips` is optional. `theme.colors.texture`: hero texture line color.
 - Pages built with `noindex` (thank-you, 404) are left out of `sitemap.xml`.
 
 ## GoHighLevel integration

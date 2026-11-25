@@ -229,8 +229,12 @@ class Site:
         if b.get("founder"): s["founder"] = {"@type": "Person", "name": b["founder"]}
         if b.get("slogan"): s["slogan"] = b["slogan"]
         if b.get("knows_about"): s["knowsAbout"] = b["knows_about"]
+        # business.credentials: [(name, issuer, url, ...)] -> hasCredential; business.member_of: [(org name, url)] -> memberOf
+        if b.get("credentials"): s["hasCredential"] = [{"@type": "EducationalOccupationalCredential", "name": c[0], "credentialCategory": "certification",
+                                                         "recognizedBy": {"@type": "Organization", "name": c[1], **({"url": c[2]} if c[2] else {})}} for c in b["credentials"]]
+        if b.get("member_of"): s["memberOf"] = [{"@type": "Organization", "name": n, **({"url": u} if u else {})} for n, u in b["member_of"]]
         served = [{"@type": "AdministrativeArea", "name": x} for x in b.get("counties", [])]
-        if self.areas: served += [{"@type": "City", "name": f'{a["city"]}, {b["address"]["region"]}'} for a in self.areas["pages"]]
+        if self.areas: served += [{"@type": a.get("place_type", "City"), "name": a.get("place_name") or f'{a["city"]}, {a.get("region", b["address"]["region"])}'} for a in self.areas["pages"]]
         if served: s["areaServed"] = served
         if self.tiers:
             s["hasOfferCatalog"] = {"@type": "OfferCatalog", "name": self.tiers["nav_label"], "itemListElement": [
@@ -477,6 +481,10 @@ class Site:
         if h.get("steps"):
             st = h["steps"]
             S["steps"] = f'<section class="bg-sand"><div class="wrap"><div class="section-head"><span class="eyebrow">{esc(st["eyebrow"])}</span><h2>{esc(st["title"])}</h2></div><div class="steps">' + "".join(f'<div class="step"><h3>{esc(t)}</h3><p>{esc(d)}</p></div>' for t, d in st["items"]) + "</div></div></section>"
+        if h.get("credentials"):   # home.credentials: {eyebrow, title, lead, items: [(icon, name, issuer, url, text)]} -> linked credential cards (E-E-A-T)
+            cr = h["credentials"]
+            cards = "".join((f'<a class="card" href="{u}" rel="noopener" target="_blank">' if u else '<div class="card">') + f'<span class="ic">{icon(i)}</span><h3>{esc(n)}</h3><p>{esc(t)}</p><span class="more">{esc(iss)}{" ↗" if u else ""}</span>' + ("</a>" if u else "</div>") for i, n, iss, u, t in cr["items"])
+            S["credentials"] = f'<section class="bg-sand"><div class="wrap"><div class="section-head center"><span class="eyebrow">{esc(cr.get("eyebrow","Credentials"))}</span><h2>{esc(cr["title"])}</h2>' + (f'<p class="lead">{esc(cr["lead"])}</p>' if cr.get("lead") else "") + f'</div><div class="grid-3">{cards}</div></div></section>'
         sh = self.c["services_hub"]
         n_svc = len(self.c["services"]); hc = sh.get("home_count")   # services_hub.home_count: feature the first N services on the home page, link the rest
         more_svc = f'<p style="margin-top:28px"><a class="btn btn-outline" href="{self.href(cur, sh["slug"])}">See all {n_svc} services →</a></p>' if hc and hc < n_svc else ""
@@ -573,23 +581,25 @@ class Site:
         self.pages[cur] = self.page(cur, A["hub_title"], A["hub_meta"], body, None, trail)
 
     def area_page(self, a):
-        A = self.areas; cur = a["slug"]; R = self.b["address"]["region"]
-        trail = self.trail((A["nav_label"], A["hub_slug"]), (f'{a["city"]}, {R}', cur))
+        A = self.areas; cur = a["slug"]; R = a.get("region", self.b["address"]["region"])   # areas.pages[].region: e.g. "NC" for an out-of-state page
+        trail = self.trail((A["nav_label"], A["hub_slug"]), (a.get("crumb") or f'{a["city"]}, {R}', cur))
         local = "".join(f'<div class="inc"><h3>{esc(t)}</h3><p>{esc(d)}</p></div>' for t, d in a["local"])
         nearby = "".join(f'<li><a href="{self.href(cur,x["slug"])}">{esc(x["city"])}</a></li>' for x in A["pages"] if x is not a)
         faqs = a["faqs"] + [(q.format(city=a["city"]), ans.format(city=a["city"])) for q, ans in A.get("shared_faqs", [])]
         svc = "".join(f'<li><a href="{self.href(cur,self.svc_path(s))}">{esc(s["name"])} in {esc(a["city"])}</a></li>' for s in self.c["services"][:A.get("services_listed", 5)])
         tiers = f'<h2>{esc(self.tiers["nav_label"])} in {esc(a["city"])}</h2><p>{A["tiers_blurb_html"]} <a href="{self.href(cur,self.tiers["slug"])}">Compare →</a></p>' if self.tiers else ""
         f = lambda s: s.format(city=esc(a["city"]), region=R)
-        body = self.page_hero(cur, trail, f(A["page_h1"]), esc(a["intro"])) + f'''
+        # areas.pages[] may override the shared templates with their own "title", "meta", "h1" (regional pages such as "the Upstate")
+        p_title, p_meta, p_h1 = a.get("title") or f(A["page_title"]), a.get("meta") or f(A["page_meta"]), a.get("h1") or f(A["page_h1"])
+        body = self.page_hero(cur, trail, p_h1, esc(a["intro"])) + f'''
 <section><div class="wrap layout-side"><div class="prose"><h2>{f(A["local_title"])}</h2><div class="included">{local}</div>{tiers}
 <h2>Services in {esc(a["city"])}</h2><ul class="checklist">{svc}</ul><h2>{esc(a["city"])} FAQ</h2>{self.faq_block(faqs)}
-<p style="color:var(--c-muted);font-size:.92rem">Serving {esc(a["city"])}, {esc(a["county"])} · ZIP codes {esc(a["zips"])}</p></div>
+<p style="color:var(--c-muted);font-size:.92rem">Serving {esc(a["city"])}, {esc(a["county"])}{" · ZIP codes " + esc(a["zips"]) if a.get("zips") else ""}</p></div>
 <aside class="aside"><h3>{f(A["aside_title"])}</h3><p>{esc(self.L["aside_text"])}</p><a class="phone{"" if self.has_phone else " is-email"}" href="{self.rh}">{esc(self.rt)}</a>
 <a class="btn btn-gold" href="{self.href(cur,self.cta)}">{esc(self.L["cta"])}</a><p style="margin:14px 0 6px;font-weight:700;color:#fff">Also serving</p><ul class="city-links" style="grid-template-columns:1fr">{nearby}</ul></aside></div></section>
 {self.related_posts_block(cur, "areas", a["slug"], self.blog.get("area_related_title", "Tips for {city}").format(city=a["city"])) if self.blog else ""}{f'<section class="bg-sand"><div class="wrap"><div class="section-head center"><span class="eyebrow">Reviews</span><h2>What our neighbors say</h2></div>{self.reviews_block()}</div></section>' if self.c["reviews"] else ""}{self.cta_band(cur)}'''
-        sch = [self.service_schema(f(A["page_title"]), a["intro"], cur, [a["city"]]), self.faq_schema(faqs)]
-        self.pages[cur] = self.page(cur, f(A["page_title"]), f(A["page_meta"]), body, sch, trail)
+        sch = [self.service_schema(p_title, a["intro"], cur, [a["city"]]), self.faq_schema(faqs)]
+        self.pages[cur] = self.page(cur, p_title, p_meta, body, sch, trail)
 
     def resource_page(self):
         R = self.resource; cur = R["slug"]; trail = self.trail((R["nav_label"], cur))
