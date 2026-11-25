@@ -5,7 +5,7 @@ slug: how-often-should-a-retention-pond-be-inspected
 date: 2026-06-01
 description: Most SC and NC commercial retention ponds need at least two documented inspections a year. How to find your permit's rule and what an inspection covers.
 category: Pond Maintenance
-author: Nicky Waters, owner
+author: Carolina Outdoor Services
 services: stormwater-inspections, retention-pond-maintenance, stormwater-pond-repairs
 areas: lexington-sc, columbia-sc, aiken-sc, greenville-sc
 image: photos/commercial-wet-pond-outlet.webp

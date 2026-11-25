@@ -12,11 +12,9 @@ Domain: cosstormwater.com (registrar GoDaddy) · Email: Gmail · No GoHighLevel 
 ## Before launch: must do (blockers)
 
 1. **Migrate 15 blog posts.** Two are migrated (`how-often-should-a-retention-pond-be-inspected`, `what-is-sustainable-stormwater-management`). The other 15 are draft stubs in `posts/` with `migrate_from` links, and `--check` blocks launch until each is filled in (their URLs would 404). Copy each body, set the real date, tag `services:` and `areas:`.
-2. **Confirm the testimonials.** The old site shows 15 five-star "reviews" with first name + last initial and town, but none appear on Google, and several read like template copy (e.g. "game-changer for our industrial property", lawn and tree-trimming reviews for a stormwater-only company). Only 6 stormwater-relevant ones are used. **Ask Nicky if each is a real client.** If not, remove them and use Google reviews instead. Don't launch with unverified reviews.
-3. **Master Pond Manager.** The site says Nicky is a "Clemson Extension Certified Master Pond Manager" (full certificate track). Confirm he completed the full certificate (with exam), not the Letter of Completion track, and the year.
-4. **Sustain SC.** Confirm the membership is current and under the company name, and ask whether Sustain SC lists members (a link back from their Member Network page would be a strong local citation).
-5. **SC contractor license.** The old site shows an "SC Contractor Licensed" badge but no number. Get the license type and number if he has one; otherwise the site only says "licensed and insured".
-6. **Web3Forms:** confirm the key is verified in csas2787@gmail.com, send a test from the preview, and add a Gmail filter so Web3Forms mail never goes to spam.
+2. **Reviews:** done. The old site's testimonials were removed; the site shows the 5 written Google reviews from his Business Profile (5.0, 7 reviews), word for word, first name + last initial, with a "read more on Google" link. Update `REVIEWS` in `site.py` as new reviews come in.
+3. **Credentials:** confirmed by the client (Nov 25). Master Pond Manager, SC BMP inspector, plan reviewer, NC State SCM, Sustain SC all stay.
+4. **Web3Forms:** confirm the key is verified in csas2787@gmail.com, send a test from the preview, and add a Gmail filter so Web3Forms mail never goes to spam.
 
 ## To confirm with Nicky (facts the copy relies on)
 
@@ -25,9 +23,9 @@ Domain: cosstormwater.com (registrar GoDaddy) · Email: Gmail · No GoHighLevel 
 - Free site assessment; no travel surcharge for Greater Columbia (from the old Columbia page)
 - Forestry mulching capacity: trees up to ~6–8" diameter, 2–4" mulch layer (old site)
 - Area pages (11 new): Gilbert, Blythewood, Aiken, North Augusta, Greenville, Spartanburg, Anderson, York County, Midlands, Upstate, North Carolina. Each has distinct local copy built on cited county rules (Lexington annual checklist, Richland 30-day NOV, Greenville County maintenance plans, Fort Mill HOA handbook, NC annual SCM reports). Have him confirm he takes work in each, and how far into NC he goes.
-- Photos: the 13 gallery photos were pulled at the size GHL served them (~700px). **Ask for the full-size originals**, plus before/after pond photos and a photo of Nicky or the crew for the About page.
+- Photos: the 13 gallery photos were pulled at the size GHL served them (~700px). **Ask for the full-size originals**, plus before/after pond photos. **No photos of Nicky or the crew:** he wants the company presented as a larger organization, so the copy uses the company voice (no owner spotlight, blog author is "Carolina Outdoor Services", no founder in schema). Customer reviews still mention Nicky by name, since they're quoted word for word.
 - The old "Asset vs Liability" before/after sliders were AI-generated images. They were not carried over.
-- Google Business Profile: send the Maps link (`google_reviews_url`) and the "ask for reviews" link (`google_review_write_url`).
+- Google Business Profile: Maps link is set. Still need the "ask for reviews" link (`google_review_write_url`, from GBP → Ask for reviews).
 
 ## Nice to have later
 
@@ -45,7 +43,7 @@ Domain: cosstormwater.com (registrar GoDaddy) · Email: Gmail · No GoHighLevel 
 **National benchmark (best-in-class pond/stormwater operators):** SOLitude Lake Management (stormwater inspection & maintenance pages, HOA-specific landing pages, deep FAQs and education content), Dragonfly Pond Works (single-partner positioning, association proof), and municipal/extension guides (Clemson HGIC, Greenville County, Fort Mill) that rank for "who maintains a stormwater pond".
 
 Patterns they share, and how they're applied here through COS's own brand:
-1. **Lead with the deliverable, not the mowing.** Top operators sell the inspection report and compliance record. → The hero card is an (Example-labeled) inspection report: outlet, forebay, berm, photos, "fix now · monitor · plan".
+1. **Lead with the deliverable, not the mowing.** Top operators sell the inspection report and compliance record. → The stormwater inspections page lists exactly what's in every report. (The hero's sample report card and the wavy hero texture were removed at the client's request, Nov 25: the hero is now a clean centered headline, CTA and credential line.)
 2. **Credentials as proof, linked to the issuer.** → New "Certified for stormwater, not just mowing" section with linked cards for Master Pond Manager (Clemson), SC BMP inspector, plan reviewer, NC State SCM, Sustain SC. Also in schema (`hasCredential`, `memberOf`), the trust bar, hero proof and every sidebar. None of the local competitors do this; Aqueous's MPM is still pending.
 3. **Education that ranks.** → A cited SC pond owner's guide (`/stormwater-pond-guide/`) covering Lexington, Richland, Greenville, York, Aiken and NC rules, plus a season checklist.
 4. **Location pages with real local substance.** → 14 area pages (3 kept + 11 new) grouped Midlands / Aiken / Upstate / York & NC, each citing that county's program. No competitor has any.

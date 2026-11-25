@@ -5,7 +5,7 @@ slug: what-is-sustainable-stormwater-management
 date: 2026-06-05
 description: What sustainable stormwater management means for SC and NC commercial properties, and why it pays off in compliance and lower repair costs.
 category: Environmental Sustainability
-author: Nicky Waters, owner
+author: Carolina Outdoor Services
 services: retention-pond-maintenance, stormwater-inspections, forestry-mulching, erosion-repair
 areas: columbia-sc, lexington-sc, midlands-sc
 draft: false

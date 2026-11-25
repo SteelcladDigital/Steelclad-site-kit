@@ -440,15 +440,14 @@ AREAS = [
     },
 ]
 
-# Testimonials as they appear on the current site (homepage carousel). Six stormwater-relevant ones are used.
-# CONFIRM with Nicky that each is a real client before launch (NOTES.md): they aren't on Google, and the old site was built by a template.
+# Google reviews from the Carolina Outdoor Services LLC Business Profile (5.0, 7 reviews), copied Nov 25, 2026.
+# The 5 reviews with written text are used word for word; 2 are star-only. The old site's testimonials were removed.
 REVIEWS = [
-    ("Emily R.", "Greer, SC · pond inspections", "We've been using Carolina Outdoor Services for our retention pond inspectors for over a year now. Their comprehensive reports and proactive maintenance have saved us time and money. Highly recommended!"),
-    ("Jacob G.", "Columbia, SC · retention pond", "Carolina Outdoor Services has been a lifesaver for our Columbia-area property. Their team transformed our neglected retention pond into a beautiful focal point. The prompt inspections and maintenance have significantly improved water quality and reduced mosquito problems."),
-    ("Sis T.", "Charlotte, NC · forestry mulching", "We were impressed by COS' expertise in forestry mulching for our Charlotte property. Their crew was professional and knowledgeable, and they transformed our overgrown area into a beautifully mulched space. We're very satisfied with the results."),
-    ("Michaela J.", "Irmo, SC · erosion", "We hired Carolina Outdoor Services to address erosion issues on our Irmo property. Their forestry mulching not only stabilized the soil but also enhanced the overall appearance of our land. Their crew was knowledgeable and efficient, and we're extremely pleased with the results."),
-    ("Sarah M.", "Spartanburg, SC · storm cleanup", "We had a severe storm that caused significant debris buildup in our retention pond. Carolina Outdoor Services responded quickly and efficiently, restoring the pond to perfect condition. Their team is professional and reliable."),
-    ("Michael K.", "Mauldin, SC · retention pond", "Carolina Outdoor Services did an outstanding job with our retention pond. They were thorough in their inspection and efficient in their maintenance work. Our pond is now functioning perfectly."),
+    ("Frank M.", "Google review · forestry mulching", "Great overall experience with Nicky and his son Austin. From initial communication to on-site estimate, to final mulching, working with Nicky was a 1st class experience. I highly recommend giving him a call for your forest mulching needs."),
+    ("Jim R.", "Google review · land clearing", "Thorough discussion before job scope was agreed to. We agreed to use two tree grinders in tandem for eight hour job covering 3 plus acres of mostly thickly dispersed trees of six inch diameter and smaller with plenty of underbrush and vines. Very pleased with results. Allowed me about thirty minutes after they finished the scope of work asking if I had any extra items to tackle. I will use Nick's services next year. Well done."),
+    ("Steve T.", "Google review · lot clearing", "Reached out to the crew at Carolina Outdoor Services to clean/mulch a two acre lot and what a job they did!! From overgrown to clear! Thanks guys for the professional work, punctuality, and price! It's greatly appreciated!"),
+    ("Rylan W.", "Google review", "The entire crew at Carolina Outdoor services were professional and courteous. They worked with me through some delays and explained everything along the way. I will using them for future projects and recommend that others do the same"),
+    ("Angela M.", "Google review", "Great experience 👍 Free estimate, prompt responses, quick scheduling. Luke who came out and spent the day working on my property did a great job and was very polite :) Very happy with the whole interaction."),
 ]
 
 GENERAL_FAQS = [
@@ -495,9 +494,9 @@ This page is a general guide, not legal or engineering advice. Your pond's appro
 """
 
 ABOUT_STORY = f"""<p>Carolina Outdoor Services started in 2004 as a full-service commercial landscaping company. Over our first decade we kept getting called to the same problems: neglected retention ponds, eroding slopes and outlet structures that hadn't been looked at in years.</p>
-<p>About twelve years ago, owner <strong>Nicky Waters</strong> narrowed the business to the work that kept finding us: stormwater maintenance, inspection and repair. Today that's all we do, along with the forestry mulching and land clearing that keep pond banks and commercial land usable. We're not a landscaping company that dabbles in stormwater.</p>
+<p>About twelve years ago we narrowed the business to the work that kept finding us: stormwater maintenance, inspection and repair. Today that's all we do, along with the forestry mulching and land clearing that keep pond banks and commercial land usable. We're not a landscaping company that dabbles in stormwater.</p>
 <p>We report what we actually find. If a pond needs a $400 fix, we say so. We don't inflate findings to win a bigger job, and you'll know what it costs and when we're coming before we show up.</p>
-<p>Nicky is a <a href="{CLEMSON_MPM}" rel="noopener">Clemson Extension Certified Master Pond Manager</a>, a certified SC post-construction BMP inspector, holds NC State's SCM Inspection &amp; Maintenance certification, and is a Clemson-certified stormwater plan reviewer. Carolina Outdoor Services is also a member of <a href="{SUSTAIN_SC}" rel="noopener">Sustain SC</a>, the Columbia-based nonprofit that connects South Carolina businesses' sustainability goals with local solutions where commerce and conservation meet.</p>"""
+<p>Our credentials include <a href="{CLEMSON_MPM}" rel="noopener">Clemson Extension Certified Master Pond Manager</a>, certified SC post-construction BMP inspector, NC State SCM Inspection &amp; Maintenance certification and Clemson-certified stormwater plan reviewer. Carolina Outdoor Services is also a member of <a href="{SUSTAIN_SC}" rel="noopener">Sustain SC</a>, the Columbia-based nonprofit that connects South Carolina businesses' sustainability goals with local solutions where commerce and conservation meet.</p>"""
 
 CONFIG = {
   "business": {
@@ -512,7 +511,6 @@ CONFIG = {
     "hours_text": "Mon–Fri 7 AM – 5 PM",
     "counties": ["South Carolina", "North Carolina", "Lexington County, SC", "Richland County, SC", "Aiken County, SC", "Greenville County, SC", "Spartanburg County, SC", "Anderson County, SC", "York County, SC"],
     "knows_about": ["Stormwater management", "Retention pond maintenance", "Detention pond maintenance", "Stormwater BMP inspection", "Stormwater control measure (SCM) inspection", "Erosion control", "Forestry mulching", "Land clearing", "Drainage ditch maintenance"],
-    "founder": "Nicky Waters",
     "legal_entity": "Carolina Outdoor Services, LLC",
     "slogan": "Stormwater Management You Can Count On.",
     "credentials": [
@@ -531,7 +529,7 @@ CONFIG = {
                "secondary_wash": "#eaf6f9", "accent": "#4c7a2e", "accent_text": "#ffffff", "surface": "#f6f8fa",
                "ink": "#152033", "muted": "#4a5568", "texture": "#72c4d6", "highlight": "#9ed36a"},
     "fonts": {"display": "inter", "body": "outfit"},
-    "radius": "soft", "heading_case": "uppercase", "divider": "wave", "texture": "ripples", "hero_layout": "card",
+    "radius": "soft", "heading_case": "uppercase", "divider": "none", "texture": "none", "hero_layout": "centered",
   },
   "logo": {"type": "image", "file": "logo.webp", "schema_file": "logo-light-bg.png", "width": 96, "height": 96},
   "favicon_svg": FAVICON_SVG,
@@ -542,7 +540,7 @@ CONFIG = {
     "web3forms_from_name": "Carolina Outdoor Services website",
     "thank_you_slug": "thank-you",
     "gtm_id": "GTM-578PKL83",
-    "google_reviews_url": "",            # TODO: his Google Maps listing link (shows reviews)
+    "google_reviews_url": "https://maps.google.com/?cid=12341557194562310408",   # GBP listing (5.0, 7 reviews)
     "google_review_write_url": "",       # TODO: GBP "Ask for reviews" link (g.page/r/.../review)
   },
   "labels": {
@@ -550,7 +548,7 @@ CONFIG = {
     "phone_prefix": "Call or text", "topbar_promise": "Stormwater Management You Can Count On.",
     "footer_blurb": "Certified stormwater inspections, retention pond maintenance and repair, erosion repair and forestry mulching for commercial, industrial and HOA properties across South Carolina and North Carolina. Since 2004.",
     "footer_services_title": "Services",
-    "reviews_title": "What our clients say",
+    "reviews_title": "What our clients say on Google",
     "cta_band_title": "Ready to stop worrying about your stormwater system?",
     "cta_band_text": "Let's do a free site assessment. We'll look, tell you exactly what we see, and give you a clear recommendation. No obligation, no pressure.",
     "aside_title": "Free site assessment", "aside_text": "Talk directly with a certified inspector. We respond within one business day.",
@@ -563,10 +561,7 @@ CONFIG = {
     "h1": "Stormwater management &amp; retention pond maintenance <em>across South Carolina</em>",
     "lead": "Certified inspections, pond maintenance and repairs, erosion repair and forestry mulching for commercial, industrial and HOA properties, from a Gilbert, SC team with 20+ years in the field. We treat compliance as the starting point, not the scramble.",
     "secondary_cta": ("See Our Work", "gallery"),
-    "proof": ["Clemson Certified Master Pond Manager", "SC BMP & NC SCM certified inspector", "Owner-operated since 2004"],
-    "hero_card": {"label": "Inspection report", "title": "Wet detention pond · Commercial site", "sub": "What you get after every inspection", "badge": "Example", "hanger": False,
-                  "checks": ["Outlet structure & trash rack", "Inlets & forebay sediment", "Berm & slope integrity", "Woody growth & vegetation", "Photos of every finding", "Fix now · monitor · plan"],
-                  "note": "Flagged: soft spot on the east berm near the riser. Recommend repair before the next heavy rain. Monitor: forebay sediment."},
+    "proof": ["Clemson Certified Master Pond Manager", "SC BMP & NC SCM certified inspector", "Serving the Carolinas since 2004"],
     "trust": [("badge", "Master Pond Manager", "Clemson Extension certified"), ("shield", "SC BMP · NC SCM", "Certified stormwater inspector"),
               ("doc", "Written reports", "Photos + prioritized fixes"), ("leaf", "Sustain SC member", "Sustainability network, Columbia")],
     "why": {"eyebrow": "Why property managers trust us",
@@ -583,7 +578,7 @@ CONFIG = {
                               ("doc", "Stormwater Plan Reviewer", "Clemson Extension", CLEMSON_BMP, "Trained to read and review stormwater plans, so we maintain your pond the way it was designed."),
                               ("check", "NC SCM Inspection & Maintenance", "NC State University", NCSU_SCM, "Certified in North Carolina stormwater control measure (SCM) inspection and maintenance."),
                               ("leaf", "Member, Sustain SC", "Sustain SC · Columbia", SUSTAIN_SC, "A statewide nonprofit connecting South Carolina businesses' sustainability goals with local land and water solutions."),
-                              ("users", "Licensed & insured", "Carolina Outdoor Services, LLC", "", "Owner-operated since 2004, with certificates of insurance available on request.")]},
+                              ("users", "Licensed & insured", "Carolina Outdoor Services, LLC", "", "In business since 2004, with certificates of insurance available on request.")]},
     "steps": {"eyebrow": "How it works", "title": "From first call to a compliant pond",
               "items": [("Call, text or send the form", f"{PHONE}. Tell us about the property and the system."),
                         ("Free site assessment", "We walk the site and tell you plainly what we see. No obligation."),
@@ -657,13 +652,13 @@ CONFIG = {
     "meta": "Practical advice on retention pond maintenance, stormwater inspections, erosion and forestry mulching for SC & NC property managers and HOAs.",
     "h1": "Stormwater advice for South Carolina property managers",
     "lead": "Straight answers on pond maintenance, inspections, compliance and land clearing for commercial, industrial and HOA properties.",
-    "default_author": "Nicky Waters, owner", "home_title": "From the blog",
+    "default_author": "Carolina Outdoor Services", "home_title": "From the blog",
     "area_related_title": "Advice for {city} property managers",
   },
   "about": {"title": "About Us: Stormwater Specialists Since 2004",
-    "meta": "Carolina Outdoor Services: owner-operated since 2004, stormwater-focused for 12+ years. Clemson Master Pond Manager and certified SC & NC inspector.",
+    "meta": "Carolina Outdoor Services: in business since 2004, stormwater-focused for 12+ years. Clemson Master Pond Manager and certified SC & NC inspectors.",
     "h1": "Over 20 Years of Showing Up. 12+ Years of Stormwater Focus.",
-    "lead": "Carolina Outdoor Services is owner-operated and based in Gilbert, SC. We do stormwater work, and we do it right.",
+    "lead": "Carolina Outdoor Services is based in Gilbert, SC and serves commercial, industrial and HOA properties across South Carolina and North Carolina. We do stormwater work, and we do it right.",
     "story_title": "How we got here",
     "story_html": ABOUT_STORY,
     "photos_title": "On the job", "photos": [PH["outlet"], PH["mulcher"], PH["mowedpond"]],
