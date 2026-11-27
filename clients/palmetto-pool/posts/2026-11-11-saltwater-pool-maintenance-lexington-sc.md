@@ -59,7 +59,7 @@ If you're seeing these, have the cell and the rest of your equipment checked bef
 
 ## The easy way to handle all of this
 
-If you'd rather not keep track of cleaning schedules and winter swaps, our **Full Service Plus** plan builds them in: salt cell cleaning twice a year, a winter dummy-cell swap, and cartridge filter cleaning every 90 days, along with weekly chemistry and cleaning. [Compare our maintenance plans](/pool-maintenance-plans/) or learn more about [salt cell and filter cleaning](/services/specialized-pool-cleaning/).
+If you'd rather not keep track of cleaning schedules and winter swaps, we can build them into your [weekly service](/services/weekly-pool-maintenance/): salt cell cleaning twice a year, a winter dummy-cell swap, and cartridge filter cleaning every 90 days, along with weekly chemistry and cleaning. Learn more about [salt cell and filter cleaning](/services/specialized-pool-cleaning/).
 
 > Thinking about converting a chlorine pool to saltwater? We'll tell you honestly whether it makes sense for your pool. See [equipment upgrades](/services/pool-equipment-upgrades/).
 

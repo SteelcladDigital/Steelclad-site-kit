@@ -2,7 +2,7 @@
 
 Owner: Mike Brazell · Lexington, SC · (803) 394-0765 · palmettopoolsolutions@gmail.com
 Build: `python3 build.py palmetto-pool` → `dist/palmetto-pool` · Preview: `python3 build.py palmetto-pool --preview`
-Status (Nov 19, 2026): **refreshed to the current process, not launched.** Branch `palmetto-refresh-nov-2026`, not merged to `main`. `launched` stays `False`.
+Status (Nov 27, 2026): **LIVE, without the maintenance plans.** `launched: True`, merged to `main`.
 
 ## What changed in the Nov 19 refresh
 
@@ -24,6 +24,18 @@ Status (Nov 19, 2026): **refreshed to the current process, not launched.** Branc
   - Privacy: rewritten for the new stack (Web3Forms, Google Tag Manager/Analytics, Cloudflare), keeping the SMS no-sharing clause. **Mike should read all three.**
 - **Real logo** (white knockout cut from his JPG) on a header in his exact logo navy, `#1b227d`. The SVG redraw is gone.
 - **Real photo of Mike** (parade float) in the hero chip, the homepage owner story, the About page and the share image (`og-image.jpg`).
+
+## Launch (Nov 27, 2026)
+
+- **Mike approved the design and asked for every mention of the maintenance plans to come off the live site.**
+  - `tiers.enabled` is now `False`. That removes the plans page, the nav link, the home plans section and plan finder, the contact form's plan dropdown, the city-page plan blurb and the OfferCatalog schema.
+  - Copy that named Balance / Full Service / Full Service Plus was reworded to "weekly service" (Forest Acres page, salt cell FAQ, the general FAQ, the calendar CTA, the saltwater post and the privacy policy).
+  - `/pool-maintenance-plans` sends a **302** (temporary) redirect to the Weekly Pool Maintenance page, so the URL can come back.
+  - Mike's own Terms still say "depending on your plan (as communicated)". That's his service-agreement wording, left as-is.
+- **The with-plans version is saved for Mike's review in a month or two:**
+  - claude.ai preview: https://claude.ai/artifact/SN41gG8s4ShRn4bv4HGm9C
+  - git branch `palmetto-plans-preview` (frozen; `launched` is False there, so it's noindexed). Cloudflare Pages builds a branch preview for it at `palmetto-plans-preview.<project>.pages.dev`.
+  - **To bring the plans back:** set `tiers.enabled` back to `True`, restore `"tiers"` and `"quiz"` in `home.order`, revert the copy changes (see the diff from `palmetto-plans-preview`), and remove the 302.
 
 ## Decisions from Steelclad (Nov 19, 2026)
 

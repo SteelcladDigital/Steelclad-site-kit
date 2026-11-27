@@ -139,7 +139,7 @@ SERVICES = [
             "You can't remember the last time it was cleaned",
         ],
         "faqs": [
-            ("Is salt cell cleaning included in a maintenance plan?", "It's built into our Full Service Plus plan, along with cartridge cleaning every 90 days. It's also available on its own."),
+            ("Can you clean my salt cell on a schedule?", "Yes. We can add scheduled salt cell and cartridge filter cleaning to your weekly service, or do it as a one-time visit."),
         ],
     },
     {
@@ -361,9 +361,9 @@ AREAS = [
         "zips": "29206", "existing": False,
         "intro": "Forest Acres lives up to its name: big, mature trees over nearly every backyard. That shade is beautiful, but it fills pools with leaves, pollen and organic debris that pool owners fight all year.",
         "local": [
-            ("Heavy leaf load", "Thorough skimming, basket cleaning and brushing every week are built into Full Service."),
+            ("Heavy leaf load", "Thorough skimming, basket cleaning and brushing are part of every weekly visit."),
             ("Phosphates from debris", "Decaying leaves feed algae. We watch for it and treat it before the pool turns."),
-            ("Filters work harder", "Shaded, leafy pools clog filters faster. Full Service Plus includes cartridge cleaning every 90 days."),
+            ("Filters work harder", "Shaded, leafy pools clog filters faster. We can schedule cartridge cleaning every 90 days as part of your weekly service."),
         ],
         "faqs": [
             ("Do you service pools in Forest Acres?", "Yes. Forest Acres (29206) is part of our Richland County service area."),
@@ -394,7 +394,6 @@ REVIEWS = [
 
 GENERAL_FAQS = [
     ("How much does pool service cost?", "Every pool is different: size, type, tree cover and equipment all matter. After a free evaluation we give you one flat monthly rate. No teaser pricing, no surprise fees."),
-    ("What's the difference between the plans?", "Balance covers water chemistry only, for people who like to clean their own pool. Full Service adds skimming, brushing, vacuuming and equipment checks. Full Service Plus adds scheduled salt cell and cartridge filter cleaning plus discounted openings and closings."),
     ("Do I need to be home on service day?", "No. We just need gate access and pets secured. You'll find a door hanger checking off everything we did, with any comments and your next service date."),
     ("Are you certified and insured?", "Yes. We're CPO certified (Certified Pool Operator), licensed and fully insured."),
     ("What if I call and you don't answer?", "We answer our phone. If you do hit voicemail, expect a callback within the hour during business hours."),
@@ -455,12 +454,12 @@ CONFIG = {
     "gtm_id": "GTM-K3752MP5",          # Mike's OWN Tag Manager account; GA4 + generate_lead tags live inside it
     "google_review_write_url": "https://g.page/r/CSSJuhDXidrPEBM/review",   # Mike's GBP review link: "★★★★★ Leave us a Google review" button + footer link
   },
-  "launched": False,                 # set True only after Mike approves and --check is clean; launch blockers then STOP the build
+  "launched": True,                  # approved by Mike Nov 27, 2026 (without plans): launch blockers now STOP the build
   "labels": {
     "cta": "Free Pool Evaluation", "cta_short": "Free Evaluation", "cta_long": "Get a Free Pool Evaluation",
     "phone_prefix": "Call or text", "topbar_promise": "Family-owned in Lexington County. We answer our phone, and missed calls get a callback within the hour.",
     "footer_blurb": "Family-owned in Lexington County, SC. CPO-certified pool care for homeowners across Lexington & Richland counties. Licensed and fully insured.",
-    "footer_services_title": "Plans & Services",
+    "footer_services_title": "Services",
     "reviews_title": "What our Lexington County neighbors are saying",
     "cta_band_title": "Ready to stop thinking about your pool?",
     "cta_band_text": "Call or text Mike's team, and we'll set up a free pool evaluation. You'll get an honest look at your pool and one flat monthly number.",
@@ -468,12 +467,12 @@ CONFIG = {
     "aside_badges": "✓ Family-owned in Lexington County · ✓ CPO certified · ✓ Licensed & insured",
   },
   "home": {
-    "title": "Weekly Pool Service & Maintenance Plans in Lexington, SC",
+    "title": "Weekly Pool Service & Maintenance in Lexington, SC",
     "meta": "Family-owned weekly pool service in Lexington & Richland counties, SC. CPO certified, flat monthly rate, visit report every week. (803) 394-0765",
     "eyebrow": "Family-owned in Lexington County, SC",
     "h1": "Weekly pool service for Lexington homeowners who are <em>done</em> chasing their pool company",
     "lead": "Lifelong Lexington County locals caring for pools across Lexington and Richland counties. One flat monthly rate, the same route day every week, and a visit report on your door after every service.",
-    "secondary_cta": ("Compare Plans", "pool-maintenance-plans"),
+    "secondary_cta": ("See Weekly Service", "services/weekly-pool-maintenance"),
     "proof": ["Serving Lexington & Richland counties", "Above-ground & in-ground", "Salt & chlorine pools"],
     "hero_owner": {"photo": "photos/mike-brazell-avatar.jpg", "alt": "Mike Brazell, owner of Palmetto Pool Solutions",
                    "name": "Mike Brazell, owner", "text": "CPO certified · Lifelong Lexington County resident"},
@@ -507,12 +506,12 @@ CONFIG = {
     "steps": {"eyebrow": "Getting started", "title": "From first call to swimming in about 10 minutes of your time",
               "items": [("Call or text", "(803) 394-0765. We answer, or call back within the hour."),
                         ("Free pool evaluation", "We inspect your pool and equipment and tell you exactly what we see. No pressure, no jargon."),
-                        ("Pick your plan", "One flat monthly number based on your actual pool. No surprise fees."),
+                        ("Get one flat rate", "One flat monthly number based on your actual pool. No surprise fees."),
                         ("Enjoy your pool", "We handle the rest. You'll find the visit report on your door.")]},
-    "order": ["trust", "owner", "tiers", "why", "reviews", "cards", "steps", "services", "areas", "quiz", "blog", "faq", "cta"],
+    "order": ["trust", "owner", "why", "services", "reviews", "cards", "steps", "areas", "blog", "faq", "cta"],
   },
   "tiers": {
-    "enabled": True, "slug": "pool-maintenance-plans", "nav_label": "Maintenance Plans",
+    "enabled": False, "slug": "pool-maintenance-plans", "nav_label": "Maintenance Plans",   # OFF on the live site (Mike, Nov 27 2026). Saved with-plans version: branch palmetto-plans-preview
     "title": "Pool Maintenance Plans in Lexington & Columbia, SC",
     "meta": "Compare weekly pool maintenance plans in Lexington & Richland County, SC: Balance, Full Service and Full Service Plus. Flat monthly rate, free evaluation.",
     "h1": "Pool Maintenance Plans in Lexington &amp; Columbia, SC",
@@ -556,9 +555,9 @@ CONFIG = {
     "footer_note": "All of Lexington County, plus Columbia and nearby Richland County.",
     "outside_note": "Anywhere in Lexington County is in our service area. In Richland County or near a county line? Call or text; our routes may run right past you.",
     "service_where_text": "We serve homeowners throughout Lexington and Richland counties, including",
-    "page_title": "Pool Service & Maintenance Plans in {city}, {region}",
-    "page_meta": "Weekly pool cleaning & maintenance plans in {city}, {region}. CPO-certified, family-owned, flat monthly rate. Call or text (803) 394-0765.",
-    "page_h1": "Pool Service &amp; Maintenance Plans in {city}, {region}",
+    "page_title": "Pool Service & Maintenance in {city}, {region}",
+    "page_meta": "Weekly pool cleaning & maintenance in {city}, {region}. CPO-certified, family-owned, flat monthly rate. Call or text (803) 394-0765.",
+    "page_h1": "Pool Service &amp; Maintenance in {city}, {region}",
     "local_title": "Pool care in {city}: what's different here", "aside_title": "Pool service in {city}",
     "tiers_blurb_html": "Choose <strong>Balance</strong> if you like cleaning your own pool and want the chemistry handled, <strong>Full Service</strong> if you want us to do it all, or <strong>Full Service Plus</strong> for saltwater and cartridge-filter pools that need scheduled preventive care.",
     "shared_faqs": [("How much is pool service in {city}?", "Every pool is different, so we start with a free evaluation and quote one flat monthly rate. No teaser pricing, no surprise fees.")],
@@ -573,7 +572,7 @@ CONFIG = {
     "faqs": [("When should I open my pool in the Midlands?", "Most Lexington and Columbia pool owners open in March or April, before water warms and algae starts, and ideally before peak pollen season."),
              ("Should I close my pool for winter in South Carolina?", "Many Midlands owners run a winter maintenance routine instead of a full closing, since winters are mild. Either way, protect equipment on freezing nights and swap in a dummy salt cell."),
              ("Why does my pool turn green after a storm?", "Heavy summer rain dilutes chlorine and washes in debris and phosphates. Test and rebalance after big storms.")],
-    "cta_title": "Rather not keep track of all this?", "cta_text": "Every item on this calendar is built into our maintenance plans. We'll handle the season, and you just swim.",
+    "cta_title": "Rather not keep track of all this?", "cta_text": "Every item on this calendar is part of our weekly service. We'll handle the season, and you just swim.",
   },
   "blog": {
     "enabled": True, "index_slug": "blog", "post_prefix": "post",   # keeps the old site's URLs: /blog and /post/<slug>
@@ -618,7 +617,7 @@ CONFIG = {
   "reviews": REVIEWS,
   "faqs": GENERAL_FAQS,
   "legal_pages": [("privacypolicy", "Privacy Policy"), ("termsandconditions", "Terms of Service"), ("accessibility", "Accessibility Statement")],
-  "redirects": [("/contact-page", "/contact/"), ("/pool-service-columbia-sc2", "/pool-service-columbia-sc/"), ("/home", "/"),
+  "redirects": [("/contact-page", "/contact/"), ("/pool-service-columbia-sc2", "/pool-service-columbia-sc/"), ("/home", "/"), ("/pool-maintenance-plans", "/services/weekly-pool-maintenance/", 302),   # plans page off for now; 302 so it can come back
                 ("/posts", "/blog/"), ("/terms", "/termsandconditions/"), ("/sitemap", "/sitemap.xml"),
                 ("/posts/author/*", "/about/"), ("/posts/tag/*", "/blog/"),
                 # links inside the old blog posts pointed at these (they 404 on the old site too)

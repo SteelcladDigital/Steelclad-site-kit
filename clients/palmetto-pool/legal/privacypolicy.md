@@ -4,7 +4,7 @@ Palmetto Pool Solutions, LLC ("Palmetto Pool Solutions," "we," "us") respects yo
 
 ## Information we collect
 
-**Information you give us.** When you request a free pool evaluation or contact us through the website, we collect the details you enter: your name, phone number, email address, city, pool type, the plan or service you're interested in, your message, and whether you agreed to receive text messages.
+**Information you give us.** When you request a free pool evaluation or contact us through the website, we collect the details you enter: your name, phone number, email address, city, pool type, the service you're interested in, your message, and whether you agreed to receive text messages.
 
 **Information collected automatically.** Like most websites, we use Google Tag Manager and Google Analytics to understand how visitors use the site, such as pages viewed, how you arrived (for example, a search engine or an ad), approximate location, and device and browser type. These tools use cookies or similar technologies. When you send a form, we also record the page you sent it from and how you first found the site (for example, the referring website or campaign tags in the link) so we know which marketing is working.
 
