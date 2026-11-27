@@ -986,7 +986,14 @@ class Site:
                 open(os.path.join(self.out, self.blog["index_slug"], "rss.xml"), "w").write(self.rss())
             open(os.path.join(self.out, "sitemap.xml"), "w").write(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>')
             open(os.path.join(self.out, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\n\nSitemap: {self.D}/sitemap.xml\n")
-            open(os.path.join(self.out, "_redirects"), "w").write("".join(f"{r[0]}  {r[1]}  {r[2] if len(r) > 2 else 301}\n" for r in self.c.get("redirects", [])))
+            # Cloudflare matches the exact path, so "/old" and "/old/" are different URLs: emit both (unless the rule is a wildcard or already ends in "/")
+            lines = []; given = {r[0] for r in self.c.get("redirects", [])}
+            for r in self.c.get("redirects", []):
+                code = r[2] if len(r) > 2 else 301
+                lines.append(f"{r[0]}  {r[1]}  {code}\n")
+                if not r[0].endswith(("/", "*")) and "." not in r[0].rsplit("/", 1)[-1] and r[0] + "/" not in given:
+                    lines.append(f"{r[0]}/  {r[1]}  {code}\n")
+            open(os.path.join(self.out, "_redirects"), "w").write("".join(lines))
         print(f"[{self.client}] built {len(self.pages)} pages -> {os.path.relpath(self.out, ROOT)}/")
 
     def make_og(self, path):
