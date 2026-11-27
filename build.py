@@ -28,6 +28,11 @@ I = {
  "shield":'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
  "phone":'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/>',
  "chat":'<path d="M4 5h16v11H8l-4 4z"/>',
+ "mail":'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+ "cake":'<path d="M4 21h16M5 21v-7a2 2 0 012-2h10a2 2 0 012 2v7"/><path d="M5 16c2 1.5 4.5 1.5 7 0s5-1.5 7 0M12 12V8"/><path d="M12 3c1 1.2 1 2.6 0 3.5-1-.9-1-2.3 0-3.5z"/>',
+ "cookie":'<circle cx="12" cy="12" r="9"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/><circle cx="10" cy="15" r="1" fill="currentColor"/><circle cx="15.5" cy="15" r="1" fill="currentColor"/>',
+ "cupcake":'<path d="M6 12h12l-1.5 9h-9z"/><path d="M6 12a3 3 0 01.5-5.5A4 4 0 0112 4a4 4 0 015.5 2.5A3 3 0 0118 12"/><path d="M10 12l.5 9M14 12l-.5 9"/>',
+ "gift":'<rect x="3" y="9" width="18" height="12" rx="1"/><path d="M3 13h18M12 9v12M12 9c-2-4-6-4-6-1.5S9 9 12 9zm0 0c2-4 6-4 6-1.5S15 9 12 9z"/>',
  "home":'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
  "badge":'<circle cx="12" cy="9" r="6"/><path d="M8.5 13.5L7 21l5-3 5 3-1.5-7.5"/>',
  "check":'<path d="M5 12l5 5 9-10"/>',
@@ -135,6 +140,11 @@ class Site:
         A = self.c.get("areas") or {}; self.areas = A if A.get("enabled") else None
         R = self.c.get("resource") or {}; self.resource = R if R.get("enabled") else None
         B = self.c.get("blog") or {}; self.blog = B if B.get("enabled") else None
+        # business.phone is optional: email/form-only businesses (e.g. home bakers) get email links wherever a phone link would go
+        self.has_phone = bool(self.b.get("phone"))
+        self.rh = f'tel:{self.b["tel"]}' if self.has_phone else f'mailto:{self.b.get("email", "")}'
+        self.rt = self.b["phone"] if self.has_phone else self.b.get("email", "")
+        self.reach_verb = self.L.get("reach_verb", "Call or text" if self.has_phone else "Email")
         self.cta = self.c["contact"].get("slug", "contact"); self.noindex = set()   # every CTA button points at the primary lead page
         self.posts = []
         if self.blog:
@@ -157,6 +167,15 @@ class Site:
     def rel_links(self, cur, html_):
         """Site-relative links written in config HTML (href="/pricing/") work in both preview and live builds."""
         return re.sub(r'href="/(?!/)([^"#?]*)', lambda m: 'href="' + self.href(cur, m.group(1).strip("/")), html_)
+    def alt_btn(self, cur, label=True):
+        """Secondary button beside the main CTA: the phone number, or (no phone) labels.alt_cta = (label, slug), else the email."""
+        if self.has_phone:
+            return f'<a class="btn btn-ghost" href="{self.rh}">{(esc(self.L["phone_prefix"]) + " ") if label else ""}{self.rt}</a>'
+        if self.L.get("alt_cta") and self.L["alt_cta"][1] == cur:
+            return ""   # never link a page to itself
+        if self.L.get("alt_cta"):
+            return f'<a class="btn btn-ghost" href="{self.href(cur, self.L["alt_cta"][1])}">{esc(self.L["alt_cta"][0])}</a>'
+        return f'<a class="btn btn-ghost" href="{self.rh}">{esc(self.rt)}</a>'
     def canon(self, path): return self.D + "/" + (path + "/" if path else "")
 
     # ---------- theme
@@ -198,8 +217,8 @@ class Site:
         if b["address"].get("street"): addr["streetAddress"] = b["address"]["street"]
         if b["address"].get("zip"): addr["postalCode"] = b["address"]["zip"]
         s = {"@type": b["schema_type"], "@id": self.D + "/#business", "name": b["legal_name"], "alternateName": b["name"],
-             "url": self.D + "/", "telephone": b["tel"], "description": b["description"], "address": addr,
-             "openingHoursSpecification": [{"@type": "OpeningHoursSpecification", "dayOfWeek": d, "opens": o, "closes": c} for d, o, c in b["hours"]],
+             "url": self.D + "/", **({"telephone": b["tel"]} if b.get("tel") else {}), "description": b["description"], "address": addr,
+             **({"openingHoursSpecification": [{"@type": "OpeningHoursSpecification", "dayOfWeek": d, "opens": o, "closes": c} for d, o, c in b["hours"]]} if b.get("hours") else {}),
              "sameAs": [u for u in b.get("social", {}).values() if u]}
         logo = self.c["logo"].get("schema_file") or self.c["logo"].get("file") or "logo.svg"   # schema_file: a version for light backgrounds (Google shows logos on white)
         s["logo"] = s["image"] = self.D + "/assets/" + logo
@@ -251,12 +270,14 @@ class Site:
             for g in self.areas["groups"]:
                 dd += f'<li class="sep">{esc(g["name"])}</li>' + "".join(f'<li><a href="{self.href(cur,a["slug"])}">{esc(a["city"])}</a></li>' for a in self.areas["pages"] if a["slug"] in g["slugs"])
             items.append(f'<li><a class="nl" href="{self.href(cur,self.areas["hub_slug"])}"{ca(self.areas["hub_slug"])}>{esc(self.areas["nav_label"])} ▾</a><ul class="dropdown"><li class="dd-all"><a href="{self.href(cur,self.areas["hub_slug"])}">{esc(self.areas["nav_label"])} overview →</a></li>{dd}</ul></li>')
+        G = self.c.get("gallery_page")
+        if G and G.get("in_nav", True): items.append(f'<li><a class="nl" href="{self.href(cur,G["slug"])}"{ca(G["slug"])}>{esc(G["nav_label"])}</a></li>')
         if self.resource: items.append(f'<li><a class="nl" href="{self.href(cur,self.resource["slug"])}"{ca(self.resource["slug"])}>{esc(self.resource["nav_label"])}</a></li>')
         if self.blog: items.append(f'<li><a class="nl" href="{self.href(cur,self.blog["index_slug"])}"{ca(self.blog["index_slug"])}>{esc(self.blog["nav_label"])}</a></li>')
         items.append(f'<li><a class="nl" href="{self.href(cur,"about")}"{ca("about")}>About</a></li>')
         promise = f'<span class="promise"><span class="dot"></span><span>{esc(L["topbar_promise"])}</span></span>' if L.get("topbar_promise") else "<span></span>"
         return f'''<a class="skip" href="#main">Skip to content</a>
-<div class="topbar"><div class="wrap">{promise}<span><span class="hide-sm">{esc(b["hours_text"])} · </span><a href="tel:{b["tel"]}">{esc(L["phone_prefix"])} {b["phone"]}</a></span></div></div>
+<div class="topbar"><div class="wrap">{promise}<span><span class="hide-sm">{esc(b["hours_text"])} · </span><a href="{self.rh}">{esc(L["phone_prefix"])} {esc(self.rt)}</a></span></div></div>
 <header class="site-header"><div class="wrap">
 <a class="logo" href="{self.href(cur,"")}" aria-label="{esc(b["name"])} home">{self.logo(cur)}</a>
 <nav class="nav" id="nav" aria-label="Main"><ul>{"".join(items)}</ul></nav>
@@ -271,29 +292,41 @@ class Site:
         col3 = ""
         if self.areas:
             # Footer service areas are ALWAYS compact (Steelclad standard, Nov 2026): a few plain town names + "All service areas",
-            # never a "Pool Service <City>, SC" link for every city page (reads as keyword stuffing).
+            # never a "<Service> <City>, ST" link for every city page (reads as keyword stuffing).
             # areas.footer_slugs picks the towns (default: the first footer_count pages, 5); areas.footer_note adds one line under them.
+            # areas.footer "compact" shows the towns as one wrapping line (optional footer_lead above it) instead of a short list.
             A = self.areas; names = {a["slug"]: a["city"] for a in A["pages"]}
             fs = A.get("footer_slugs") or [a["slug"] for a in A["pages"]][:A.get("footer_count", 5)]
-            col3 = ('<div><h4>Service Areas</h4><ul>' + "".join(f'<li><a href="{self.href(cur,sl)}">{esc(names[sl])}</a></li>' for sl in fs)
-                    + f'<li><a href="{self.href(cur,A["hub_slug"])}"><strong>All service areas →</strong></a></li></ul>'
-                    + (f'<p style="margin-top:10px;font-size:.88rem;opacity:.8">{esc(A["footer_note"])}</p>' if A.get("footer_note") else "") + '</div>')
+            bad = [sl for sl in fs if sl not in names]
+            if bad: sys.exit(f"[{self.client}] areas.footer_slugs has slug(s) with no area page: {', '.join(bad)}")
+            allx = f'<a class="footer-areas-all" href="{self.href(cur,A["hub_slug"])}">All service areas →</a>'
+            note = f'<p style="margin-top:10px;font-size:.88rem;opacity:.8">{esc(A["footer_note"])}</p>' if A.get("footer_note") else ""
+            if A.get("footer") == "compact":   # each town keeps its trailing dot on the same line, so no line starts with "·"
+                towns = " ".join(f'<span class="fa-item"><a href="{self.href(cur,sl)}">{esc(names[sl])}</a>{"<span aria-hidden=" + chr(34) + "true" + chr(34) + "> ·</span>" if i < len(fs) - 1 else ""}</span>' for i, sl in enumerate(fs))
+                lead = f'<p class="footer-areas-lead">{esc(A["footer_lead"])}</p>' if A.get("footer_lead") else ""
+                col3 = f'<div><h4>Service Areas</h4>{lead}<p class="footer-areas">{towns}</p><p>{allx}</p>{note}</div>'
+            else:
+                col3 = ('<div><h4>Service Areas</h4><ul>' + "".join(f'<li><a href="{self.href(cur,sl)}">{esc(names[sl])}</a></li>' for sl in fs)
+                        + f'<li>{allx}</li></ul>{note}</div>')
         else:
             addr = b["address"]; street = f'{esc(addr["street"])}<br>' if addr.get("street") else ""
             col3 = f'<div><h4>Visit</h4><p>{street}{esc(addr["locality"])}, {addr["region"]} {addr.get("zip","")}</p><p>{esc(b["hours_text"])}</p></div>'
         social = "".join(f'<a href="{u}" aria-label="{k.title()}">{icon("fb" if k=="facebook" else "ig")}</a>' for k, u in b.get("social", {}).items() if u and k in ("facebook", "instagram"))
         company = [("about", "About Us"), (self.cta, L["cta"])]
         if self.resource: company.insert(1, (self.resource["slug"], self.resource["nav_label"]))
+        if self.c.get("gallery_page"): company.insert(1, (self.c["gallery_page"]["slug"], self.c["gallery_page"]["nav_label"]))
         if self.blog: company.insert(1, (self.blog["index_slug"], self.blog["nav_label"]))
         comp = "".join(f'<li><a href="{self.href(cur,p)}">{esc(n)}</a></li>' for p, n in company)
+        wr = self.c.get("integrations", {}).get("google_review_write_url")
+        if wr: comp += f'<li><a href="{wr}" rel="noopener" target="_blank">Leave a Google Review</a></li>'
         legal = " · ".join(f'<a href="{self.href(cur,s)}">{esc(n)}</a>' for s, n in self.c.get("legal_pages", []))
         return f'''<footer class="site-footer"><div class="wrap"><div class="cols">
 <div><a class="logo" href="{self.href(cur,"")}">{self.logo(cur, "footer")}</a><p style="margin-top:16px">{esc(L["footer_blurb"])}</p>
-<p><a href="tel:{b["tel"]}"><strong>{b["phone"]}</strong></a><br>{esc(b["hours_text"])}</p><div class="social">{social}</div></div>
+<p><a href="{self.rh}"><strong>{esc(self.rt)}</strong></a><br>{esc(b["hours_text"])}</p><div class="social">{social}</div></div>
 <div><h4>{esc(L.get("footer_services_title","Services"))}</h4><ul>{svc}</ul></div>{col3}
 <div><h4>Company</h4><ul>{comp}</ul></div>
 </div><div class="legal"><span>© {date.today().year} {esc(b["legal_name"])}. All rights reserved.</span><span>{legal}</span></div></div></footer>
-<nav class="mbar" aria-label="Quick actions"><a href="tel:{b["tel"]}">{icon("phone")}Call</a><a href="{L.get("mbar_second_href") or "sms:"+b["tel"]}">{icon(L.get("mbar_second_icon","chat"))}{esc(L.get("mbar_second_label","Text"))}</a><a class="go" href="{self.href(cur,self.cta)}">{icon("calendar")}{esc(L["cta_short"])}</a></nav>'''
+<nav class="mbar" aria-label="Quick actions"><a href="{self.rh}">{icon("phone" if self.has_phone else "mail")}{"Call" if self.has_phone else "Email"}</a><a href="{L.get("mbar_second_href") or (self.href(cur, L["mbar_second_slug"]) if L.get("mbar_second_slug") else ("sms:" + b["tel"] if self.has_phone else self.href(cur, self.c["services_hub"]["slug"])))}">{icon(L.get("mbar_second_icon","chat"))}{esc(L.get("mbar_second_label","Text"))}</a><a class="go" href="{self.href(cur,self.cta)}">{icon("calendar")}{esc(L["cta_short"])}</a></nav>'''
 
     def page(self, cur, title, meta, body, schema=None, trail=None, noindex=False, og_override=None, og_type="website"):
         brand = self.b["name"]; base = title.split(" | ")[0]
@@ -310,9 +343,9 @@ class Site:
         if ig.get("chat_snippet") and not self.preview: chat = "\n" + ig["chat_snippet"].strip()   # any other chat widget (e.g. tawk.to), live build only
         snip = ig.get("ghl_tracking_snippet", "").strip()
         track = ("\n" + snip) if snip and not self.preview else "<!-- GHL external tracking: set integrations.ghl_tracking_snippet -->"
-        if ig.get("form_mode") == "web3forms":   # no GoHighLevel on this site: leave no GHL hooks or hints in the HTML
-            track = ""
+        if ig.get("form_mode") == "web3forms":   # GHL-free site: no GHL placeholders in the HTML
             if not ig.get("ghl_chat_widget_id") and not ig.get("chat_snippet"): chat = ""
+            if not snip: track = ""
         fonts = sorted({self.c["theme"]["fonts"]["display"], self.c["theme"]["fonts"]["body"]})
         pre = "".join(f'<link rel="preload" href="{self.asset(cur,"fonts/"+f+".woff2")}" as="font" type="font/woff2" crossorigin>' for f in fonts)
         og = og_override or self.c.get("og_image", "og-image.jpg")
@@ -347,7 +380,7 @@ class Site:
 
     def page_hero(self, cur, trail, h1, lead, ctas=True, sand=False):
         bc = " / ".join(f'<a href="{self.href(cur,p)}">{esc(n)}</a>' for n, p in trail[:-1]) + f' / <span>{esc(trail[-1][0])}</span>'
-        btns = f'<div class="btn-row" style="margin-top:22px"><a class="btn btn-gold" href="{self.href(cur,self.cta)}">{esc(self.L["cta_long"])}</a><a class="btn btn-ghost" href="tel:{self.b["tel"]}">{esc(self.L["phone_prefix"])} {self.b["phone"]}</a></div>' if ctas else ""
+        btns = f'<div class="btn-row" style="margin-top:22px"><a class="btn btn-gold" href="{self.href(cur,self.cta)}">{esc(self.L["cta_long"])}</a>{self.alt_btn(cur)}</div>' if ctas else ""
         lead_html = f'<p class="lead">{lead}</p>' if lead else ""
         return f'''<section class="hero page-hero on-dark">{self.texture()}<div class="wrap"><div><nav class="crumbs" aria-label="Breadcrumb">{bc}</nav><h1>{h1}</h1>{lead_html}{btns}</div></div>{self.divider(sand)}</section>'''
 
@@ -382,10 +415,12 @@ class Site:
 
     def reviews_block(self):
         cards = "".join(f'<figure class="review"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>“{esc(t)}”</blockquote><figcaption><cite>{esc(n)}<span>{esc(c)}</span></cite></figcaption></figure>' for n, c, t in self.c["reviews"])
-        url = self.c.get("integrations", {}).get("google_reviews_url")
-        label = self.c.get("integrations", {}).get("google_reviews_label") or "Read more reviews on Google"   # e.g. "Read or leave a review on Google" for a g.page/.../review link
-        stars = '<span class="btn-stars" aria-hidden="true">★★★★★</span>' if self.c.get("integrations", {}).get("google_reviews_stars", True) else ""   # 5 gold stars on the button (default on; False to hide)
-        more = f'<p style="text-align:center;margin-top:28px"><a class="btn btn-outline btn-review" href="{url}" rel="noopener">{stars}{esc(label)}</a></p>' if url else ""
+        ig = self.c.get("integrations", {})
+        url = ig.get("google_reviews_url")            # link that SHOWS the reviews (Maps / search)
+        write = ig.get("google_review_write_url")     # GBP "ask for reviews" link (g.page/r/.../review) that OPENS the write-a-review box
+        btns = (f'<a class="btn btn-outline" href="{url}" rel="noopener" target="_blank">Read more reviews on Google</a>' if url else "") + \
+               (f'<a class="btn btn-outline" href="{write}" rel="noopener" target="_blank"><span class="rv-stars" aria-hidden="true">★★★★★</span> Leave us a Google review</a>' if write else "")
+        more = f'<p class="btn-row" style="justify-content:center;margin-top:28px">{btns}</p>' if btns else ""
         return f'<div class="reviews">{cards}</div>{more}'
 
     @staticmethod
@@ -394,7 +429,7 @@ class Site:
     def cta_band(self, cur, h=None, p=None):
         h = h or self.L["cta_band_title"]; p = p or self.L["cta_band_text"]
         return f'''<section><div class="wrap"><div class="cta-band"><div><h2>{h}</h2><p>{p}</p></div>
-<div class="btn-row"><a class="btn btn-gold" href="{self.href(cur,self.cta)}">{esc(self.L["cta"])}</a><a class="btn btn-ghost" href="tel:{self.b["tel"]}">{self.b["phone"]}</a></div></div></div></section>'''
+<div class="btn-row"><a class="btn btn-gold" href="{self.href(cur,self.cta)}">{esc(self.L["cta"])}</a>{self.alt_btn(cur, label=False)}</div></div></div></section>'''
 
     def svc_path(self, s):   # services_hub.flat_urls: service pages at /<slug>/ (keeps old top-level URLs like /lawn-care-lexington-sc)
         return s["slug"] if self.c["services_hub"].get("flat_urls") else f'{self.c["services_hub"]["slug"]}/{s["slug"]}'
@@ -410,7 +445,7 @@ class Site:
             links = "".join(f'<li><a href="{self.href(cur,a["slug"])}">{esc(a["city"])}</a></li>' for a in A["pages"] if a["slug"] in g["slugs"])
             also = (f'<p class="also-served">{esc(g.get("also_label", "Also serving"))} {esc(", ".join(g["also"]))}{esc(g.get("also_tail", ""))}</p>') if g.get("also") else ""   # groups[].also: towns served without their own page
             cols += f'<div class="county"><h3>{esc(g["name"])} <small>{esc(g.get("note",""))}</small></h3><ul class="city-links">{links}</ul>{also}</div>'
-        return f'<div class="grid-2">{cols}</div><p style="text-align:center;margin-top:24px;color:var(--c-muted)">{esc(A["outside_note"])} <a href="tel:{self.b["tel"]}">{self.b["phone"]}</a></p>'
+        return f'<div class="grid-2">{cols}</div><p style="text-align:center;margin-top:24px;color:var(--c-muted)">{esc(A["outside_note"])} <a href="{self.rh}">{esc(self.rt)}</a></p>'
 
     def hero_visual(self, cur):
         h = self.c["home"]; lay = self.c["theme"].get("hero_layout", "card")
@@ -526,6 +561,15 @@ class Site:
             f'<section><div class="wrap"><div class="section-head center"><span class="eyebrow">FAQ</span><h2>{esc(T["nav_label"])} questions</h2></div>{self.faq_block(T["faqs"])}</div></section>{self.cta_band(cur)}'
         self.pages[cur] = self.page(cur, T["title"], T["meta"], body, [self.faq_schema(T["faqs"]), self.service_schema(T["nav_label"], T["meta"], cur)], trail)
 
+    def gallery_page(self):
+        """gallery_page: a standalone photo gallery (portfolio) page: {slug, nav_label, title, meta, h1, lead, photos, in_nav, cta_title, cta_text}."""
+        G = self.c["gallery_page"]; cur = G["slug"]; trail = self.trail((G["nav_label"], cur))
+        body = (self.page_hero(cur, trail, G["h1"], esc(G.get("lead", "")))
+                + f'<section><div class="wrap">{self.photo_grid(cur, G["photos"])}</div></section>{self.cta_band(cur, G.get("cta_title"), G.get("cta_text"))}')
+        img = [{"@type": "ImageObject", "contentUrl": f'{self.D}/assets/{ph["file"]}', "caption": ph.get("caption") or ph["alt"]} for ph in G["photos"]]
+        sch = [{"@type": "ImageGallery", "@id": self.canon(cur) + "#gallery", "name": G["h1"], "url": self.canon(cur), "image": img}]
+        self.pages[cur] = self.page(cur, G["title"], G["meta"], body, sch, trail)
+
     def services_hub(self):
         sh = self.c["services_hub"]; cur = sh["slug"]; trail = self.trail((sh["nav_label"], cur))
         extra = f'<section class="bg-sand"><div class="wrap"><div class="section-head center"><span class="eyebrow">{esc(self.tiers["nav_label"])}</span><h2>{esc(self.tiers["home_title"])}</h2></div>{self.tier_cards(cur)}</div></section>' if self.tiers else ""
@@ -551,7 +595,7 @@ class Site:
 <section><div class="wrap layout-side"><div class="prose"><h2>{esc(s["included_title"])}</h2><div class="included">{inc}</div>
 {f'<h2 id="photos">{esc(s.get("photos_title","Recent work"))}</h2>' + self.photo_grid(cur, s["photos"]) if s.get("photos") else ""}
 {f'<h2>{esc(s["signs_title"])}</h2><ul class="checklist">{signs}</ul>' if signs else ""}{faq_html}{where}</div>
-<aside class="aside"><h3>{esc(self.L["aside_title"])}</h3><p>{esc(self.L["aside_text"])}</p><a class="phone" href="tel:{self.b["tel"]}">{self.b["phone"]}</a>
+<aside class="aside"><h3>{esc(self.L["aside_title"])}</h3><p>{esc(self.L["aside_text"])}</p><a class="phone{"" if self.has_phone else " is-email"}" href="{self.rh}">{esc(self.rt)}</a>
 <a class="btn btn-gold" href="{self.href(cur,self.cta)}">{esc(self.L["cta"])}</a>{alt}<p style="margin:12px 0 0;font-size:.85rem">{esc(self.L["aside_badges"])}</p></aside></div></section>
 {self.related_posts_block(cur, "services", s["slug"]) if self.blog else ""}<section class="bg-sand"><div class="wrap"><div class="section-head"><span class="eyebrow">More</span><h2>Other ways we can help</h2></div>{self.service_cards(cur, exclude=s["slug"])}</div></section>{self.cta_band(cur)}'''
         sch = [self.service_schema(s["name"], s["meta"], cur)] + ([self.faq_schema(s["faqs"])] if s.get("faqs") else [])
@@ -575,7 +619,7 @@ class Site:
 <section><div class="wrap layout-side"><div class="prose"><h2>{f(A["local_title"])}</h2><div class="included">{local}</div>{tiers}
 <h2>Services in {esc(a["city"])}</h2><ul class="checklist">{svc}</ul><h2>{esc(a["city"])} FAQ</h2>{self.faq_block(faqs)}
 <p style="color:var(--c-muted);font-size:.92rem">Serving {esc(a["city"])}, {esc(a["county"])} · ZIP codes {esc(a["zips"])}</p></div>
-<aside class="aside"><h3>{f(A["aside_title"])}</h3><p>{esc(self.L["aside_text"])}</p><a class="phone" href="tel:{self.b["tel"]}">{self.b["phone"]}</a>
+<aside class="aside"><h3>{f(A["aside_title"])}</h3><p>{esc(self.L["aside_text"])}</p><a class="phone{"" if self.has_phone else " is-email"}" href="{self.rh}">{esc(self.rt)}</a>
 <a class="btn btn-gold" href="{self.href(cur,self.cta)}">{esc(self.L["cta"])}</a><p style="margin:14px 0 6px;font-weight:700;color:#fff">Also serving</p><ul class="city-links" style="grid-template-columns:1fr">{nearby}</ul></aside></div></section>
 {self.related_posts_block(cur, "areas", a["slug"], self.blog.get("area_related_title", "Tips for {city}").format(city=a["city"])) if self.blog else ""}{f'<section class="bg-sand"><div class="wrap"><div class="section-head center"><span class="eyebrow">Reviews</span><h2>What our neighbors say</h2></div>{self.reviews_block()}</div></section>' if self.c["reviews"] else ""}{self.cta_band(cur)}'''
         sch = [self.service_schema(f(A["page_title"]), a["intro"], cur, [a["city"]]), self.faq_schema(faqs)]
@@ -683,7 +727,7 @@ class Site:
                 f'<p class="lead">{esc(p.get("description",""))}</p>{meta_line}</div></div>{self.divider()}</section>'
                 f'<section><div class="wrap layout-side"><article class="prose post-body">{hero_img}{body_html}</article>'
                 f'<aside class="aside"><h2 class="h3">{esc(self.L["aside_title"])}</h2><p>{esc(self.L["aside_text"])}</p>'
-                f'<a class="phone" href="tel:{self.b["tel"]}">{self.b["phone"]}</a>'
+                f'<a class="phone{"" if self.has_phone else " is-email"}" href="{self.rh}">{esc(self.rt)}</a>'
                 f'<a class="btn btn-gold" href="{self.href(cur,self.cta)}">{esc(self.L["cta"])}</a>{aside_links}</aside></div></section>'
                 f'{rel_html}{self.cta_band(cur)}')
         is_person = author != self.b["name"] and author != self.b["legal_name"]
@@ -740,18 +784,28 @@ class Site:
                         + "".join(f'<option value="">{esc(C.get("select_placeholder", "Choose one"))}</option>' if o == "" else f"<option>{esc(o)}</option>" for o in opts) + "</select></div>")
         if self.areas and C.get("city_select", True):
             selects = (f'<div class="full"><label for="{fid}-city">{esc(C.get("city_label", "City"))}</label><select id="{fid}-city" name="city">'
+                       + (f'<option value="">{esc(C["city_placeholder"])}</option>' if C.get("city_placeholder") else "")   # contact.city_placeholder / city_first: e.g. home town first
+                       + "".join(f"<option>{esc(x)}</option>" for x in C.get("city_first", []))
                        + "".join(f"<option>{esc(a['city'])}</option>" for a in self.areas["pages"]) + "<option>Other / not sure</option></select></div>" + selects)
         if self.tiers and C.get("plan_select", True):
-            selects += (f'<div class="full"><label for="{fid}-plan">Interested in</label><select id="{fid}-plan" class="plan-select" name="plan"><option value="">Not sure yet</option>'
-                        + "".join(f'<option value="{t["slug"]}">{esc(t["name"])}</option>' for t in self.tiers["items"]) + "</select></div>")
-        # extra_inputs: (name, label, autocomplete, required, full_width)
-        extra_inputs = "".join(f'<div{" class=full" if full else ""}><label for="{fid}-{n}">{esc(lbl)}</label><input id="{fid}-{n}" name="{n}" autocomplete="{ac}"{" required" if req else ""}></div>'
-                               for n, lbl, ac, req, full in C.get("extra_inputs", []))
+            # contact.plan_label / plan_placeholder / plan_extra_options: relabel the tier select and add non-tier choices
+            selects += (f'<div class="full"><label for="{fid}-plan">{esc(C.get("plan_label", "Interested in"))}</label><select id="{fid}-plan" class="plan-select" name="plan"><option value="">{esc(C.get("plan_placeholder", "Not sure yet"))}</option>'
+                        + "".join(f'<option value="{t["slug"]}">{esc(t["name"])}</option>' for t in self.tiers["items"])
+                        + "".join(f"<option>{esc(o)}</option>" for o in C.get("plan_extra_options", [])) + "</select></div>")
+        # extra_inputs: (name, label, autocomplete, required, full_width[, input_type[, placeholder]]), e.g. type "date", "url", "number"
+        def _inp(n, lbl, ac, req, full, typ="text", ph=""):
+            return (f'<div{" class=full" if full else ""}><label for="{fid}-{n}">{esc(lbl)}</label><input id="{fid}-{n}" name="{n}" type="{typ}" autocomplete="{ac}"'
+                    + (f' placeholder="{esc(ph)}"' if ph else "") + (" required" if req else "") + "></div>")
+        extra_inputs = "".join(_inp(*x) for x in C.get("extra_inputs", []))
+        # extra_textareas: (name, label, placeholder) shown after the main message box
+        extra_tas = "".join(f'<div class="full"><label for="{fid}-{n}">{esc(lbl)}</label><textarea id="{fid}-{n}" name="{n}" rows="3"' + (f' placeholder="{esc(ph)}"' if ph else "") + "></textarea></div>"
+                            for n, lbl, ph in C.get("extra_textareas", []))
+        after_inputs = "".join(_inp(*x) for x in C.get("after_inputs", []))   # inputs placed after the message, e.g. "How did you hear about us?"
         consent = (f'<div class="full consent"><label><input type="checkbox" name="sms_consent" value="yes"> <span>{esc(C["consent_text"])}</span></label></div>'
                    if C.get("consent_text") else "")
         ok = (f'<div class="form-msg" role="status">{esc(C.get("success", "Thanks! We got your request and will reach out shortly."))} '
-              f'Need us sooner? Call or text <a href="tel:{b["tel"]}">{b["phone"]}</a>.</div>')
-        err = f'<div class="form-err" role="alert">Something went wrong sending the form. Please call or text <a href="tel:{b["tel"]}">{b["phone"]}</a> so we don\'t miss you.</div>'
+              f'Need us sooner? {esc(self.reach_verb)} <a href="{self.rh}">{esc(self.rt)}</a>.</div>')
+        err = f'<div class="form-err" role="alert">Something went wrong sending the form. Please {esc(self.reach_verb.lower())} <a href="{self.rh}">{esc(self.rt)}</a> so we don\'t miss you.</div>'
         hp = f'<div class="hp" aria-hidden="true"><label for="{fid}-website">Leave this empty</label><input id="{fid}-website" name="website" tabindex="-1" autocomplete="off"></div>'
         hidden = ""
         if mode == "native":
@@ -781,7 +835,7 @@ class Site:
                 f'<div class="form-grid"><div><label for="{fid}-name">Name</label><input id="{fid}-name" name="name" autocomplete="name" required></div>\n'
                 f'<div><label for="{fid}-phone">{esc(C.get("phone_label", "Mobile phone"))}</label><input id="{fid}-phone" name="phone" type="tel" autocomplete="tel" required></div>\n'
                 f'<div class="full"><label for="{fid}-email">Email</label><input id="{fid}-email" name="email" type="email" autocomplete="email"{email_req}></div>{extra_inputs}{selects}\n'
-                f'<div class="full"><label for="{fid}-msg">{esc(C["message_label"])}</label><textarea id="{fid}-msg" name="message" rows="4"></textarea></div>{consent}</div>\n'
+                f'<div class="full"><label for="{fid}-msg">{esc(C["message_label"])}</label><textarea id="{fid}-msg" name="message" rows="4"></textarea></div>{extra_tas}{after_inputs}{consent}</div>\n'
                 f'<button class="btn btn-gold" type="submit" style="width:100%;margin-top:16px">{esc(C["submit"])}</button><p class="form-note">{esc(C["note"])}</p>\n'
                 f'{msg}</form>')
 
@@ -794,7 +848,7 @@ class Site:
         form = self.lead_form(cur, C)
         nxt = "".join(f"<li>{esc(x)}</li>" for x in C["next_steps"])
         email = f'<p><a href="mailto:{b["email"]}" style="color:#fff">{esc(b["email"])}</a></p>' if b.get("email") and C.get("show_email", True) else ""
-        aside = (f'<aside class="aside"><h2 class="h3">{esc(self.L["phone_prefix"])}</h2><a class="phone" href="tel:{b["tel"]}">{b["phone"]}</a><p>{esc(b["hours_text"])}</p>{email}'
+        aside = (f'<aside class="aside"><h2 class="h3">{esc(self.L["phone_prefix"])}</h2><a class="phone{"" if self.has_phone else " is-email"}" href="{self.rh}">{esc(self.rt)}</a><p>{esc(b["hours_text"])}</p>{email if self.has_phone else ""}'
                  f'<h2 class="h3" style="margin-top:20px">{esc(C.get("next_title", "What happens next"))}</h2><ul class="checklist" style="color:rgba(255,255,255,.86)">{nxt}</ul></aside>')
         extra, sch = "", []
         if C.get("steps"):
@@ -820,7 +874,7 @@ class Site:
         T = self.c.get("thank_you", {}); b = self.b
         more = f'<p><a href="{self.href(slug, self.blog["index_slug"])}">Read the {esc(self.blog["nav_label"].lower())} while you wait →</a></p>' if self.blog else ""
         body = (self.page_hero(slug, self.trail(("Thank you", slug)), esc(T.get("h1", "Thanks, we got it.")), esc(T.get("lead", "We'll be in touch shortly.")), ctas=False)
-                + f'<section><div class="wrap prose"><p>{esc(T.get("text", "Need us sooner?"))} Call or text <a href="tel:{b["tel"]}">{b["phone"]}</a>.</p>{more}</div></section>')
+                + f'<section><div class="wrap prose"><p>{esc(T.get("text", "Need us sooner?"))} {esc(self.reach_verb)} <a href="{self.rh}">{esc(self.rt)}</a>.</p>{more}</div></section>')
         self.pages[slug] = self.page(slug, T.get("title", "Thank you"), "Thanks for reaching out.", body, noindex=True)
 
     def legal_pages(self):
@@ -857,7 +911,11 @@ class Site:
         if want == "web3forms":
             W.append("Web3Forms: send one real test submission from the live domain and confirm the email arrives (check spam the first time) with the page and UTM fields filled in.")
             if ig.get("web3forms_cc"): W.append("Web3Forms ccemail needs a paid Web3Forms plan; on the free plan, set a forwarding rule in the owner's inbox instead.")
-            if not ig.get("gtm_id"): B.append("Web3Forms mode has no CRM tracking script, so integrations.gtm_id (GA4 + lead conversions) is required to measure leads.")
+            if not ig.get("gtm_id"):
+                if ig.get("no_analytics"):   # integrations.no_analytics: client opted out of GTM/GA4; leads are counted from the Web3Forms inbox
+                    W.append("No analytics by choice (integrations.no_analytics): count leads from the Web3Forms emails / dashboard.")
+                else:
+                    B.append("Web3Forms mode has no CRM tracking script, so integrations.gtm_id (GA4 + lead conversions) is required to measure leads. (Set integrations.no_analytics: True if the client opts out.)")
         if mode == "native":
             W.append("Native form mode: send one real test submission after launch and confirm it appears in GHL > Contacts and fires the owner-notification workflow.")
         if mode == "ghl_embed":
@@ -888,6 +946,7 @@ class Site:
     def build(self):
         self.home(); self.services_hub(); self.about_page(); self.contact_page(); self.legal_pages(); self.thank_you_page()
         for lp in self.c.get("lead_pages", []): self.contact_page(lp)
+        if self.c.get("gallery_page"): self.gallery_page()
         for s in self.c["services"]: self.service_page(s)
         if self.tiers: self.tiers_page()
         if self.areas:
@@ -903,10 +962,14 @@ class Site:
             open(os.path.join(d, "index.html"), "w").write(h)
         A = os.path.join(self.out, "assets"); os.makedirs(os.path.join(A, "fonts"))
         for f in ("site.css", "site.js"): shutil.copy(os.path.join(ROOT, "core", f), A)
-        if self.c.get("integrations", {}).get("form_mode") != "native":   # GHL native-form handler only ships to sites that use it
-            js = os.path.join(A, "site.js")
-            src = open(js).read()   # read before reopening for write (opening with "w" truncates)
-            open(js, "w").write(re.sub(r"[ \t]*/\*GHL-NATIVE-START\*/.*?/\*GHL-NATIVE-END\*/\n*", "", src, flags=re.S))
+        # site.js carries GHL-only code between //@@GHL markers: keep it (markers removed) for GHL sites, drop it for GHL-free (web3forms) sites
+        js = open(os.path.join(A, "site.js"), encoding="utf-8").read()
+        if self.c["integrations"].get("form_mode") == "web3forms":
+            js = re.sub(r"  //@@GHL-START\n.*?  //@@GHL-END\n", "", js, flags=re.S)
+            js = js.replace("  //@@GHL-LINE demo form (no GHL connection yet): never pretends to send", "  // demo form (no form connection yet): never pretends to send")
+        else:
+            js = js.replace("  //@@GHL-START\n", "").replace("  //@@GHL-END\n", "").replace("  //@@GHL-LINE demo form", "  // demo form")
+        open(os.path.join(A, "site.js"), "w", encoding="utf-8").write(js)
         for f in {self.c["theme"]["fonts"]["display"], self.c["theme"]["fonts"]["body"]}: shutil.copy(os.path.join(ROOT, "core", "fonts", f + ".woff2"), os.path.join(A, "fonts"))
         open(os.path.join(A, "theme.css"), "w").write(self.theme_css())
         if self.c["logo"]["type"] == "svg":
@@ -923,7 +986,7 @@ class Site:
                 open(os.path.join(self.out, self.blog["index_slug"], "rss.xml"), "w").write(self.rss())
             open(os.path.join(self.out, "sitemap.xml"), "w").write(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>')
             open(os.path.join(self.out, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\n\nSitemap: {self.D}/sitemap.xml\n")
-            open(os.path.join(self.out, "_redirects"), "w").write("".join(f"{a}  {b}  301\n" for a, b in self.c.get("redirects", [])))
+            open(os.path.join(self.out, "_redirects"), "w").write("".join(f"{r[0]}  {r[1]}  {r[2] if len(r) > 2 else 301}\n" for r in self.c.get("redirects", [])))
         print(f"[{self.client}] built {len(self.pages)} pages -> {os.path.relpath(self.out, ROOT)}/")
 
     def make_og(self, path):
@@ -946,7 +1009,7 @@ class Site:
         y = 270
         for line in textwrap.wrap(re.sub("<[^>]+>", "", self.c["home"]["title"]), 40)[:3]:
             d.text((80, y), line, font=load(40, False), fill=hx(col["secondary_wash"])); y += 56
-        d.text((80, 500), f'{self.b["phone"]}  ·  {self.b["domain"].split("//")[-1]}', font=load(34), fill=hx(col["accent"]))
+        d.text((80, 500), f'{self.rt}  ·  {self.b["domain"].split("//")[-1]}', font=load(34), fill=hx(col["accent"]))
         im.save(path, quality=88)
 
     def pages_404(self):

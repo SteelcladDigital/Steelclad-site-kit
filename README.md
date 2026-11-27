@@ -47,7 +47,7 @@ Everything about a site's look and structure lives in that client's `site.py`.
 **Optional sections**
 - `tiers`: plans, packages, memberships or subscriptions, with an optional comparison table and plan-finder quiz
 - `areas`: city and service-area pages, for service-area businesses
-  - Footer: always compact (Steelclad standard). It shows a few plain town names plus "All service areas", never a "Service <City>, ST" link for every city page, because that reads as keyword stuffing. Pick the towns with `areas.footer_slugs` (default: the first `footer_count` pages, 5) and add one line with `areas.footer_note`.
+  - Footer: always compact (Steelclad standard). It shows a few plain town names plus "All service areas", never a "Service <City>, ST" link for every city page, because that reads as keyword stuffing. Pick the towns with `areas.footer_slugs` (default: the first `footer_count` pages, 5) and add one line with `areas.footer_note`. Set `areas.footer: "compact"` (optional `footer_lead`) to show the towns as one wrapping line instead of a short list.
 - `resource`: a guide or calendar page that earns links
 - Storefronts: add `address.street` and `hours_table` to get a "Visit us" block with directions instead of area pages
 
@@ -145,6 +145,7 @@ GHL stays the lead inbox, automation engine, chat, reviews and Social Planner. T
 | `ghl_chat_widget_id` | Sites → Chat Widget | Chat bubble on every page |
 | `gtm_id` | Google Tag Manager | GA4 and conversion tags |
 | `google_reviews_url` | Google Business Profile | "Read more reviews on Google" button |
+| `google_review_write_url` | GBP → "Ask for reviews" link (`g.page/r/…/review`) | "★★★★★ Leave us a Google review" button under the reviews + "Leave a Google Review" footer link |
 
 Without a form ID or native mode, the contact page shows a **demo form** that clearly says it's a preview. The launch check blocks it.
 
@@ -195,7 +196,7 @@ Each client is its own Cloudflare Pages project, and every project builds from t
 How it behaves:
 - Every push to `main` rebuilds all client sites, which is harmless because each one only changes if its files did.
 - Pushes to any other branch create a private preview URL, which is handy for showing a client changes before they go live.
-- `_redirects` (old URLs → new) and `404.html` work on Cloudflare Pages as-is.
+- `_redirects` (old URLs → new) and `404.html` work on Cloudflare Pages as-is. Each `redirects` entry is `(from, to)` for a 301, or `(from, to, 302)` for a temporary redirect such as a billing-portal short link.
 
 **Social share image:** the build creates `og-image.jpg` automatically when Pillow is installed. Cloudflare's build environment doesn't have Pillow, so run one local build per client and commit the result to `clients/<client>/assets/og-image.jpg`. Better still, add a real 1200×630 photo there.
 
@@ -207,3 +208,27 @@ How it behaves:
 4. Custom domain added. Set `"launched": True` and push.
 5. Live test: submit the form, confirm the GHL contact and owner notification arrive, and check the chat widget.
 6. Search Console: verify the site and submit `sitemap.xml`. Then update the GBP website link and the Social Planner RSS feed.
+
+## Claude Code hooks (`.claude/`)
+
+When Claude Code works in this repo, `.claude/settings.json` runs these checks automatically:
+
+| Hook | When | What it does |
+| :- | :- | :- |
+| `guard_scope.py` | Before any file edit | The first client a session edits becomes its client. Edits to another client's folder, or to `build.py` / `core/`, are blocked until you approve. |
+| `post_edit.py` | After any client or kit edit | Runs the deploy build (and the standards scan) right away. A kit edit rebuilds every client. |
+| `pre_push.py` | Before `git push` | Builds and scans every client the push changes (all of them if kit code changed). Blocks the push if a site won't build or a live site has a hard issue. |
+| `stop_gate.py` | When Claude tries to finish | Won't accept "done" while a touched site fails. Gives up after 3 tries and tells you what's left. |
+
+**Hard issues** (block live sites): build failure, GHL code left in a Web3Forms site, GTM missing from pages (or no `no_analytics` opt-out), placeholder text visitors can see.
+**Standards** (reported, not blocking): footer not compact, missing title / meta description / single H1, no committed `og-image.jpg`.
+
+Approve a blocked edit (lasts 4 hours):
+
+```bash
+python3 .claude/hooks/scope.py allow teal-outdoor   # another client's folder
+python3 .claude/hooks/scope.py allow core           # build.py / core/
+python3 .claude/hooks/scope.py status
+```
+
+Hooks catch Claude's Edit/Write tools; a file changed with a shell command skips the scope guard, but is still caught by the push check and the finish check.

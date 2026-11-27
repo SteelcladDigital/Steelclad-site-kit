@@ -453,8 +453,7 @@ CONFIG = {
     "web3forms_from_name": "Palmetto Pool Solutions website",
     "thank_you_slug": "thank-you",
     "gtm_id": "GTM-K3752MP5",          # Mike's OWN Tag Manager account; GA4 + generate_lead tags live inside it
-    "google_reviews_url": "https://g.page/r/CSSJuhDXidrPEBM/review",   # Mike's GBP review link (opens his Google reviews with the write-a-review box)
-    "google_reviews_label": "Read or leave a review on Google",
+    "google_review_write_url": "https://g.page/r/CSSJuhDXidrPEBM/review",   # Mike's GBP review link: "★★★★★ Leave us a Google review" button + footer link
   },
   "launched": False,                 # set True only after Mike approves and --check is clean; launch blockers then STOP the build
   "labels": {
