@@ -205,3 +205,27 @@ How it behaves:
 4. Custom domain added. Set `"launched": True` and push.
 5. Live test: submit the form, confirm the GHL contact and owner notification arrive, and check the chat widget.
 6. Search Console: verify the site and submit `sitemap.xml`. Then update the GBP website link and the Social Planner RSS feed.
+
+## Claude Code hooks (`.claude/`)
+
+When Claude Code works in this repo, `.claude/settings.json` runs these checks automatically:
+
+| Hook | When | What it does |
+| :- | :- | :- |
+| `guard_scope.py` | Before any file edit | The first client a session edits becomes its client. Edits to another client's folder, or to `build.py` / `core/`, are blocked until you approve. |
+| `post_edit.py` | After any client or kit edit | Runs the deploy build (and the standards scan) right away. A kit edit rebuilds every client. |
+| `pre_push.py` | Before `git push` | Builds and scans every client the push changes (all of them if kit code changed). Blocks the push if a site won't build or a live site has a hard issue. |
+| `stop_gate.py` | When Claude tries to finish | Won't accept "done" while a touched site fails. Gives up after 3 tries and tells you what's left. |
+
+**Hard issues** (block live sites): build failure, GHL code left in a Web3Forms site, GTM missing from pages (or no `no_analytics` opt-out), placeholder text visitors can see.
+**Standards** (reported, not blocking): footer not compact, missing title / meta description / single H1, no committed `og-image.jpg`.
+
+Approve a blocked edit (lasts 4 hours):
+
+```bash
+python3 .claude/hooks/scope.py allow teal-outdoor   # another client's folder
+python3 .claude/hooks/scope.py allow core           # build.py / core/
+python3 .claude/hooks/scope.py status
+```
+
+Hooks catch Claude's Edit/Write tools; a file changed with a shell command skips the scope guard, but is still caught by the push check and the finish check.
