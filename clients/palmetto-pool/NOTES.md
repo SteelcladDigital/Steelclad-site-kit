@@ -27,6 +27,8 @@ Status (Nov 27, 2026): **LIVE, without the maintenance plans.** `launched: True`
 
 ## Launch (Nov 27, 2026)
 
+- Cloudflare Pages project `palmetto-pool`: production branch switched from `palmetto-refresh-nov-2026` to **`main`** on Nov 27, 2026.
+
 - **Mike approved the design and asked for every mention of the maintenance plans to come off the live site.**
   - `tiers.enabled` is now `False`. That removes the plans page, the nav link, the home plans section and plan finder, the contact form's plan dropdown, the city-page plan blurb and the OfferCatalog schema.
   - Copy that named Balance / Full Service / Full Service Plus was reworded to "weekly service" (Forest Acres page, salt cell FAQ, the general FAQ, the calendar CTA, the saltwater post and the privacy policy).
