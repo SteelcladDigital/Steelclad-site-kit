@@ -622,5 +622,14 @@ CONFIG = {
                 ("/posts/author/*", "/about/"), ("/posts/tag/*", "/blog/"),
                 # links inside the old blog posts pointed at these (they 404 on the old site too)
                 ("/weekly-pool-maintenance", "/services/weekly-pool-maintenance/"), ("/pump-filter-services", "/services/pool-pump-filter-repair/"),
-                ("/green-to-clean", "/services/green-to-clean-pool-recovery/")],
+                ("/green-to-clean", "/services/green-to-clean-pool-recovery/"),
+                # old GHL redirects (still getting clicks, Nov 2026): root-level service URLs and retired pages
+                ("/specialized-pool-cleaning", "/services/specialized-pool-cleaning/"),
+                ("/pool-surface-gunite-repair", "/services/pool-surface-gunite-repair/"),
+                ("/services/pool-surface-gunite-repair2", "/services/pool-surface-gunite-repair/"),
+                ("/pool-pump--filter-repair", "/services/pool-pump-filter-repair/"),
+                ("/pool-pump-filter-repair", "/services/pool-pump-filter-repair/"),
+                ("/pool-equipment-upgrades", "/services/pool-equipment-upgrades/"),
+                ("/pool-liner-repair", "/services/pool-liner-repair/"),
+                ("/servicesoldpage", "/services/"), ("/services-404059", "/services/")],
 }
