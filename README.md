@@ -46,7 +46,8 @@ Everything about a site's look and structure lives in that client's `site.py`.
 
 **Optional sections**
 - `tiers`: plans, packages, memberships or subscriptions, with an optional comparison table and plan-finder quiz
-- `areas`: city and service-area pages, for service-area businesses. Set `areas.footer: "compact"` (optional `footer_lead`) to list the towns as one wrapping line in the footer instead of one long link per row; use it once there are more than about 8 areas.
+- `areas`: city and service-area pages, for service-area businesses
+  - Footer: always compact (Steelclad standard). It shows a few plain town names plus "All service areas", never a "Service <City>, ST" link for every city page, because that reads as keyword stuffing. Pick the towns with `areas.footer_slugs` (default: the first `footer_count` pages, 5) and add one line with `areas.footer_note`. Set `areas.footer: "compact"` (optional `footer_lead`) to show the towns as one wrapping line instead of a short list.
 - `resource`: a guide or calendar page that earns links
 - Storefronts: add `address.street` and `hours_table` to get a "Visit us" block with directions instead of area pages
 

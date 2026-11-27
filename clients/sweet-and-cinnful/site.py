@@ -353,6 +353,7 @@ CONFIG = {
   "services": SERVICES,
   "areas": {
     "enabled": True, "hub_slug": "delivery-areas", "nav_label": "Areas", "link_prefix": "Custom Cakes",
+    "footer": "compact", "footer_lead": "Baked in Lexington, SC. Also serving:",   # Lexington is the home base (the home page targets it), so it leads the footer
     "hub_title": "Custom Cakes Near Lexington, SC: Areas Served",
     "hub_meta": "Custom cakes, cupcakes and cookies for Lexington, Irmo, Chapin, West Columbia, Cayce and Gilbert, SC. Pickup in Lexington or ask about delivery.",
     "hub_h1": "Custom Cakes for Lexington &amp; Nearby Towns",

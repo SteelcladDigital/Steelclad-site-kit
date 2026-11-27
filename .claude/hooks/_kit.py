@@ -184,6 +184,10 @@ def scan(client):
             long_links = re.findall(r">[^<>]{2,60}, " + re.escape(region) + r"</a>", foot.group(0))
             if long_links:
                 issues.append(f"Footer lists {len(long_links)} '<Service> <City>, {region}' links; set areas.footer: \"compact\" (Steelclad footer standard)")
+            col = re.search(r"<h4>Service Areas</h4>(.*?)</div>", foot.group(0), re.S)
+            towns = len(re.findall(r"<a ", col.group(1))) - 1 if col else 0
+            if towns > 8:
+                issues.append(f"Footer shows {towns} towns; the standard is a few (set areas.footer_slugs)")
 
     # 6. Share image committed (Cloudflare builds can't generate one without Pillow)
     og = cfg.get("og_image", "og-image.jpg")
