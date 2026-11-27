@@ -6,7 +6,16 @@ The agency's own site, and the first site off GoHighLevel. Built Nov 15, 2026 fr
 
 - Build: `python3 build.py steelclad-digital` → `dist/steelclad-digital/`
 - Forms: **Web3Forms** (`form_mode: "web3forms"`), no GHL anywhere on the site.
-- Positioning: the only Lexington-area agency we found that **publishes its prices**, focuses only on home services, and is owner-operated and month-to-month. The site is built around that.
+- Positioning (since Nov 27, 2026): **a trustworthy agency for every kind of local business**, not home services only. Edge vs. Lexington/Columbia agencies (Local & Qualified, Stoney Digital, Hibu, etc., all generalists that hide prices or start at $1,000+): **published prices under $1k/mo, month-to-month, owner-operated, client owns everything.** Slogan: "Get found. Get chosen."
+
+## Nov 27, 2026: repositioned to all local businesses (branch `generalist-repositioning`)
+- **Copy:** every home-services-only line rewritten (home, services, pricing, about, FAQs, checklist, blog categories, form). "Booked jobs" → calls, bookings, visits, customers. New FAQ: "Why don't you specialize in one industry?"
+- **Industries (new kit feature `industries`):** `/industries/` hub + 4 pages: `/home-services-marketing/`, `/professional-services-marketing/`, `/restaurant-retail-marketing/`, `/commercial-services-marketing/`. Menu dropdown, home section, "Who we do this for" on every service page. All 7 existing posts tagged `industries: home-services-marketing`.
+- **City pages renamed:** `/home-services-marketing-<city>-sc/` → `/digital-marketing-<city>-sc/` with 301s (only 11 days old, so little ranking lost). Resubmit the sitemap in Search Console after merge.
+- **Colors:** orange replaced with steel & cobalt pulled from the logo (see `theme.colors` comment for contrast ratios).
+- **Share image:** `assets/og-image.jpg` redone with the logo; the old one still showed the GHL number (803) 205-2732.
+- **Form "Business type"** now lists 11 industry groups (was 10 trades).
+- **Next:** short case studies from current clients (with their OK) on the industry pages; new blog posts for restaurants/retail, professional and commercial services (current 7 posts are all home services, so the home page blog row still reads trade-heavy); Terms of Service Sec. 1 says "home services businesses and other small businesses" (accurate, optional update); update GBP description/categories and social bios to match.
 
 ## Before launch: decisions and facts to confirm
 

@@ -6,7 +6,8 @@ date: 2026-10-29
 description: Ignoring negative reviews costs Lexington, SC home services businesses customers and local rankings. Here's what happens, and how to respond instead.
 category: Reputation & Online Presence
 services: review-management, google-business-profile
-areas: home-services-marketing-lexington-sc
+areas: digital-marketing-lexington-sc
+industries: home-services-marketing
 draft: false
 ---
 

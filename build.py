@@ -76,7 +76,7 @@ def parse_post(path):
         for line in fm.strip().splitlines():
             if ":" in line:
                 k, v = line.split(":", 1); meta[k.strip()] = v.strip().strip('"')
-    for k in ("services", "areas", "tags"):
+    for k in ("services", "areas", "industries", "tags"):
         meta[k] = [x.strip() for x in meta.get(k, "").split(",") if x.strip()]
     meta["draft"] = meta.get("draft", "false").lower() in ("true", "yes", "1")
     base = os.path.basename(path)[:-3]
@@ -140,6 +140,7 @@ class Site:
         A = self.c.get("areas") or {}; self.areas = A if A.get("enabled") else None
         R = self.c.get("resource") or {}; self.resource = R if R.get("enabled") else None
         B = self.c.get("blog") or {}; self.blog = B if B.get("enabled") else None
+        N = self.c.get("industries") or {}; self.industries = N if N.get("enabled") else None   # optional: "who we serve" hub + one page per industry
         # business.phone is optional: email/form-only businesses (e.g. home bakers) get email links wherever a phone link would go
         self.has_phone = bool(self.b.get("phone"))
         self.rh = f'tel:{self.b["tel"]}' if self.has_phone else f'mailto:{self.b.get("email", "")}'
@@ -265,6 +266,10 @@ class Site:
         sh = self.c["services_hub"]
         # .dd-all: hub link shown only in the mobile accordion (on phones, tapping the parent opens the list instead of navigating)
         items.append(f'<li><a class="nl" href="{self.href(cur,sh["slug"])}"{ca(sh["slug"])}>{esc(sh["nav_label"])} ▾</a><ul class="dropdown"><li class="dd-all"><a href="{self.href(cur,sh["slug"])}">{esc(sh["nav_label"])} overview →</a></li>{svc}</ul></li>')
+        if self.industries:
+            N = self.industries
+            ind = "".join(f'<li><a href="{self.href(cur,i["slug"])}">{esc(i["name"])}</a></li>' for i in N["pages"])
+            items.append(f'<li><a class="nl" href="{self.href(cur,N["hub_slug"])}"{ca(N["hub_slug"])}>{esc(N["nav_label"])} ▾</a><ul class="dropdown"><li class="dd-all"><a href="{self.href(cur,N["hub_slug"])}">{esc(N["nav_label"])} overview →</a></li>{ind}</ul></li>')
         if self.areas:
             dd = ""
             for g in self.areas["groups"]:
@@ -439,6 +444,13 @@ class Site:
             f'<a class="card" href="{self.href(cur,self.svc_path(s))}"><span class="ic">{icon(s["icon"])}</span><h3>{esc(s["name"])}</h3><p>{esc(s["short"])}</p><span class="more">Learn more →</span></a>'
             for s in svcs) + "</div>"
 
+    def industry_cards(self, cur, exclude=None):
+        pages = [i for i in self.industries["pages"] if i["slug"] != exclude]
+        grid = "grid-4" if len(pages) == 4 else ("grid-2" if len(pages) in (2,) else "grid-3")
+        return f'<div class="{grid}">' + "".join(
+            f'<a class="card" href="{self.href(cur,i["slug"])}"><span class="ic">{icon(i["icon"])}</span><h3>{esc(i["name"])}</h3><p>{esc(i["short"])}</p><span class="more">{esc(self.industries.get("card_more","See how we help"))} →</span></a>'
+            for i in pages) + "</div>"
+
     def area_block(self, cur):
         A = self.areas; cols = ""
         for g in A["groups"]:
@@ -515,6 +527,10 @@ class Site:
         n_svc = len(self.c["services"]); hc = sh.get("home_count")   # services_hub.home_count: feature the first N services on the home page, link the rest
         more_svc = f'<p style="margin-top:28px"><a class="btn btn-outline" href="{self.href(cur, sh["slug"])}">See all {n_svc} services →</a></p>' if hc and hc < n_svc else ""
         S["services"] = f'<section><div class="wrap"><div class="section-head"><span class="eyebrow">{esc(sh["nav_label"])}</span><h2>{esc(sh["home_title"])}</h2><p class="lead">{esc(sh["home_lead"])}</p></div>{self.service_cards(cur, limit=sh.get("home_count"))}{more_svc}</div></section>'
+        if self.industries:   # "industries" in home.order
+            N = self.industries
+            S["industries"] = (f'<section class="bg-sand"><div class="wrap"><div class="section-head"><span class="eyebrow">{esc(N["nav_label"])}</span><h2>{esc(N["home_title"])}</h2>'
+                               + (f'<p class="lead">{esc(N["home_lead"])}</p>' if N.get("home_lead") else "") + f'</div>{self.industry_cards(cur)}</div></section>')
         g = h.get("gallery")
         S["gallery"] = (f'<section><div class="wrap"><div class="section-head"><span class="eyebrow">{esc(g.get("eyebrow","Our work"))}</span><h2>{esc(g["title"])}</h2>'
                         + (f'<p>{esc(g["lead"])}</p>' if g.get("lead") else "") + '</div>' + self.photo_grid(cur, g["photos"]) + '</div></section>') if g else ""
@@ -590,6 +606,10 @@ class Site:
         if self.areas:
             near = " · ".join(f'<a href="{self.href(cur,a["slug"])}">{esc(a["city"])}</a>' for a in self.areas["pages"])
             where = f'<h2>Where we offer {esc(s["name"].lower())}</h2><p>{esc(self.areas["service_where_text"])} {near}.</p>'
+        if self.industries:   # industries cross-link back to every service page
+            N = self.industries
+            who = " · ".join(f'<a href="{self.href(cur,i["slug"])}">{esc(i["name"])}</a>' for i in N["pages"])
+            where = f'<h2>{esc(N.get("service_who_title","Who we do this for"))}</h2><p>{esc(N.get("service_who_text","We do this for"))} {who}.</p>' + where
         alt = f'<a class="btn btn-ghost" href="{self.href(cur,self.tiers["slug"])}">Compare {esc(self.tiers["nav_label"].lower())}</a>' if self.tiers else ""
         body = self.page_hero(cur, trail, esc(s["h1"]), esc(s["lead"])) + f'''
 <section><div class="wrap layout-side"><div class="prose"><h2>{esc(s["included_title"])}</h2><div class="included">{inc}</div>
@@ -624,6 +644,45 @@ class Site:
 {self.related_posts_block(cur, "areas", a["slug"], self.blog.get("area_related_title", "Tips for {city}").format(city=a["city"])) if self.blog else ""}{f'<section class="bg-sand"><div class="wrap"><div class="section-head center"><span class="eyebrow">Reviews</span><h2>What our neighbors say</h2></div>{self.reviews_block()}</div></section>' if self.c["reviews"] else ""}{self.cta_band(cur)}'''
         sch = [self.service_schema(f(A["page_title"]), a["intro"], cur, [a["city"]]), self.faq_schema(faqs)]
         self.pages[cur] = self.page(cur, f(A["page_title"]), f(A["page_meta"]), body, sch, trail)
+
+    def industries_hub(self):
+        N = self.industries; cur = N["hub_slug"]; trail = self.trail((N["nav_label"], cur))
+        body = (self.page_hero(cur, trail, N["hub_h1"], esc(N["hub_lead"]))
+                + f'<section><div class="wrap"><div class="section-head"><h2>{esc(N["home_title"])}</h2></div>{self.industry_cards(cur)}</div></section>'
+                + (f'<section class="bg-sand"><div class="wrap"><div class="prose" style="max-width:860px">{self.rel_links(cur, N["hub_body_html"])}</div></div></section>' if N.get("hub_body_html") else "")
+                + (f'<section><div class="wrap"><div class="section-head center"><span class="eyebrow">FAQ</span><h2>{esc(N.get("hub_faq_title","Common questions"))}</h2></div>{self.faq_block(N["hub_faqs"])}</div></section>' if N.get("hub_faqs") else "")
+                + self.cta_band(cur))
+        sch = [{"@type": "CollectionPage", "@id": self.canon(cur) + "#collection", "name": N["hub_h1"], "url": self.canon(cur),
+                "hasPart": [{"@type": "WebPage", "name": i["name"], "url": self.canon(i["slug"])} for i in N["pages"]]}]
+        if N.get("hub_faqs"): sch.append(self.faq_schema(N["hub_faqs"]))
+        self.pages[cur] = self.page(cur, N["hub_title"], N["hub_meta"], body, sch, trail)
+
+    def industry_page(self, i):
+        """industries.pages[]: {slug, name, icon, short, title, meta, h1, lead, examples, challenges_title, challenges[(t,d)],
+        focus_title, focus[(t,d)], services[slugs], services_title, plan_html, faqs, aside_title}."""
+        N = self.industries; cur = i["slug"]; trail = self.trail((N["nav_label"], N["hub_slug"]), (i["name"], cur))
+        ex = "".join(f'<span class="chip">{esc(x)}</span>' for x in i.get("examples", []))
+        ch = "".join(f'<div class="inc"><h3>{esc(t)}</h3><p>{esc(d)}</p></div>' for t, d in i.get("challenges", []))
+        fo = "".join(f'<div class="inc"><h3>{esc(t)}</h3><p>{esc(d)}</p></div>' for t, d in i.get("focus", []))
+        by = {s["slug"]: s for s in self.c["services"]}
+        bad = [x for x in i.get("services", []) if x not in by]
+        if bad: sys.exit(f"[{self.client}] industries page '{cur}' lists unknown service slug(s): {', '.join(bad)}")
+        svc = "".join(f'<li><a href="{self.href(cur,self.svc_path(by[x]))}">{esc(by[x]["name"])}</a>: {esc(by[x]["short"])}</li>' for x in i.get("services", []))
+        others = "".join(f'<li><a href="{self.href(cur,x["slug"])}">{esc(x["name"])}</a></li>' for x in N["pages"] if x is not i)
+        faq_html = f'<h2>{esc(i["name"])} FAQ</h2>{self.faq_block(i["faqs"])}' if i.get("faqs") else ""
+        body = self.page_hero(cur, trail, esc(i["h1"]), esc(i["lead"])) + f'''
+<section><div class="wrap layout-side"><div class="prose">{f'<h2>{esc(i.get("examples_title","Who this is for"))}</h2><div class="chips">{ex}</div>' if ex else ""}
+{f'<h2>{esc(i["challenges_title"])}</h2><div class="included">{ch}</div>' if ch else ""}
+{f'<h2>{esc(i["focus_title"])}</h2><div class="included">{fo}</div>' if fo else ""}
+{f'<h2>{esc(i.get("services_title","The services that matter most"))}</h2><ul class="checklist">{svc}</ul>' if svc else ""}
+{self.rel_links(cur, i["plan_html"]) if i.get("plan_html") else ""}{faq_html}</div>
+<aside class="aside"><h3>{esc(i.get("aside_title", self.L["aside_title"]))}</h3><p>{esc(self.L["aside_text"])}</p><a class="phone{"" if self.has_phone else " is-email"}" href="{self.rh}">{esc(self.rt)}</a>
+<a class="btn btn-gold" href="{self.href(cur,self.cta)}">{esc(self.L["cta"])}</a><p style="margin:14px 0 6px;font-weight:700;color:#fff">{esc(N.get("aside_others","Other industries"))}</p><ul class="city-links" style="grid-template-columns:1fr">{others}</ul></aside></div></section>
+{self.related_posts_block(cur, "industries", i["slug"]) if self.blog else ""}{self.cta_band(cur)}'''
+        s = self.service_schema(i["h1"], i["meta"], cur)
+        s["audience"] = {"@type": "BusinessAudience", "audienceType": i["name"]}
+        sch = [s] + ([self.faq_schema(i["faqs"])] if i.get("faqs") else [])
+        self.pages[cur] = self.page(cur, i["title"], i["meta"], body, sch, trail)
 
     def resource_page(self):
         R = self.resource; cur = R["slug"]; trail = self.trail((R["nav_label"], cur))
@@ -715,6 +774,9 @@ class Site:
         aside_links = ""
         if svc_links: aside_links += f'<p class="aside-label">Related services</p><ul class="city-links" style="grid-template-columns:1fr">{svc_links}</ul>'
         if area_links: aside_links += f'<p class="aside-label">Areas we serve</p><ul class="city-links" style="grid-template-columns:1fr">{area_links}</ul>'
+        if self.industries and p["industries"]:
+            ind_links = "".join(f'<li><a href="{self.href(cur,i["slug"])}">{esc(i["name"])}</a></li>' for i in self.industries["pages"] if i["slug"] in p["industries"])
+            if ind_links: aside_links += f'<p class="aside-label">{esc(self.industries.get("post_label","Who this is for"))}</p><ul class="city-links" style="grid-template-columns:1fr">{ind_links}</ul>'
         others = [o for o in self.posts if o is not p]
         rel = sorted(others, key=lambda o: (len(set(o["services"]) & set(p["services"])) + (o.get("category") == p.get("category")), o["date"]), reverse=True)[:3]
         rel_html = ""
@@ -949,6 +1011,9 @@ class Site:
         if self.c.get("gallery_page"): self.gallery_page()
         for s in self.c["services"]: self.service_page(s)
         if self.tiers: self.tiers_page()
+        if self.industries:
+            self.industries_hub()
+            for i in self.industries["pages"]: self.industry_page(i)
         if self.areas:
             self.areas_hub()
             for a in self.areas["pages"]: self.area_page(a)

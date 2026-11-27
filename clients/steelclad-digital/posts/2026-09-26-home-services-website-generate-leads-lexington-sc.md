@@ -6,7 +6,8 @@ date: 2026-09-26
 description: Your site gets visits but the phone doesn't ring? The five things a lead-generating home services website in Lexington, SC has to do, and how to fix each.
 category: Lead Generation
 services: website-design, local-seo
-areas: home-services-marketing-lexington-sc
+areas: digital-marketing-lexington-sc
+industries: home-services-marketing
 draft: false
 ---
 

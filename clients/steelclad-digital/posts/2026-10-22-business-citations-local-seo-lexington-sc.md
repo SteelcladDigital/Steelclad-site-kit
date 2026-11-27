@@ -6,7 +6,8 @@ date: 2026-10-22
 description: What citations are, why inconsistent NAP data quietly drags down local rankings, and how Lexington, SC home services companies fix it.
 category: Local SEO
 services: local-seo, google-business-profile
-areas: home-services-marketing-lexington-sc
+areas: digital-marketing-lexington-sc
+industries: home-services-marketing
 draft: false
 ---
 

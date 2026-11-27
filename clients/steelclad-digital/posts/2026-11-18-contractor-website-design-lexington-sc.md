@@ -6,7 +6,8 @@ date: 2026-11-18
 description: Hiring a web designer in Lexington, SC? What a contractor website should include, what it should cost, who should own it, and questions to ask first.
 category: Lead Generation
 services: website-design, local-seo
-areas: home-services-marketing-lexington-sc, home-services-marketing-west-columbia-sc, home-services-marketing-irmo-sc
+areas: digital-marketing-lexington-sc, digital-marketing-west-columbia-sc, digital-marketing-irmo-sc
+industries: home-services-marketing
 draft: false
 ---
 

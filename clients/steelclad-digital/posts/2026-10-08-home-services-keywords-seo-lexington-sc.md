@@ -6,7 +6,8 @@ date: 2026-10-08
 description: How Lexington, SC contractors pick search terms that bring real local customers: service + city keywords, problem searches and trust searches.
 category: Local SEO
 services: local-seo, website-design, google-business-profile
-areas: home-services-marketing-lexington-sc, home-services-marketing-irmo-sc, home-services-marketing-chapin-sc, home-services-marketing-west-columbia-sc, home-services-marketing-cayce-sc
+areas: digital-marketing-lexington-sc, digital-marketing-irmo-sc, digital-marketing-chapin-sc, digital-marketing-west-columbia-sc, digital-marketing-cayce-sc
+industries: home-services-marketing
 draft: false
 ---
 

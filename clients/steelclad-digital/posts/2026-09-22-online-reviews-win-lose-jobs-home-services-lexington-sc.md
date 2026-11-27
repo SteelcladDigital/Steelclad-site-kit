@@ -6,7 +6,8 @@ date: 2026-09-22
 description: Online reviews are the new neighbor's recommendation in Lexington County. What your rating signals, why to ask, and how to handle bad reviews.
 category: Reputation & Online Presence
 services: review-management, google-business-profile
-areas: home-services-marketing-lexington-sc
+areas: digital-marketing-lexington-sc
+industries: home-services-marketing
 draft: false
 ---
 

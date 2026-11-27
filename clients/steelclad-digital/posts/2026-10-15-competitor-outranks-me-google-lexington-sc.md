@@ -6,7 +6,8 @@ date: 2026-10-15
 description: A competitor keeps showing up above you on Google in Lexington, SC? Here are five specific, fixable reasons and how to close the gap.
 category: Local SEO
 services: local-seo, google-business-profile, review-management
-areas: home-services-marketing-lexington-sc, home-services-marketing-irmo-sc, home-services-marketing-chapin-sc, home-services-marketing-cayce-sc
+areas: digital-marketing-lexington-sc, digital-marketing-irmo-sc, digital-marketing-chapin-sc, digital-marketing-cayce-sc
+industries: home-services-marketing
 draft: false
 ---
 
