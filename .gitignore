@@ -2,3 +2,5 @@ dist/
 preview/
 __pycache__/
 .DS_Store
+.claude/state/
+.claude/settings.local.json
