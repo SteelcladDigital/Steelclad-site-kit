@@ -24,7 +24,7 @@ The agency's own site, and the first site off GoHighLevel. Built Nov 15, 2026 fr
 2. ~~**GTM container ID**~~ Done (Nov 16): `GTM-KP9LD8WV` (Steelclad-owned account; replaces GTM-MKD488Q8, which sat under the TruePoint client account). GA4 property 564521555, Measurement ID `G-6JBYXY9Z86` (Steelclad-owned), configured inside GTM, not in the site config. In GTM: GA4 config tag, a GA4 event tag on the `generate_lead` dataLayer event (mark it as a key event in GA4), or count page views of `/thank-you/`.
 
 **Facts to confirm:**
-3. **Exit fee conflict.** The old /pricing page says a one-time **$500 exit fee**. Your Terms of Service (Section 8) say **no cancellation fee**, with migration help quoted only if you ask. The new site follows the Terms. If the $500 fee is real, the Terms need updating too.
+3. ~~**Exit fee conflict.**~~ Decided (Nov 27, 2026): **no termination or exit fee of any kind.** The old $500 exit fee is dropped. Site and Terms (Sec. 7–8) already say no cancellation fee; nothing to change.
 4. **Call length.** The old site said both 20 and 30 minutes. The new site says **30 minutes** everywhere.
 5. ~~"Lead capture and automated follow-up"~~ Reworded (Nov 16): clients never used the GHL CRM tools, so plans now promise lead capture forms with instant lead alerts and lead source tracking. Terms of Service Sections 3, 4 and 9 updated to match (Last Updated Nov 16, 2026).
 6. **Setup fee amount** isn't published (it wasn't on the old site either). Publishing it would make the pricing page even stronger; nobody local does.
